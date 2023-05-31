@@ -40,7 +40,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: const Center(
         child: Text(
-          "Prepare for something amazing! Here, wonders await.",
+          "Prepare for something amazing!",
         ),
       ),
     );
