@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-PreferredSizeWidget loginAppBar(context) {
+PreferredSizeWidget loginAndRegistrationAppBar(context) {
   return PreferredSize(
     preferredSize: Size.fromHeight(appBarHeight(context)),
     child: AppBar(
       shadowColor: Colors.black,
       backgroundColor: Theme.of(context).colorScheme.primary,
       elevation: 10.0,
-      surfaceTintColor: Colors.transparent,
       centerTitle: true,
       toolbarHeight: appBarHeight(context),
       title: Column(
