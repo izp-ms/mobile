@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mobile/custom_widgets/form_text_field.dart';
+import 'package:mobile/custom_widgets/submit_button.dart';
 
 class RegistrationForm extends StatelessWidget {
   const RegistrationForm({
@@ -18,7 +19,7 @@ class RegistrationForm extends StatelessWidget {
             padding: const EdgeInsets.only(left: 10),
             child: Text(
               "Register",
-              style: GoogleFonts.rubik(fontSize: 20),
+              style: GoogleFonts.rubik(fontSize: 22),
             ),
           ),
           Container(
@@ -50,28 +51,36 @@ class RegistrationForm extends StatelessWidget {
           SizedBox(
             width: double.infinity,
             height: 60,
-            child: ElevatedButton(
-              onPressed: () {},
-              style: ElevatedButton.styleFrom(
-                  shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(20),
-                    ),
-                  ),
-                  backgroundColor:
-                      Theme.of(context).colorScheme.secondaryContainer),
-              child: Text(
-                "Sign up",
-                style: GoogleFonts.rubik(
-                  color: Theme.of(context).colorScheme.onSecondaryContainer,
-                  fontSize: 20,
-                ),
-              ),
+            child: SubmitButton(
+              buttonText: "Sign up",
+              onButtonPressed: signUpActionButton,
             ),
           ),
+          const SpaceBetweenTextFields(),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                "Have account already? ",
+                style: GoogleFonts.rubik(fontSize: 14),
+              ),
+              Text(
+                "Sign in",
+                style: GoogleFonts.rubik(
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).colorScheme.secondary,
+                  fontSize: 14,
+                ),
+              ),
+            ],
+          )
         ],
       ),
     );
+  }
+
+  signUpActionButton() {
+    //TODO registration button action
   }
 }
 
