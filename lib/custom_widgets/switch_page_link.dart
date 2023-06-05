@@ -15,27 +15,29 @@ class SwitchPageLink extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(
-          regularText,
-          style: GoogleFonts.rubik(fontSize: 14),
-        ),
-        GestureDetector(
-          onTap: () {
-            onLinkPress();
-          },
-          child: Text(
-            linkText,
-            style: GoogleFonts.rubik(
-              fontWeight: FontWeight.bold,
-              color: Theme.of(context).colorScheme.secondary,
-              fontSize: 14,
+    return FittedBox(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            regularText,
+            style: GoogleFonts.rubik(fontSize: 14),
+          ),
+          GestureDetector(
+            onTap: () {
+              onLinkPress();
+            },
+            child: Text(
+              linkText,
+              style: GoogleFonts.rubik(
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).colorScheme.secondary,
+                fontSize: 14,
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
