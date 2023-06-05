@@ -6,7 +6,7 @@ PreferredSizeWidget loginAppBar(context) {
     preferredSize: Size.fromHeight(appBarHeight(context)),
     child: AppBar(
       shadowColor: Colors.black,
-      backgroundColor: const Color(0xFFA6ECFF),
+      backgroundColor: Theme.of(context).colorScheme.primary,
       elevation: 10.0,
       surfaceTintColor: Colors.transparent,
       centerTitle: true,
@@ -14,9 +14,9 @@ PreferredSizeWidget loginAppBar(context) {
       title: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          const Icon(
+          Icon(
             Icons.local_post_office_outlined,
-            color: Colors.black,
+            color: Theme.of(context).colorScheme.onPrimary,
             size: 40,
           ),
           Text(
@@ -24,6 +24,7 @@ PreferredSizeWidget loginAppBar(context) {
             style: GoogleFonts.rubik(
               fontSize: 40,
               fontWeight: FontWeight.w300,
+              color: Theme.of(context).colorScheme.onPrimary
             ),
           )
         ],
