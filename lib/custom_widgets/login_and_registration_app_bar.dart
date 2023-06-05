@@ -15,7 +15,7 @@ PreferredSizeWidget loginAndRegistrationAppBar(context) {
         children: [
           Icon(
             Icons.local_post_office_outlined,
-            color: Theme.of(context).colorScheme.onPrimary,
+            color: Theme.of(context).colorScheme.primaryContainer,
             size: 40,
           ),
           Text(
@@ -23,7 +23,7 @@ PreferredSizeWidget loginAndRegistrationAppBar(context) {
             style: GoogleFonts.rubik(
               fontSize: 40,
               fontWeight: FontWeight.w300,
-              color: Theme.of(context).colorScheme.onPrimary
+              color: Theme.of(context).colorScheme.primaryContainer
             ),
           )
         ],
