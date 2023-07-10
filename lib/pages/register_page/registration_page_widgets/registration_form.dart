@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mobile/custom_widgets/form_text_field.dart';
 import 'package:mobile/custom_widgets/submit_button.dart';
+import 'package:mobile/custom_widgets/switch_page_link.dart';
 
 class RegistrationForm extends StatelessWidget {
   const RegistrationForm({
@@ -58,22 +59,10 @@ class RegistrationForm extends StatelessWidget {
               ),
             ),
             const SpaceBetweenTextFields(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  "Have account already? ",
-                  style: GoogleFonts.rubik(fontSize: 14),
-                ),
-                Text(
-                  "Sign in",
-                  style: GoogleFonts.rubik(
-                    fontWeight: FontWeight.bold,
-                    color: Theme.of(context).colorScheme.secondary,
-                    fontSize: 14,
-                  ),
-                ),
-              ],
+            SwitchPageLink(
+              regularText: 'Have account already? ',
+              linkText: 'Sign in',
+              onLinkPress: onSignInLinkPress,
             )
           ],
         ),
@@ -81,8 +70,12 @@ class RegistrationForm extends StatelessWidget {
     );
   }
 
-  signUpActionButton() {
+  void signUpActionButton() {
     //TODO registration button action
+  }
+
+  void onSignInLinkPress() {
+    //TODO Sign in link press
   }
 }
 

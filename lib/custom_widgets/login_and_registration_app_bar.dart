@@ -11,24 +11,27 @@ PreferredSizeWidget loginAndRegistrationAppBar(context) {
       centerTitle: true,
       toolbarHeight: appBarHeight(context),
       title: Container(
-        padding: const EdgeInsets.only(bottom: 20),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Icon(
-              Icons.local_post_office_outlined,
-              color: Theme.of(context).colorScheme.primaryContainer,
-              size: 40,
-            ),
-            Text(
-              "postcardia",
-              style: GoogleFonts.rubik(
-                fontSize: 40,
-                fontWeight: FontWeight.w300,
-                color: Theme.of(context).colorScheme.primaryContainer
+        padding: EdgeInsets.only(bottom: appBarHeight(context) * 0.2),
+        height: appBarHeight(context),
+        child: FittedBox(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Icon(
+                Icons.local_post_office_outlined,
+                color: Theme.of(context).colorScheme.primaryContainer,
+                size: 40,
               ),
-            )
-          ],
+              Text(
+                "postcardia",
+                style: GoogleFonts.rubik(
+                  fontSize: 40,
+                  fontWeight: FontWeight.w300,
+                  color: Theme.of(context).colorScheme.primaryContainer
+                ),
+              )
+            ],
+          ),
         ),
       ),
     ),
