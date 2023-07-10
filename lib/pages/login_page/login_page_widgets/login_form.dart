@@ -3,10 +3,10 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:mobile/custom_widgets/form_text_field.dart';
 import 'package:mobile/custom_widgets/submit_button.dart';
 import 'package:mobile/custom_widgets/switch_page_link.dart';
-import 'package:mobile/pages/login_page/login_page.dart';
+import 'package:mobile/pages/register_page/register_page.dart';
 
-class RegistrationForm extends StatelessWidget {
-  const RegistrationForm({
+class LoginForm extends StatelessWidget {
+  const LoginForm({
     super.key,
   });
 
@@ -21,7 +21,7 @@ class RegistrationForm extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(left: 10),
               child: Text(
-                "Register",
+                "Login",
                 style: GoogleFonts.rubik(fontSize: 22),
               ),
             ),
@@ -35,17 +35,7 @@ class RegistrationForm extends StatelessWidget {
                   ),
                   SpaceBetweenTextFields(),
                   FormTextField(
-                    hintText: 'Name',
-                    inputIcon: Icons.person,
-                  ),
-                  SpaceBetweenTextFields(),
-                  FormTextField(
                     hintText: 'Password',
-                    inputIcon: Icons.lock,
-                  ),
-                  SpaceBetweenTextFields(),
-                  FormTextField(
-                    hintText: 'Confirm password',
                     inputIcon: Icons.lock,
                   ),
                 ],
@@ -55,16 +45,16 @@ class RegistrationForm extends StatelessWidget {
               width: double.infinity,
               height: 60,
               child: SubmitButton(
-                buttonText: "Sign up",
-                onButtonPressed: signUpActionButton,
+                buttonText: "Sign in",
+                onButtonPressed: signInActionButton,
               ),
             ),
             const SpaceBetweenTextFields(),
             SwitchPageLink(
-              regularText: 'Have account already? ',
-              linkText: 'Sign in',
+              regularText: "Don't have account yet? ",
+              linkText: 'Sign up',
               onLinkPress: () {
-                onSignInLinkPress(context);
+                onSignUpLinkPress(context);
               },
             )
           ],
@@ -73,13 +63,13 @@ class RegistrationForm extends StatelessWidget {
     );
   }
 
-  void signUpActionButton() {
+  void signInActionButton() {
     //TODO registration button action
   }
 
-  void onSignInLinkPress(context) {
+  void onSignUpLinkPress(context) {
     Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => const LoginPage()));
+        context, MaterialPageRoute(builder: (context) => const RegisterPage()));
   }
 }
 
