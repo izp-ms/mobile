@@ -17,6 +17,7 @@ class PasswordFormField extends StatelessWidget {
         getHintMessage(context),
         Icons.lock,
       ),
+      cursorColor: Theme.of(context).colorScheme.secondary,
       obscureText: true,
       enableSuggestions: false,
       autocorrect: false,

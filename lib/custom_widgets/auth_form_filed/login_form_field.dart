@@ -17,6 +17,7 @@ class FormTextField extends StatelessWidget {
     return TextField(
       style: GoogleFonts.rubik(fontSize: 14),
       decoration: authTextFieldDecoration(context, hintText, inputIcon),
+      cursorColor: Theme.of(context).colorScheme.secondary,
     );
   }
 }
