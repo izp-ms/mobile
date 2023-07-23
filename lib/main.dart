@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:mobile/pages/register_page/register_page.dart';
+import 'package:mobile/pages/postcards_page/postcards_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 void main() {
@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
           onSecondaryContainer: Color(0xFF1C1C1C),
           error: Colors.red,
           onError: Colors.white,
-          background: Color(0xFFF2F5F6),
+          background: Color(0xFFE3E6E7),
           onBackground: Colors.black,
           surface: Color(0xFFDAE0E0),
           onSurface: Color(0xFF1C1C1C),
@@ -64,7 +64,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       themeMode: ThemeMode.system,
-      home: const RegisterPage(),
+      home: const PostcardsPage(),
     );
   }
 }

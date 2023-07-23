@@ -9,5 +9,9 @@
   "name": "Name",
   "haveAccountAlready": "Have account already? ",
   "password": "Password",
-  "confirmPassword": "Confirm password"
+  "confirmPassword": "Confirm password",
+  "profile": "Profile",
+  "postcards": "Postcards",
+  "settings": "Settings",
+  "logOut": "Log out"
 }
