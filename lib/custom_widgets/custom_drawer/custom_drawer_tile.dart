@@ -27,7 +27,6 @@ class CustomDrawerTile extends StatelessWidget {
           Text(
             tileText,
             style: GoogleFonts.rubik(
-              color: Theme.of(context).colorScheme.onSecondaryContainer,
               fontSize: 25,
             ),
           )
