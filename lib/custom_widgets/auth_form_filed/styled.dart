@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 InputDecoration authTextFieldDecoration(context, hintText, inputIcon) {
   return InputDecoration(
-    fillColor: Theme.of(context).colorScheme.primary,
+    fillColor: Theme.of(context).colorScheme.onBackground,
     suffixIcon: Icon(
       inputIcon,
       color: Theme.of(context).colorScheme.secondary,
