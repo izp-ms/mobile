@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:mobile/custom_widgets/form_text_field.dart';
-import 'package:mobile/custom_widgets/password_form_field.dart';
+import 'package:mobile/custom_widgets/auth_form_filed/login_form_field.dart';
+import 'package:mobile/custom_widgets/auth_form_filed/password_form_field.dart';
 import 'package:mobile/custom_widgets/submit_button.dart';
 import 'package:mobile/custom_widgets/switch_page_link.dart';
 import 'package:mobile/pages/login_page/login_page.dart';

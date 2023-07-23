@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:mobile/styles/auth_text_field_decoration.dart';
+import 'package:mobile/custom_widgets/auth_form_filed/styled.dart';
 
 class PasswordFormField extends StatelessWidget {
   const PasswordFormField({
