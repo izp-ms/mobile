@@ -6,10 +6,12 @@ class CustomDrawerTile extends StatelessWidget {
     super.key,
     required this.tileIcon,
     required this.tileText,
+    required this.onTilePress,
   });
 
   final IconData tileIcon;
   final String tileText;
+  final VoidCallback onTilePress;
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +35,7 @@ class CustomDrawerTile extends StatelessWidget {
         ],
       ),
       onTap: () {
-        //TODO Navigation to another pages
+        onTilePress();
       },
     );
   }

@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/pages/login_page/login_page.dart';
+import 'package:mobile/pages/postcards_page/postcards_page.dart';
+import 'package:mobile/pages/profile_page/profile_page.dart';
+import 'package:mobile/pages/settings_page/settings_page.dart';
 import 'custom_drawer_tile.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -34,15 +38,20 @@ class CustomDrawer extends Drawer {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       CustomDrawerTile(
-                        tileIcon: Icons.person,
-                        tileText: AppLocalizations.of(context).profile,
-                      ),
+                          tileIcon: Icons.person,
+                          tileText: AppLocalizations.of(context).profile,
+                          onTilePress: () {
+                            onProfilePress(context);
+                          }),
                       SizedBox(
                         height: gapBetweenTiles,
                       ),
                       CustomDrawerTile(
                         tileIcon: Icons.local_post_office_outlined,
                         tileText: AppLocalizations.of(context).postcards,
+                        onTilePress: () {
+                          onPostcardsPress(context);
+                        },
                       ),
                       SizedBox(
                         height: gapBetweenTiles,
@@ -50,6 +59,9 @@ class CustomDrawer extends Drawer {
                       CustomDrawerTile(
                         tileIcon: Icons.settings_outlined,
                         tileText: AppLocalizations.of(context).settings,
+                        onTilePress: () {
+                          onSettingsPress(context);
+                        },
                       ),
                     ],
                   ),
@@ -61,11 +73,35 @@ class CustomDrawer extends Drawer {
               child: CustomDrawerTile(
                 tileIcon: Icons.logout,
                 tileText: AppLocalizations.of(context).logOut,
+                onTilePress: () {
+                  onLogOutPress(context);
+                },
               ),
             ),
           ],
         ),
       ),
     );
+  }
+
+  void onProfilePress(context) {
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => const ProfilePage()));
+  }
+
+  void onPostcardsPress(context) {
+    Navigator.pushReplacement(context,
+        MaterialPageRoute(builder: (context) => const PostcardsPage()));
+  }
+
+  void onSettingsPress(context) {
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => const SettingsPage()));
+  }
+
+  void onLogOutPress(context) {
+    //TODO Proper log out function
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => const LoginPage()));
   }
 }
