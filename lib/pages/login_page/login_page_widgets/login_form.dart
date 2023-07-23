@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:mobile/custom_widgets/form_text_field.dart';
-import 'package:mobile/custom_widgets/password_form_field.dart';
+import 'package:mobile/custom_widgets/auth_form_filed/login_form_field.dart';
+import 'package:mobile/custom_widgets/auth_form_filed/password_form_field.dart';
 import 'package:mobile/custom_widgets/submit_button.dart';
 import 'package:mobile/custom_widgets/switch_page_link.dart';
 import 'package:mobile/pages/register_page/register_page.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class LoginForm extends StatelessWidget {
   const LoginForm({
     super.key,
   });
+
+  final double gapBetweenTextFields = 18;
 
   @override
   Widget build(BuildContext context) {
@@ -22,20 +26,20 @@ class LoginForm extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(left: 10),
               child: Text(
-                "Login",
+                AppLocalizations.of(context).login,
                 style: GoogleFonts.rubik(fontSize: 22),
               ),
             ),
             Container(
               padding: const EdgeInsets.only(top: 20, bottom: 30),
-              child: const Column(
+              child: Column(
                 children: [
                   FormTextField(
-                    hintText: 'Email',
+                    hintText: AppLocalizations.of(context).email,
                     inputIcon: Icons.email,
                   ),
-                  SpaceBetweenTextFields(),
-                  PasswordFormField(),
+                  SizedBox(height: gapBetweenTextFields),
+                  const PasswordFormField(),
                 ],
               ),
             ),
@@ -43,14 +47,14 @@ class LoginForm extends StatelessWidget {
               width: double.infinity,
               height: 60,
               child: SubmitButton(
-                buttonText: "Sign in",
+                buttonText: AppLocalizations.of(context).signIn,
                 onButtonPressed: signInActionButton,
               ),
             ),
-            const SpaceBetweenTextFields(),
+            SizedBox(height: gapBetweenTextFields),
             SwitchPageLink(
-              regularText: "Don't have account yet? ",
-              linkText: 'Sign up',
+              regularText: AppLocalizations.of(context).dontHaveAccountYet,
+              linkText: AppLocalizations.of(context).signUp,
               onLinkPress: () {
                 onSignUpLinkPress(context);
               },
@@ -68,18 +72,5 @@ class LoginForm extends StatelessWidget {
   void onSignUpLinkPress(context) {
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (context) => const RegisterPage()));
-  }
-}
-
-class SpaceBetweenTextFields extends StatelessWidget {
-  const SpaceBetweenTextFields({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return const SizedBox(
-      height: 18,
-    );
   }
 }

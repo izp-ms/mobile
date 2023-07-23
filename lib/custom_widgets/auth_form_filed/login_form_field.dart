@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:mobile/styles/auth_text_field_decoration.dart';
+import 'package:mobile/custom_widgets/auth_form_filed/styled.dart';
 
 class FormTextField extends StatelessWidget {
   const FormTextField({
@@ -17,6 +17,7 @@ class FormTextField extends StatelessWidget {
     return TextField(
       style: GoogleFonts.rubik(fontSize: 14),
       decoration: authTextFieldDecoration(context, hintText, inputIcon),
+      cursorColor: Theme.of(context).colorScheme.secondary,
     );
   }
 }

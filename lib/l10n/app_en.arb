@@ -1,0 +1,17 @@
+{
+  "postcardia": "postcardia",
+  "login": "Login",
+  "email": "Email",
+  "signIn": "Sign in",
+  "dontHaveAccountYet": "Don't have account yet? ",
+  "signUp": "Sign up",
+  "register": "Register",
+  "name": "Name",
+  "haveAccountAlready": "Have account already? ",
+  "password": "Password",
+  "confirmPassword": "Confirm password",
+  "profile": "Profile",
+  "postcards": "Postcards",
+  "settings": "Settings",
+  "logOut": "Log out"
+}

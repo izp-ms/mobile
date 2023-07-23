@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 PreferredSizeWidget loginAndRegistrationAppBar(context) {
   return PreferredSize(
@@ -23,7 +24,7 @@ PreferredSizeWidget loginAndRegistrationAppBar(context) {
                 size: 40,
               ),
               Text(
-                "postcardia",
+                AppLocalizations.of(context).postcardia,
                 style: GoogleFonts.rubik(
                   fontSize: 40,
                   fontWeight: FontWeight.w300,

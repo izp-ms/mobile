@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/pages/register_page/register_page.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:mobile/pages/postcards_page/postcards_page.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,7 +13,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Posty',
+      title: 'postcardia',
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('en'),
+      ],
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         useMaterial3: true,
@@ -26,8 +37,8 @@ class MyApp extends StatelessWidget {
           onSecondaryContainer: Color(0xFF1C1C1C),
           error: Colors.red,
           onError: Colors.white,
-          background: Color(0xFFF2F5F6),
-          onBackground: Colors.black,
+          background: Color(0xFFE3E6E7),
+          onBackground: Color(0xFFC4CDCD),
           surface: Color(0xFFDAE0E0),
           onSurface: Color(0xFF1C1C1C),
 
@@ -47,13 +58,13 @@ class MyApp extends StatelessWidget {
           error: Colors.red,
           onError: Colors.white,
           background: Color(0xFF282828),
-          onBackground: Colors.white,
-          surface: Color(0xFF1C1C1C),
+          onBackground: Color(0xFF1C1C1C),
+          surface: Color(0xFF464646),
           onSurface: Colors.white,
         ),
       ),
       themeMode: ThemeMode.system,
-      home: const RegisterPage(),
+      home: const PostcardsPage(),
     );
   }
 }
