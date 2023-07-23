@@ -12,6 +12,8 @@ class RegistrationForm extends StatelessWidget {
     super.key,
   });
 
+  final double gapBetweenTextFields = 18;
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -35,14 +37,14 @@ class RegistrationForm extends StatelessWidget {
                     hintText: AppLocalizations.of(context).email,
                     inputIcon: Icons.email,
                   ),
-                  const SpaceBetweenTextFields(),
+                  SizedBox(height: gapBetweenTextFields),
                   FormTextField(
                     hintText: AppLocalizations.of(context).name,
                     inputIcon: Icons.person,
                   ),
-                  const SpaceBetweenTextFields(),
+                  SizedBox(height: gapBetweenTextFields),
                   const PasswordFormField(),
-                  const SpaceBetweenTextFields(),
+                  SizedBox(height: gapBetweenTextFields),
                   PasswordFormField(
                     hintMessage: AppLocalizations.of(context).confirmPassword,
                   ),
@@ -57,7 +59,7 @@ class RegistrationForm extends StatelessWidget {
                 onButtonPressed: signUpActionButton,
               ),
             ),
-            const SpaceBetweenTextFields(),
+            SizedBox(height: gapBetweenTextFields),
             SwitchPageLink(
               regularText: AppLocalizations.of(context).haveAccountAlready,
               linkText: AppLocalizations.of(context).signIn,
@@ -78,18 +80,5 @@ class RegistrationForm extends StatelessWidget {
   void onSignInLinkPress(context) {
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (context) => const LoginPage()));
-  }
-}
-
-class SpaceBetweenTextFields extends StatelessWidget {
-  const SpaceBetweenTextFields({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return const SizedBox(
-      height: 18,
-    );
   }
 }

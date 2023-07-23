@@ -13,6 +13,8 @@ class LoginForm extends StatelessWidget {
     super.key,
   });
 
+  final double gapBetweenTextFields = 18;
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -36,7 +38,7 @@ class LoginForm extends StatelessWidget {
                     hintText: AppLocalizations.of(context).email,
                     inputIcon: Icons.email,
                   ),
-                  const SpaceBetweenTextFields(),
+                  SizedBox(height: gapBetweenTextFields),
                   const PasswordFormField(),
                 ],
               ),
@@ -49,7 +51,7 @@ class LoginForm extends StatelessWidget {
                 onButtonPressed: signInActionButton,
               ),
             ),
-            const SpaceBetweenTextFields(),
+            SizedBox(height: gapBetweenTextFields),
             SwitchPageLink(
               regularText: AppLocalizations.of(context).dontHaveAccountYet,
               linkText: AppLocalizations.of(context).signUp,
@@ -70,18 +72,5 @@ class LoginForm extends StatelessWidget {
   void onSignUpLinkPress(context) {
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (context) => const RegisterPage()));
-  }
-}
-
-class SpaceBetweenTextFields extends StatelessWidget {
-  const SpaceBetweenTextFields({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return const SizedBox(
-      height: 18,
-    );
   }
 }
