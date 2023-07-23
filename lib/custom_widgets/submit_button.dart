@@ -26,7 +26,7 @@ class SubmitButton extends StatelessWidget {
         backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
       ),
       child: Text(
-        "Sign up",
+        buttonText,
         style: GoogleFonts.rubik(
           color: Theme.of(context).colorScheme.onSecondaryContainer,
           fontSize: 20,

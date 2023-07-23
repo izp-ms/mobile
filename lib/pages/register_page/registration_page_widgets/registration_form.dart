@@ -5,6 +5,7 @@ import 'package:mobile/custom_widgets/auth_form_filed/password_form_field.dart';
 import 'package:mobile/custom_widgets/submit_button.dart';
 import 'package:mobile/custom_widgets/switch_page_link.dart';
 import 'package:mobile/pages/login_page/login_page.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class RegistrationForm extends StatelessWidget {
   const RegistrationForm({
@@ -22,27 +23,29 @@ class RegistrationForm extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(left: 10),
               child: Text(
-                "Register",
+                AppLocalizations.of(context).register,
                 style: GoogleFonts.rubik(fontSize: 22),
               ),
             ),
             Container(
               padding: const EdgeInsets.only(top: 20, bottom: 30),
-              child: const Column(
+              child: Column(
                 children: [
                   FormTextField(
-                    hintText: 'Email',
+                    hintText: AppLocalizations.of(context).email,
                     inputIcon: Icons.email,
                   ),
-                  SpaceBetweenTextFields(),
+                  const SpaceBetweenTextFields(),
                   FormTextField(
-                    hintText: 'Name',
+                    hintText: AppLocalizations.of(context).name,
                     inputIcon: Icons.person,
                   ),
-                  SpaceBetweenTextFields(),
-                  PasswordFormField(),
-                  SpaceBetweenTextFields(),
-                  PasswordFormField(),
+                  const SpaceBetweenTextFields(),
+                  const PasswordFormField(),
+                  const SpaceBetweenTextFields(),
+                  PasswordFormField(
+                    hintMessage: AppLocalizations.of(context).confirmPassword,
+                  ),
                 ],
               ),
             ),
@@ -50,14 +53,14 @@ class RegistrationForm extends StatelessWidget {
               width: double.infinity,
               height: 60,
               child: SubmitButton(
-                buttonText: "Sign up",
+                buttonText: AppLocalizations.of(context).signUp,
                 onButtonPressed: signUpActionButton,
               ),
             ),
             const SpaceBetweenTextFields(),
             SwitchPageLink(
-              regularText: 'Have account already? ',
-              linkText: 'Sign in',
+              regularText: AppLocalizations.of(context).haveAccountAlready,
+              linkText: AppLocalizations.of(context).signIn,
               onLinkPress: () {
                 onSignInLinkPress(context);
               },

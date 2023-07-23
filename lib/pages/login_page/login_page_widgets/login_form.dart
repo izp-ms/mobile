@@ -5,6 +5,8 @@ import 'package:mobile/custom_widgets/auth_form_filed/password_form_field.dart';
 import 'package:mobile/custom_widgets/submit_button.dart';
 import 'package:mobile/custom_widgets/switch_page_link.dart';
 import 'package:mobile/pages/register_page/register_page.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class LoginForm extends StatelessWidget {
   const LoginForm({
@@ -22,20 +24,20 @@ class LoginForm extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(left: 10),
               child: Text(
-                "Login",
+                AppLocalizations.of(context).login,
                 style: GoogleFonts.rubik(fontSize: 22),
               ),
             ),
             Container(
               padding: const EdgeInsets.only(top: 20, bottom: 30),
-              child: const Column(
+              child: Column(
                 children: [
                   FormTextField(
-                    hintText: 'Email',
+                    hintText: AppLocalizations.of(context).email,
                     inputIcon: Icons.email,
                   ),
-                  SpaceBetweenTextFields(),
-                  PasswordFormField(),
+                  const SpaceBetweenTextFields(),
+                  const PasswordFormField(),
                 ],
               ),
             ),
@@ -43,14 +45,14 @@ class LoginForm extends StatelessWidget {
               width: double.infinity,
               height: 60,
               child: SubmitButton(
-                buttonText: "Sign in",
+                buttonText: AppLocalizations.of(context).signIn,
                 onButtonPressed: signInActionButton,
               ),
             ),
             const SpaceBetweenTextFields(),
             SwitchPageLink(
-              regularText: "Don't have account yet? ",
-              linkText: 'Sign up',
+              regularText: AppLocalizations.of(context).dontHaveAccountYet,
+              linkText: AppLocalizations.of(context).signUp,
               onLinkPress: () {
                 onSignUpLinkPress(context);
               },
