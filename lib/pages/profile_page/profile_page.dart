@@ -9,11 +9,7 @@ import 'package:mobile/pages/profile_page/profile_page_widgets/statistics_sectio
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ProfilePage extends StatelessWidget {
-  ProfilePage({super.key});
-
-  final List<Map> myProducts =
-      List.generate(100000, (index) => {"id": index, "name": "Product $index"})
-          .toList();
+  const ProfilePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -116,7 +112,6 @@ class ProfilePage extends StatelessWidget {
               );
             },
           ),
-
         ],
       ),
     );
