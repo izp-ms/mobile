@@ -8,22 +8,23 @@ class ProfilePicture extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
+    final double profileImageSize = (deviceSize.width - 60) * 0.4;
     return Positioned(
       top: (deviceSize.width - 60) * 0.3,
       child: Stack(
         alignment: Alignment.center,
         children: [
           Container(
-            height: (deviceSize.width - 60) * 0.4,
-            width: (deviceSize.width - 60) * 0.4,
+            height: profileImageSize,
+            width: profileImageSize,
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.background,
               shape: BoxShape.circle,
               ),
             ),
           Container(
-            height: (deviceSize.width - 60) * 0.4 - 10,
-            width: (deviceSize.width - 60) * 0.4 - 10,
+            height: profileImageSize - 10,
+            width: profileImageSize - 10,
             decoration: const BoxDecoration(
               shape: BoxShape.circle,
               image: DecorationImage(
