@@ -40,7 +40,7 @@ class ProfilePage extends StatelessWidget {
                 ),
               ],
             ),
-            padding: const EdgeInsets.all(30),
+            padding: const EdgeInsets.fromLTRB(30,10,30,30),
             child: const Column(
               mainAxisSize: MainAxisSize.min,
               children: [
