@@ -86,7 +86,7 @@ class CustomDrawer extends Drawer {
 
   void onProfilePress(context) {
     Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => const ProfilePage()));
+        context, MaterialPageRoute(builder: (context) => ProfilePage()));
   }
 
   void onPostcardsPress(context) {

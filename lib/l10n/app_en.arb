@@ -15,5 +15,7 @@
   "settings": "Settings",
   "logOut": "Log out",
   "followers": "Followers",
-  "following": "Following"
+  "following": "Following",
+  "favouritePostcards": "Favourite postcards",
+  "editProfile": "Edit profile"
 }
