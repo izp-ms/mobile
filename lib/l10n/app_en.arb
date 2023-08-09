@@ -13,5 +13,10 @@
   "profile": "Profile",
   "postcards": "Postcards",
   "settings": "Settings",
-  "logOut": "Log out"
+  "logOut": "Log out",
+  "followers": "Followers",
+  "following": "Following",
+  "favouritePostcards": "Favourite postcards",
+  "editProfile": "Edit profile",
+  "editFavourite": "Edit favourite"
 }
