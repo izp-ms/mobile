@@ -8,9 +8,16 @@ class PasswordFormField extends StatelessWidget {
 
   final String? hintMessage;
 
+
   @override
   Widget build(BuildContext context) {
-    return TextField(
+    return TextFormField(
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Please enter validate password';
+        }
+        return null;
+      },
       style: GoogleFonts.rubik(fontSize: 14),
       decoration: authTextFieldDecoration(
         context,

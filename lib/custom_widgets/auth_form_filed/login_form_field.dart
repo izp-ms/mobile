@@ -14,7 +14,13 @@ class FormTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
+    return TextFormField(
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Please enter validate email';
+        }
+        return null;
+      },
       style: GoogleFonts.rubik(fontSize: 14),
       decoration: authTextFieldDecoration(context, hintText, inputIcon),
       cursorColor: Theme.of(context).colorScheme.secondary,
