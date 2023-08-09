@@ -40,16 +40,41 @@ class ProfilePage extends StatelessWidget {
                 ),
               ],
             ),
-            padding: const EdgeInsets.fromLTRB(30,10,30,30),
-            child: const Column(
+            padding: const EdgeInsets.fromLTRB(30, 10, 30, 30),
+            child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                ProfilePicturesStack(),
-                SizedBox(
-                  height: 70,
+                const ProfilePicturesStack(),
+                GestureDetector(
+                  onTap: () =>
+                      {print("Navigacja do modala do edytowania profilu")},
+                  child: Container(
+                    padding: const EdgeInsets.fromLTRB(0, 15, 10, 0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        const Icon(
+                          Icons.mode_edit_outlined,
+                          size: 15,
+                        ),
+                        const SizedBox(
+                          width: 3,
+                        ),
+                        Text(
+                          AppLocalizations.of(context).editProfile,
+                          style: GoogleFonts.rubik(
+                            fontSize: 10,
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
                 ),
-                PersonalInfoSection(),
-                StatisticsSection(),
+                const SizedBox(
+                  height: 50,
+                ),
+                const PersonalInfoSection(),
+                const StatisticsSection(),
               ],
             ),
           ),
@@ -65,9 +90,8 @@ class ProfilePage extends StatelessWidget {
                   ),
                 ),
                 GestureDetector(
-                  onTap: () => {
-                    print("Navigacja do modala do edytowania pocztówek")
-                  },
+                  onTap: () =>
+                      {print("Navigacja do modala do edytowania pocztówek")},
                   child: Row(
                     children: [
                       const Icon(
@@ -78,7 +102,7 @@ class ProfilePage extends StatelessWidget {
                         width: 3,
                       ),
                       Text(
-                        AppLocalizations.of(context).editProfile,
+                        AppLocalizations.of(context).editFavourite,
                         style: GoogleFonts.rubik(
                           fontSize: 10,
                         ),
@@ -91,11 +115,10 @@ class ProfilePage extends StatelessWidget {
           ),
           GridView.builder(
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3, // Number of columns in the GridView
+              crossAxisCount: 3,
               crossAxisSpacing: 32,
               mainAxisSpacing: 20,
-              childAspectRatio: 3/4,
-
+              childAspectRatio: 3 / 4,
             ),
             padding: const EdgeInsets.symmetric(horizontal: 30),
             physics: const NeverScrollableScrollPhysics(),
@@ -103,13 +126,11 @@ class ProfilePage extends StatelessWidget {
             itemCount: 9,
             itemBuilder: (BuildContext context, int index) {
               return Container(
-                color: Colors.white,
-                child:
-                  Padding(
+                  color: Colors.white,
+                  child: Padding(
                     padding: const EdgeInsets.all(7),
                     child: SvgPicture.asset('assets/postcards/First.svg'),
-                  )
-              );
+                  ));
             },
           ),
         ],

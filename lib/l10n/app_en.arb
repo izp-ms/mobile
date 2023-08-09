@@ -17,5 +17,6 @@
   "followers": "Followers",
   "following": "Following",
   "favouritePostcards": "Favourite postcards",
-  "editProfile": "Edit profile"
+  "editProfile": "Edit profile",
+  "editFavourite": "Edit favourite"
 }
