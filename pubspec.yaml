@@ -40,6 +40,8 @@ dependencies:
     sdk: flutter
   intl:
   flutter_svg:
+  http:
+  flutter_bloc:
 
 dev_dependencies:
   flutter_test:

@@ -10,7 +10,7 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: loginAndRegistrationAppBar(context),
-      body: const LoginForm(),
+      body: LoginForm(),
     );
   }
 }
