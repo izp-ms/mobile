@@ -34,11 +34,17 @@ class RegistrationForm extends StatelessWidget {
               child: Column(
                 children: [
                   FormTextField(
+                    onSaved: (newValue) {
+                      print('Value saved: $newValue');
+                    },
                     hintText: AppLocalizations.of(context).email,
                     inputIcon: Icons.email,
                   ),
                   SizedBox(height: gapBetweenTextFields),
                   FormTextField(
+                    onSaved: (newValue) {
+                      print('Value saved: $newValue');
+                    },
                     hintText: AppLocalizations.of(context).name,
                     inputIcon: Icons.person,
                   ),

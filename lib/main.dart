@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -6,7 +8,17 @@ import 'package:mobile/pages/login_page/login_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:mobile/repositories/login_repository/login_repository.dart';
 
+class MyHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
+  }
+}
+
 void main() {
+  HttpOverrides.global = MyHttpOverrides();
   runApp(const MyApp());
 }
 
@@ -18,7 +30,7 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider<LoginCubit>(
-            create: (context) => LoginCubit(LoginRepository()),
+          create: (context) => LoginCubit(LoginRepository()),
         )
       ],
       child: MaterialApp(
@@ -50,7 +62,6 @@ class MyApp extends StatelessWidget {
             onBackground: Color(0xFFC4CDCD),
             surface: Color(0xFFDAE0E0),
             onSurface: Color(0xFF1C1C1C),
-
           ),
         ),
         darkTheme: ThemeData(

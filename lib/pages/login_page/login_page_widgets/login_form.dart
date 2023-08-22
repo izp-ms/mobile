@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mobile/custom_widgets/auth_form_filed/login_form_field.dart';
-import 'package:mobile/custom_widgets/auth_form_filed/password_form_field.dart';
 import 'package:mobile/custom_widgets/submit_button.dart';
 import 'package:mobile/custom_widgets/switch_page_link.dart';
 import 'package:mobile/pages/login_page/cubit/login_cubit.dart';
 import 'package:mobile/pages/login_page/cubit/login_state.dart';
+import 'package:mobile/pages/postcards_page/postcards_page.dart';
 import 'package:mobile/pages/register_page/register_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -23,6 +23,8 @@ class _LoginFormState extends State<LoginForm> {
   final double gapBetweenTextFields = 18;
 
   final _formKey = GlobalKey<FormState>();
+  String _userEmail = '';
+  String _userPassword = '';
 
   @override
   Widget build(BuildContext context) {
@@ -53,11 +55,23 @@ class _LoginFormState extends State<LoginForm> {
                     child: Column(
                       children: [
                         FormTextField(
+                          onSaved: (newValue) {
+                            if (newValue == null) return;
+                            _userEmail = newValue;
+                          },
                           hintText: AppLocalizations.of(context).email,
                           inputIcon: Icons.email,
                         ),
                         SizedBox(height: gapBetweenTextFields),
-                        const PasswordFormField(),
+                        FormTextField(
+                          onSaved: (newValue) {
+                            if (newValue == null) return;
+                            _userPassword = newValue;
+                          },
+                          hintText: AppLocalizations.of(context).password,
+                          inputIcon: Icons.lock,
+                          isPasswordField: true,
+                        ),
                       ],
                     ),
                   ),
@@ -87,9 +101,42 @@ class _LoginFormState extends State<LoginForm> {
     );
   }
 
-  void signInActionButton(context) {
+  Future<void> signInActionButton(BuildContext context) async {
     if (_formKey.currentState!.validate()) {
       FocusManager.instance.primaryFocus?.unfocus();
+      _formKey.currentState!.save();
+
+      final loginCubit = context.read<LoginCubit>();
+
+      try {
+        await loginCubit.loginUser(_userEmail, _userPassword);
+
+        final currentState = loginCubit.state;
+        if (currentState is ResponseLoginState && context.mounted) {
+          _navigateToPostcardsPage(context);
+        } else if (currentState is ErrorLoginState) {
+          _showErrorSnackBar(context, currentState.errorMessage);
+        }
+      } catch (e) {
+        _showErrorSnackBar(context, "An error occurred: $e");
+      }
+    }
+  }
+
+  void _navigateToPostcardsPage(BuildContext context) {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => const PostcardsPage()),
+    );
+  }
+
+  void _showErrorSnackBar(BuildContext context, String message) {
+    final snackBar = SnackBar(
+      content: Text(message),
+      backgroundColor: Colors.red,
+    );
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
   }
 

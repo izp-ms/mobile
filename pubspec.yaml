@@ -42,6 +42,7 @@ dependencies:
   flutter_svg:
   http:
   flutter_bloc:
+  flutter_secure_storage:
 
 dev_dependencies:
   flutter_test:
