@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mobile/cubit/auth_cubit/auth_cubit.dart';
+import 'package:mobile/cubit/auth_cubit/auth_state.dart';
 import 'package:mobile/custom_widgets/auth_form_filed/login_form_field.dart';
 import 'package:mobile/custom_widgets/submit_button.dart';
 import 'package:mobile/custom_widgets/switch_page_link.dart';
-import 'package:mobile/pages/login_page/cubit/login_cubit.dart';
-import 'package:mobile/pages/login_page/cubit/login_state.dart';
 import 'package:mobile/pages/postcards_page/postcards_page.dart';
 import 'package:mobile/pages/register_page/register_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -28,9 +28,16 @@ class _LoginFormState extends State<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<LoginCubit, LoginState>(
+    return BlocConsumer<AuthCubit, AuthState>(
+      listener: (context, state) {
+        if (state is LoginSuccessState) {
+          _navigateToPostcardsPage(context);
+        } else if (state is ErrorState) {
+          _showErrorSnackBar(context, state.errorMessage);
+        }
+      },
       builder: (context, state) {
-        if (state is LoadingLoginState) {
+        if (state is LoadingState || state is LoginSuccessState) {
           return const Center(
             child: CircularProgressIndicator(),
           );
@@ -106,17 +113,10 @@ class _LoginFormState extends State<LoginForm> {
       FocusManager.instance.primaryFocus?.unfocus();
       _formKey.currentState!.save();
 
-      final loginCubit = context.read<LoginCubit>();
+      final loginCubit = context.read<AuthCubit>();
 
       try {
         await loginCubit.loginUser(_userEmail, _userPassword);
-
-        final currentState = loginCubit.state;
-        if (currentState is ResponseLoginState && context.mounted) {
-          _navigateToPostcardsPage(context);
-        } else if (currentState is ErrorLoginState) {
-          _showErrorSnackBar(context, currentState.errorMessage);
-        }
       } catch (e) {
         _showErrorSnackBar(context, "An error occurred: $e");
       }

@@ -3,10 +3,10 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:mobile/pages/login_page/cubit/login_cubit.dart';
+import 'package:mobile/cubit/auth_cubit/auth_cubit.dart';
 import 'package:mobile/pages/login_page/login_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:mobile/repositories/login_repository/login_repository.dart';
+import 'package:mobile/repositories/auth_repository/auth_repository.dart';
 
 class MyHttpOverrides extends HttpOverrides {
   @override
@@ -29,8 +29,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider<LoginCubit>(
-          create: (context) => LoginCubit(LoginRepository()),
+        BlocProvider<AuthCubit>(
+          create: (context) => AuthCubit(AuthRepository()),
         )
       ],
       child: MaterialApp(

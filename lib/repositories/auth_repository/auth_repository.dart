@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:mobile/models/error_message_model.dart';
+import 'package:mobile/models/token_model.dart';
 
-class LoginRepository {
+class AuthRepository {
   Future<dynamic> login(String email, String password) async {
     const url = 'https://10.0.2.2:7275/api/User/login';
     final uri = Uri.parse(url);
@@ -19,10 +21,14 @@ class LoginRepository {
     );
 
     if (response.statusCode == 200) {
-      final token = response.body;
+      final tokenJson = json.decode(response.body);
+      print(tokenJson);
+      final token = TokenModel.fromJson(tokenJson).token;
       return token;
     } else {
-      throw "Something went wrong code ${response.statusCode}";
+      final errorJson = json.decode(response.body);
+      final errorMessage = ErrorMessageModel.fromJson(errorJson).message;
+      throw errorMessage;
     }
   }
 }
