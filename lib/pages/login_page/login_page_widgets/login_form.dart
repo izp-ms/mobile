@@ -20,8 +20,9 @@ class LoginForm extends StatefulWidget {
 }
 
 class _LoginFormState extends State<LoginForm> {
-  final double gapBetweenTextFields = 18;
 
+
+  final double gapBetweenTextFields = 18;
   final _formKey = GlobalKey<FormState>();
   String _userEmail = '';
   String _userPassword = '';
@@ -32,16 +33,12 @@ class _LoginFormState extends State<LoginForm> {
       listener: (context, state) {
         if (state is LoginSuccessState) {
           _navigateToPostcardsPage(context);
+          context.read<AuthCubit>().resetState();
         } else if (state is ErrorState) {
           _showErrorSnackBar(context, state.errorMessage);
         }
       },
       builder: (context, state) {
-        if (state is LoadingState || state is LoginSuccessState) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        }
         return SingleChildScrollView(
           child: Container(
             padding: const EdgeInsets.all(30.0),
@@ -86,6 +83,7 @@ class _LoginFormState extends State<LoginForm> {
                     width: double.infinity,
                     height: 60,
                     child: SubmitButton(
+                      isLoading: (state is LoadingState),
                       buttonText: AppLocalizations.of(context).signIn,
                       onButtonPressed: () => signInActionButton(context),
                     ),

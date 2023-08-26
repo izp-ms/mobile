@@ -12,11 +12,35 @@ class AuthCubit extends Cubit<AuthState> {
   Future<void> loginUser(String email, String password) async {
     emit(LoadingState());
     try {
-      final response = await _repository.login(email, password);
+      final response = await _repository.login(
+        email,
+        password,
+      );
 
       await storage.write(key: 'token', value: response);
 
       emit(LoginSuccessState(response));
+    } catch (e) {
+      emit(ErrorState(e.toString()));
+    }
+  }
+
+  Future<void> registerUser(
+    String email,
+    String nickName,
+    String password,
+    String confirmPassword,
+  ) async {
+    emit(LoadingState());
+    try {
+      final response = await _repository.register(
+        email,
+        nickName,
+        password,
+        confirmPassword,
+      );
+
+      emit(RegisterSuccessState(response));
     } catch (e) {
       emit(ErrorState(e.toString()));
     }
