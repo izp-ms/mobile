@@ -87,23 +87,39 @@ class CustomDrawer extends Drawer {
 
   void onProfilePress(context) {
     Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => ProfilePage()));
+      context,
+      MaterialPageRoute(
+        builder: (context) => ProfilePage(),
+      ),
+    );
   }
 
   void onPostcardsPress(context) {
-    Navigator.pushReplacement(context,
-        MaterialPageRoute(builder: (context) => const PostcardsPage()));
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const PostcardsPage(),
+      ),
+    );
   }
 
   void onSettingsPress(context) {
     Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => const SettingsPage()));
+      context,
+      MaterialPageRoute(
+        builder: (context) => const SettingsPage(),
+      ),
+    );
   }
 
   Future<void> onLogOutPress(context) async {
     const storage = FlutterSecureStorage();
     await storage.delete(key: 'token');
     Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => const LoginPage()));
+      context,
+      MaterialPageRoute(
+        builder: (context) => const LoginPage(),
+      ),
+    );
   }
 }

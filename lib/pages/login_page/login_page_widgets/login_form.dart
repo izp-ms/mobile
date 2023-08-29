@@ -6,6 +6,7 @@ import 'package:mobile/cubit/auth_cubit/auth_state.dart';
 import 'package:mobile/custom_widgets/auth_form_filed/login_form_field.dart';
 import 'package:mobile/custom_widgets/submit_button.dart';
 import 'package:mobile/custom_widgets/switch_page_link.dart';
+import 'package:mobile/dto/login_dto.dart';
 import 'package:mobile/pages/postcards_page/postcards_page.dart';
 import 'package:mobile/pages/register_page/register_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -113,8 +114,13 @@ class _LoginFormState extends State<LoginForm> {
 
       final loginCubit = context.read<AuthCubit>();
 
+      final loginDto = LoginDto(
+        email: _userEmail,
+        password: _userPassword,
+      );
+
       try {
-        await loginCubit.loginUser(_userEmail, _userPassword);
+        await loginCubit.loginUser(loginDto);
       } catch (e) {
         _showErrorSnackBar(context, "An error occurred: $e");
       }
