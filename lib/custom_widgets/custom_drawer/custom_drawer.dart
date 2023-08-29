@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:mobile/pages/login_page/login_page.dart';
 import 'package:mobile/pages/postcards_page/postcards_page.dart';
 import 'package:mobile/pages/profile_page/profile_page.dart';
@@ -99,8 +100,9 @@ class CustomDrawer extends Drawer {
         context, MaterialPageRoute(builder: (context) => const SettingsPage()));
   }
 
-  void onLogOutPress(context) {
-    //TODO Proper log out function
+  Future<void> onLogOutPress(context) async {
+    const storage = FlutterSecureStorage();
+    await storage.delete(key: 'token');
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (context) => const LoginPage()));
   }

@@ -43,6 +43,7 @@ dependencies:
   http:
   flutter_bloc:
   flutter_secure_storage:
+  jwt_decoder:
 
 dev_dependencies:
   flutter_test:

@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class SubmitButton extends StatelessWidget {
-  const SubmitButton(
-      {super.key,
-      required this.buttonText,
-      required this.onButtonPressed,
-      this.isLoading = false});
+  const SubmitButton({
+    super.key,
+    required this.buttonText,
+    required this.onButtonPressed,
+    this.isLoading = false,
+  });
 
   final String buttonText;
   final VoidCallback onButtonPressed;

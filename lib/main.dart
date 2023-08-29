@@ -3,9 +3,12 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:mobile/cubit/auth_cubit/auth_cubit.dart';
 import 'package:mobile/pages/login_page/login_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:mobile/pages/postcards_page/postcards_page.dart';
 import 'package:mobile/repositories/auth_repository/auth_repository.dart';
 
 class MyHttpOverrides extends HttpOverrides {
@@ -17,16 +20,28 @@ class MyHttpOverrides extends HttpOverrides {
   }
 }
 
-void main() {
+Future<void> main() async {
   HttpOverrides.global = MyHttpOverrides();
-  runApp(const MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  const storage = FlutterSecureStorage();
+  final token = await storage.read(key: 'token');
+  runApp(MyApp(token: token));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({super.key, required this.token});
+
+  final String? token;
 
   @override
   Widget build(BuildContext context) {
+    bool isAuthenticated = false;
+    if (token != null) {
+      if (!JwtDecoder.isExpired(token!)) {
+        isAuthenticated = true;
+      }
+    }
+
     return MultiBlocProvider(
       providers: [
         BlocProvider<AuthCubit>(
@@ -84,7 +99,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
         themeMode: ThemeMode.system,
-        home: const LoginPage(),
+        home: isAuthenticated ? const PostcardsPage() : const LoginPage(),
       ),
     );
   }
