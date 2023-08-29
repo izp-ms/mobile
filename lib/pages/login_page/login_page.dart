@@ -8,9 +8,12 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: loginAndRegistrationAppBar(context),
-      body: const LoginForm(),
+    return GestureDetector(
+      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+      child: Scaffold(
+        appBar: loginAndRegistrationAppBar(context),
+        body: const LoginForm(),
+      ),
     );
   }
 }
