@@ -1,10 +1,10 @@
-class RegisterDto {
+class RegisterRequest {
   final String email;
   final String nickName;
   final String password;
   final String confirmPassword;
 
-  RegisterDto({
+  RegisterRequest({
     required this.email,
     required this.nickName,
     required this.password,

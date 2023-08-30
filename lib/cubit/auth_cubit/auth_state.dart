@@ -1,4 +1,4 @@
-import 'package:mobile/models/register_user_response_model.dart';
+import 'package:mobile/api/response/register_user_response.dart';
 
 abstract class AuthState {}
 
@@ -17,6 +17,6 @@ class LoginSuccessState extends AuthState {
 }
 
 class RegisterSuccessState extends AuthState {
-  final RegisterUserResponseModel user;
+  final RegisterUserResponse user;
   RegisterSuccessState(this.user);
 }

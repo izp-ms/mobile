@@ -1,15 +1,14 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:mobile/cubit/auth_cubit/auth_cubit.dart';
 import 'package:mobile/pages/login_page/login_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:mobile/pages/postcards_page/postcards_page.dart';
-import 'package:mobile/repositories/auth_repository/auth_repository.dart';
+import 'package:mobile/repositories/auth_repository.dart';
+import 'package:mobile/repositories/secure_storage_repository.dart';
 
 class MyHttpOverrides extends HttpOverrides {
   @override
@@ -23,8 +22,7 @@ class MyHttpOverrides extends HttpOverrides {
 Future<void> main() async {
   HttpOverrides.global = MyHttpOverrides();
   WidgetsFlutterBinding.ensureInitialized();
-  const storage = FlutterSecureStorage();
-  final token = await storage.read(key: 'token');
+  final token = await SecureStorageRepository.read(key: 'token');
   runApp(MyApp(token: token));
 }
 

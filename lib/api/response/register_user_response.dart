@@ -1,18 +1,18 @@
-class RegisterUserResponseModel {
+class RegisterUserResponse {
   int id;
   String nickName;
   String email;
   String role;
 
-  RegisterUserResponseModel({
+  RegisterUserResponse({
     required this.id,
     required this.nickName,
     required this.email,
     required this.role,
   });
 
-  factory RegisterUserResponseModel.fromJson(Map<String, dynamic> json) {
-    return RegisterUserResponseModel(
+  factory RegisterUserResponse.fromJson(Map<String, dynamic> json) {
+    return RegisterUserResponse(
       id: json['id'],
       nickName: json['nickName'],
       email: json['email'],
