@@ -4,11 +4,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:mobile/cubit/auth_cubit/auth_cubit.dart';
+import 'package:mobile/cubit/user_cubit/user_cubit.dart';
 import 'package:mobile/pages/login_page/login_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:mobile/pages/postcards_page/postcards_page.dart';
 import 'package:mobile/repositories/auth_repository.dart';
 import 'package:mobile/repositories/secure_storage_repository.dart';
+import 'package:mobile/repositories/user_repository.dart';
 
 class MyHttpOverrides extends HttpOverrides {
   @override
@@ -44,7 +46,10 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider<AuthCubit>(
           create: (context) => AuthCubit(AuthRepository()),
-        )
+        ),
+        BlocProvider<UserCubit>(
+          create: (context) => UserCubit(UserRepository()),
+        ),
       ],
       child: MaterialApp(
         title: 'postcardia',
