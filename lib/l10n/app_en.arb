@@ -7,6 +7,7 @@
   "signUp": "Sign up",
   "register": "Register",
   "name": "Name",
+  "nickName": "Nickname",
   "haveAccountAlready": "Have account already? ",
   "password": "Password",
   "confirmPassword": "Confirm password",

@@ -1,15 +1,17 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:mobile/dto/login_dto.dart';
-import 'package:mobile/dto/register_dto.dart';
-import 'package:mobile/models/error_message_model.dart';
-import 'package:mobile/models/register_user_response_model.dart';
-import 'package:mobile/models/token_model.dart';
+import 'package:mobile/api/request/login_request.dart';
+import 'package:mobile/api/request/register_request.dart';
+import 'package:mobile/api/response/error_message_response.dart';
+import 'package:mobile/api/response/register_user_response.dart';
+import 'package:mobile/api/response/token_response.dart';
+import 'package:mobile/constants/api_constants.dart';
+import 'package:mobile/extensions/is_ok.dart';
 
 class AuthRepository {
-  final String _baseUrl = 'https://10.0.2.2:7275/api';
+  final String _baseUrl = ApiConstants.baseUrl;
 
-  Future<dynamic> login(LoginDto loginDto) async {
+  Future<dynamic> login(LoginRequest loginRequest) async {
     final url = '$_baseUrl/User/login';
     final uri = Uri.parse(url);
 
@@ -19,21 +21,21 @@ class AuthRepository {
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8'
       },
-      body: json.encode(loginDto.toJson()),
+      body: json.encode(loginRequest.toJson()),
     );
 
     if (response.ok) {
       final tokenJson = json.decode(response.body);
-      final token = TokenModel.fromJson(tokenJson).token;
+      final token = TokenResponse.fromJson(tokenJson).token;
       return token;
     } else {
       final errorJson = json.decode(response.body);
-      final errorMessage = ErrorMessageModel.fromJson(errorJson).message;
+      final errorMessage = ErrorMessageResponse.fromJson(errorJson).message;
       throw errorMessage;
     }
   }
 
-  Future<dynamic> register(RegisterDto registerDto) async {
+  Future<dynamic> register(RegisterRequest registerRequest) async {
     final url = '$_baseUrl/User/register';
     final uri = Uri.parse(url);
 
@@ -43,23 +45,19 @@ class AuthRepository {
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8'
       },
-      body: json.encode(registerDto.toJson()),
+      body: json.encode(registerRequest.toJson()),
     );
 
     if (response.ok) {
       final userJson = json.decode(response.body);
-      final userResponse = RegisterUserResponseModel.fromJson(userJson);
+      final userResponse = RegisterUserResponse.fromJson(userJson);
       return userResponse;
     } else {
       final errorJson = json.decode(response.body);
-      final errorMessage = ErrorMessageModel.fromJson(errorJson).message;
+      final errorMessage = ErrorMessageResponse.fromJson(errorJson).message;
       throw errorMessage;
     }
   }
 }
 
-extension IsOk on http.Response {
-  bool get ok {
-    return (statusCode ~/ 100) == 2;
-  }
-}
+

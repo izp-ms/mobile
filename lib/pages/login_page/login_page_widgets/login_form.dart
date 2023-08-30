@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mobile/api/request/login_request.dart';
 import 'package:mobile/cubit/auth_cubit/auth_cubit.dart';
 import 'package:mobile/cubit/auth_cubit/auth_state.dart';
 import 'package:mobile/custom_widgets/auth_form_filed/login_form_field.dart';
 import 'package:mobile/custom_widgets/submit_button.dart';
 import 'package:mobile/custom_widgets/switch_page_link.dart';
-import 'package:mobile/dto/login_dto.dart';
 import 'package:mobile/pages/postcards_page/postcards_page.dart';
 import 'package:mobile/pages/register_page/register_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -114,7 +114,7 @@ class _LoginFormState extends State<LoginForm> {
 
       final loginCubit = context.read<AuthCubit>();
 
-      final loginDto = LoginDto(
+      final loginDto = LoginRequest(
         email: _userEmail,
         password: _userPassword,
       );

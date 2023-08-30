@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mobile/api/request/register_request.dart';
 import 'package:mobile/cubit/auth_cubit/auth_cubit.dart';
 import 'package:mobile/cubit/auth_cubit/auth_state.dart';
 import 'package:mobile/custom_widgets/auth_form_filed/login_form_field.dart';
 import 'package:mobile/custom_widgets/submit_button.dart';
 import 'package:mobile/custom_widgets/switch_page_link.dart';
-import 'package:mobile/dto/register_dto.dart';
 import 'package:mobile/pages/login_page/login_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -78,7 +78,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                             if (newValue == null) return;
                             _userName = newValue;
                           },
-                          hintText: AppLocalizations.of(context).name,
+                          hintText: AppLocalizations.of(context).nickName,
                           inputIcon: Icons.person,
                         ),
                         SizedBox(height: gapBetweenTextFields),
@@ -140,7 +140,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
 
       final authCubit = context.read<AuthCubit>();
 
-      final registerDto = RegisterDto(
+      final registerDto = RegisterRequest(
         email: _userEmail,
         nickName: _userName,
         password: _userPassword,
