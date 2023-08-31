@@ -7,6 +7,8 @@ import 'package:mobile/cubit/auth_cubit/auth_state.dart';
 import 'package:mobile/custom_widgets/auth_form_filed/login_form_field.dart';
 import 'package:mobile/custom_widgets/submit_button.dart';
 import 'package:mobile/custom_widgets/switch_page_link.dart';
+import 'package:mobile/helpers/show_error_snack_bar.dart';
+import 'package:mobile/helpers/show_success_snack_bar.dart';
 import 'package:mobile/pages/login_page/login_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -37,11 +39,11 @@ class _RegistrationFormState extends State<RegistrationForm> {
     return BlocConsumer<AuthCubit, AuthState>(
       listener: (context, state) {
         if (state is RegisterSuccessState) {
-          _showSuccessSnackBar(context, "Successfully register user.");
+          showSuccessSnackBar(context, "Successfully register user.");
           context.read<AuthCubit>().resetState();
           _navigateToLoginPage(context);
         } else if (state is ErrorState) {
-          _showErrorSnackBar(context, state.errorMessage);
+          showErrorSnackBar(context, state.errorMessage);
         }
       },
       builder: (context, state) {
@@ -150,7 +152,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
       try {
         await authCubit.registerUser(registerDto);
       } catch (e) {
-        _showErrorSnackBar(context, "An error occurred: $e");
+        showErrorSnackBar(context, "An error occurred: $e");
       }
     }
   }
@@ -160,26 +162,6 @@ class _RegistrationFormState extends State<RegistrationForm> {
       context,
       MaterialPageRoute(builder: (context) => const LoginPage()),
     );
-  }
-
-  void _showSuccessSnackBar(BuildContext context, String message) {
-    final snackBar = SnackBar(
-      content: Text(message),
-      backgroundColor: Colors.green,
-    );
-    if (context.mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-    }
-  }
-
-  void _showErrorSnackBar(BuildContext context, String message) {
-    final snackBar = SnackBar(
-      content: Text(message),
-      backgroundColor: Colors.red,
-    );
-    if (context.mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-    }
   }
 
   void onSignInLinkPress(context) {

@@ -7,6 +7,7 @@ import 'package:mobile/cubit/auth_cubit/auth_state.dart';
 import 'package:mobile/custom_widgets/auth_form_filed/login_form_field.dart';
 import 'package:mobile/custom_widgets/submit_button.dart';
 import 'package:mobile/custom_widgets/switch_page_link.dart';
+import 'package:mobile/helpers/show_error_snack_bar.dart';
 import 'package:mobile/pages/postcards_page/postcards_page.dart';
 import 'package:mobile/pages/register_page/register_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -36,7 +37,7 @@ class _LoginFormState extends State<LoginForm> {
           _navigateToPostcardsPage(context);
           context.read<AuthCubit>().resetState();
         } else if (state is ErrorState) {
-          _showErrorSnackBar(context, state.errorMessage);
+          showErrorSnackBar(context, state.errorMessage);
         }
       },
       builder: (context, state) {
@@ -122,7 +123,7 @@ class _LoginFormState extends State<LoginForm> {
       try {
         await loginCubit.loginUser(loginDto);
       } catch (e) {
-        _showErrorSnackBar(context, "An error occurred: $e");
+        showErrorSnackBar(context, "An error occurred: $e");
       }
     }
   }
@@ -132,16 +133,6 @@ class _LoginFormState extends State<LoginForm> {
       context,
       MaterialPageRoute(builder: (context) => const PostcardsPage()),
     );
-  }
-
-  void _showErrorSnackBar(BuildContext context, String message) {
-    final snackBar = SnackBar(
-      content: Text(message),
-      backgroundColor: Colors.red,
-    );
-    if (context.mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-    }
   }
 
   void onSignUpLinkPress(context) {

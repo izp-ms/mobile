@@ -9,7 +9,7 @@ class SettingsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
-      appBar: MainPageAppBar(),
+      appBar: const MainPageAppBar(),
       drawer: CustomDrawer(context),
       body: const Center(
         child: Text("Settings"),

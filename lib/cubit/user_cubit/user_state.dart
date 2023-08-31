@@ -13,5 +13,6 @@ class ErrorState extends UserState {
 
 class LoadedState extends UserState {
   final UserDetailResponse userDetail;
-  LoadedState(this.userDetail);
+  final String nickName;
+  LoadedState(this.userDetail, this.nickName);
 }

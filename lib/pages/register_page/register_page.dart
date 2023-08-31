@@ -10,7 +10,7 @@ class RegisterPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: loginAndRegistrationAppBar(context),
-      body: RegistrationForm(),
+      body: const RegistrationForm(),
     );
   }
 }

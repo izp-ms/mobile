@@ -13,7 +13,7 @@ class _PostcardsPageState extends State<PostcardsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MainPageAppBar(),
+      appBar: const MainPageAppBar(),
       drawer: CustomDrawer(context),
       body: const Center(
         child: Text("Postcards"),
