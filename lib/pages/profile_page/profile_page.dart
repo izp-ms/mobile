@@ -36,95 +36,47 @@ class _ProfilePageState extends State<ProfilePage> {
       drawer: CustomDrawer(context),
       body: BlocConsumer<UserCubit, UserState>(
         listener: (context, state) {
-         if (state is ErrorState) {
+          if (state is ErrorState) {
             showErrorSnackBar(context, state.errorMessage);
           }
         },
         builder: (context, state) {
-          if (state is LoadingState) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          } else if (state is LoadedState) {
-            return ListView(
-              children: [
-                Container(
-                  constraints: const BoxConstraints(
-                    minWidth: 0,
-                    minHeight: 0,
-                    maxWidth: double.infinity,
-                    maxHeight: double.infinity,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.background,
-                    borderRadius: const BorderRadius.only(
-                      bottomLeft: Radius.circular(30),
-                      bottomRight: Radius.circular(30),
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.25),
-                        spreadRadius: 0,
-                        blurRadius: 4,
-                        offset: const Offset(0, 4),
-                      ),
-                    ],
-                  ),
-                  padding: const EdgeInsets.fromLTRB(30, 10, 30, 30),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const ProfilePicturesStack(),
-                      GestureDetector(
-                        onTap: () => {
-                          print("Navigacja do modala do edytowania profilu")
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.fromLTRB(0, 15, 10, 0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              const Icon(
-                                Icons.mode_edit_outlined,
-                                size: 15,
-                              ),
-                              const SizedBox(
-                                width: 3,
-                              ),
-                              Text(
-                                AppLocalizations.of(context).editProfile,
-                                style: GoogleFonts.rubik(
-                                  fontSize: 10,
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 50,
-                      ),
-                      const PersonalInfoSection(),
-                      const StatisticsSection(),
-                    ],
-                  ),
+          return ListView(
+            children: [
+              Container(
+                constraints: const BoxConstraints(
+                  minWidth: 0,
+                  minHeight: 0,
+                  maxWidth: double.infinity,
+                  maxHeight: double.infinity,
                 ),
-                Container(
-                  padding: const EdgeInsets.all(30),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        AppLocalizations.of(context).favouritePostcards,
-                        style: GoogleFonts.rubik(
-                          fontSize: 18,
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: () => {
-                          print("Navigacja do modala do edytowania pocztówek")
-                        },
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.background,
+                  borderRadius: const BorderRadius.only(
+                    bottomLeft: Radius.circular(30),
+                    bottomRight: Radius.circular(30),
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.25),
+                      spreadRadius: 0,
+                      blurRadius: 4,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
+                padding: const EdgeInsets.fromLTRB(30, 10, 30, 30),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const ProfilePicturesStack(),
+                    GestureDetector(
+                      onTap: () =>
+                          {print("Navigacja do modala do edytowania profilu")},
+                      child: Container(
+                        padding: const EdgeInsets.fromLTRB(0, 15, 10, 0),
                         child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             const Icon(
                               Icons.mode_edit_outlined,
@@ -134,43 +86,82 @@ class _ProfilePageState extends State<ProfilePage> {
                               width: 3,
                             ),
                             Text(
-                              AppLocalizations.of(context).editFavourite,
+                              AppLocalizations.of(context).editProfile,
                               style: GoogleFonts.rubik(
                                 fontSize: 10,
                               ),
                             )
                           ],
                         ),
-                      )
-                    ],
-                  ),
-                ),
-                GridView.builder(
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3,
-                    crossAxisSpacing: 32,
-                    mainAxisSpacing: 20,
-                    childAspectRatio: 3 / 4,
-                  ),
-                  padding: const EdgeInsets.symmetric(horizontal: 30),
-                  physics: const NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: 9,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Container(
-                      color: Colors.white,
-                      child: Padding(
-                        padding: const EdgeInsets.all(7),
-                        child: SvgPicture.asset('assets/postcards/First.svg'),
                       ),
-                    );
-                  },
+                    ),
+                    const SizedBox(
+                      height: 50,
+                    ),
+                    const PersonalInfoSection(),
+                    const StatisticsSection(),
+                  ],
                 ),
-              ],
-            );
-          } else {
-            return Container();
-          }
+              ),
+              Container(
+                padding: const EdgeInsets.all(30),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      AppLocalizations.of(context).favouritePostcards,
+                      style: GoogleFonts.rubik(
+                        fontSize: 18,
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () => {
+                        print("Navigacja do modala do edytowania pocztówek")
+                      },
+                      child: Row(
+                        children: [
+                          const Icon(
+                            Icons.mode_edit_outlined,
+                            size: 15,
+                          ),
+                          const SizedBox(
+                            width: 3,
+                          ),
+                          Text(
+                            AppLocalizations.of(context).editFavourite,
+                            style: GoogleFonts.rubik(
+                              fontSize: 10,
+                            ),
+                          )
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              GridView.builder(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3,
+                  crossAxisSpacing: 32,
+                  mainAxisSpacing: 20,
+                  childAspectRatio: 3 / 4,
+                ),
+                padding: const EdgeInsets.symmetric(horizontal: 30),
+                physics: const NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                itemCount: 9,
+                itemBuilder: (BuildContext context, int index) {
+                  return Container(
+                    color: Colors.white,
+                    child: Padding(
+                      padding: const EdgeInsets.all(7),
+                      child: SvgPicture.asset('assets/postcards/First.svg'),
+                    ),
+                  );
+                },
+              ),
+            ],
+          );
         },
       ),
     );

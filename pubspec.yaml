@@ -44,6 +44,7 @@ dependencies:
   flutter_bloc:
   flutter_secure_storage:
   jwt_decoder:
+  shimmer:
 
 dev_dependencies:
   flutter_test:
