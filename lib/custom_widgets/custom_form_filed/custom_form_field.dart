@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:mobile/custom_widgets/auth_form_filed/styled.dart';
+import 'package:mobile/custom_widgets/custom_form_filed/styled.dart';
 
 class FormTextField extends StatelessWidget {
   const FormTextField({
@@ -32,6 +32,7 @@ class FormTextField extends StatelessWidget {
       enableSuggestions: isPasswordField,
       autocorrect: isPasswordField,
       onSaved: onSaved,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
     );
   }
 }

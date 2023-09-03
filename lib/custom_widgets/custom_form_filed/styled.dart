@@ -30,5 +30,23 @@ InputDecoration authTextFieldDecoration(context, hintText, inputIcon) {
         width: 2,
       ),
     ),
+    errorBorder: OutlineInputBorder(
+      borderRadius: const BorderRadius.all(
+        Radius.circular(25),
+      ),
+      borderSide: BorderSide(
+        color: Theme.of(context).colorScheme.error,
+        width: 2,
+      ),
+    ),
+    focusedErrorBorder: OutlineInputBorder(
+      borderRadius: const BorderRadius.all(
+        Radius.circular(25),
+      ),
+      borderSide: BorderSide(
+        color: Theme.of(context).colorScheme.error,
+        width: 1,
+      ),
+    ),
   );
 }

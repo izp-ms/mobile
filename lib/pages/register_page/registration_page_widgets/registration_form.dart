@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:mobile/api/request/register_request.dart';
 import 'package:mobile/cubit/auth_cubit/auth_cubit.dart';
 import 'package:mobile/cubit/auth_cubit/auth_state.dart';
-import 'package:mobile/custom_widgets/auth_form_filed/login_form_field.dart';
+import 'package:mobile/custom_widgets/custom_form_filed/custom_form_field.dart';
 import 'package:mobile/custom_widgets/submit_button.dart';
 import 'package:mobile/custom_widgets/switch_page_link.dart';
 import 'package:mobile/helpers/show_error_snack_bar.dart';
@@ -164,7 +164,8 @@ class _RegistrationFormState extends State<RegistrationForm> {
     );
   }
 
-  void onSignInLinkPress(context) {
+  void onSignInLinkPress(BuildContext context) {
+    context.read<AuthCubit>().resetState();
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (context) => const LoginPage()));
   }
