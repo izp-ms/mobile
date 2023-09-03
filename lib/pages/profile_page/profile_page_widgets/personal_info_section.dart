@@ -16,41 +16,79 @@ class PersonalInfoSection extends StatefulWidget {
 }
 
 class _PersonalInfoSectionState extends State<PersonalInfoSection> {
+  bool isDescriptionOpen = false;
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<UserCubit, UserState>(
       builder: (context, state) {
-        return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              _renderUserName(state),
-              const SizedBox(
-                height: 20,
-              ),
-              if (state is LoadedState)
-                Column(
-                  children: [
-                    if (state.userDetail.birthDate != null)
-                      _buildRowWithIcon(
-                        icon: Icons.cake_outlined,
-                        text: state.userDetail.birthDate.toString(),
-                      ),
-                    if (state.userDetail.id != null) ...[
-                      // TODO wyjebania
-                      SizedBox(
-                        height: state.userDetail.birthDate == null ? 0 : 8,
-                      ),
-                      _buildRowWithIcon(
-                        icon: Icons.flag,
-                        text: "Afganistan",
-                      ),
-                    ]
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            _renderUserName(state),
+            const SizedBox(
+              height: 20,
+            ),
+            if (state is LoadedState)
+              Column(
+                children: [
+                  if (state.userDetail.birthDate != null)
+                    _buildRowWithIcon(
+                      icon: Icons.cake_outlined,
+                      text: state.userDetail.birthDate.toString(),
+                    ),
+                  if (state.userDetail.id != null) ...[
+                    // TODO wyjebania
+                    SizedBox(
+                      height: state.userDetail.birthDate == null ? 0 : 8,
+                    ),
+                    _buildRowWithIcon(
+                      icon: Icons.flag,
+                      text: "Afganistan",
+                    ),
                   ],
-                )
-            ],
-          ),
+                  if (state.userDetail.description != null) ...[
+                    const SizedBox(height: 10),
+                    const Divider(),
+                    const SizedBox(height: 10),
+                    ExpansionPanelList(
+                      children: [
+                        ExpansionPanel(
+                          backgroundColor:
+                              Theme.of(context).colorScheme.background,
+                          headerBuilder:
+                              (BuildContext context, bool isExpanded) {
+                            return ListTile(
+                              title: Text(
+                                "About me",
+                                style: GoogleFonts.rubik(
+                                  fontSize: 18,
+                                ),
+                              ),
+                            );
+                          },
+                          body: Text(
+                            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec consectetur ante odio, quis volutpat diam iaculis sit amet. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Suspendisse potenti. Vivamus hendrerit cras.",
+                            style: GoogleFonts.rubik(
+                              fontSize: 18,
+                            ),
+                          ),
+                          isExpanded: isDescriptionOpen,
+                        ),
+                      ],
+                      elevation: 0,
+                      expansionCallback: (i, isExpanded) => {
+                        setState(() {
+                          isDescriptionOpen = !isExpanded;
+                        })
+                      },
+                    ),
+                    const SizedBox(height: 10),
+                    const Divider(),
+                  ]
+                ],
+              )
+          ],
         );
       },
     );
