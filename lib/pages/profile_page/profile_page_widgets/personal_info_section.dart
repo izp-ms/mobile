@@ -27,11 +27,14 @@ class _PersonalInfoSectionState extends State<PersonalInfoSection> {
           children: [
             _renderUserName(state),
             const SizedBox(
-              height: 20,
+              height: 12,
             ),
             if (state is LoadedState)
               Column(
                 children: [
+                  const SizedBox(
+                    height: 8,
+                  ),
                   if (state.userDetail.birthDate != null)
                     _buildRowWithIcon(
                       icon: Icons.cake_outlined,
@@ -39,8 +42,8 @@ class _PersonalInfoSectionState extends State<PersonalInfoSection> {
                     ),
                   if (state.userDetail.id != null) ...[
                     // TODO wyjebania
-                    SizedBox(
-                      height: state.userDetail.birthDate == null ? 0 : 8,
+                    const SizedBox(
+                      height: 8,
                     ),
                     _buildRowWithIcon(
                       icon: Icons.flag,
