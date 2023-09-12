@@ -19,5 +19,7 @@
   "following": "Following",
   "favouritePostcards": "Favourite postcards",
   "editProfile": "Edit profile",
-  "editFavourite": "Edit favourite"
+  "editFavourite": "Edit favourite",
+  "pickPhoto": "Pick photo",
+  "save": "Save"
 }

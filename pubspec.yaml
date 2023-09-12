@@ -45,6 +45,7 @@ dependencies:
   flutter_secure_storage:
   jwt_decoder:
   shimmer:
+  image_picker:
 
 dev_dependencies:
   flutter_test:

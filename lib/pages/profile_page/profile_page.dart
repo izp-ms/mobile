@@ -7,6 +7,7 @@ import 'package:mobile/cubit/user_cubit/user_state.dart';
 import 'package:mobile/custom_widgets/custom_drawer/custom_drawer.dart';
 import 'package:mobile/custom_widgets/main_page_app_bar.dart';
 import 'package:mobile/helpers/show_error_snack_bar.dart';
+import 'package:mobile/pages/edit_user_details_page/edit_user_details_page.dart';
 import 'package:mobile/pages/profile_page/profile_page_widgets/personal_info_section.dart';
 import 'package:mobile/pages/profile_page/profile_page_widgets/profile_pictures_stack/profile_pictures_stack.dart';
 import 'package:mobile/pages/profile_page/profile_page_widgets/statistics_section/statistics_section.dart';
@@ -71,8 +72,22 @@ class _ProfilePageState extends State<ProfilePage> {
                   children: [
                     const ProfilePicturesStack(),
                     GestureDetector(
-                      onTap: () =>
-                          {print("Navigacja do modala do edytowania profilu")},
+                      onTap: () => {
+                        if (state is LoadedState)
+                          {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => EditUserDetailsPage(
+                                  userDetail: state.userDetail,
+                                ),
+                              ),
+                            ),
+                          }
+                        else {
+                          print("State is not loaded")
+                        }
+                      },
                       child: Container(
                         padding: const EdgeInsets.fromLTRB(0, 15, 10, 0),
                         child: Row(

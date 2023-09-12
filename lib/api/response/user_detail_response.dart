@@ -5,6 +5,7 @@ class UserDetailResponse {
   final DateTime birthDate;
   final String? avatarBase64;
   final String? description;
+  final String? backgroundBase64;
 
   UserDetailResponse({
     required this.id,
@@ -13,6 +14,7 @@ class UserDetailResponse {
     required this.birthDate,
     this.avatarBase64,
     this.description,
+    this.backgroundBase64,
   });
 
   factory UserDetailResponse.fromJson(Map<String, dynamic> json) {
@@ -23,6 +25,7 @@ class UserDetailResponse {
       birthDate: DateTime.parse(json['birthDate']),
       avatarBase64: json['avatarBase64'],
       description: json['description'],
+      backgroundBase64: json['backgroundBase64'],
     );
   }
 }
