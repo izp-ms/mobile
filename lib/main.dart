@@ -97,7 +97,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
         themeMode: ThemeMode.system,
-        home: isAuthenticated ? const PostcardsPage() : const PostcardsPage(),// : const LoginPage(),
+        home: isAuthenticated ? const PostcardsPage() : const LoginPage(),
       ),
     );
   }

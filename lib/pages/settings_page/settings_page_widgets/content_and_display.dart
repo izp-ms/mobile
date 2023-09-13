@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:mobile/custom_widgets/custom_drawer/settings_switch.dart';
+import 'package:mobile/custom_widgets/settings_switch.dart';
 
 class ContentAndDisplay extends StatelessWidget {
   const ContentAndDisplay({
