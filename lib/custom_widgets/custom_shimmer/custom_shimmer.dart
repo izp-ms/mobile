@@ -5,8 +5,8 @@ class CustomShimmer extends StatelessWidget {
   const CustomShimmer({
     super.key,
     required this.context,
-    required this.width,
-    required this.height,
+    this.width = double.infinity,
+    this.height = double.infinity,
     this.radius = 12,
   });
 

@@ -8,6 +8,7 @@ import 'package:mobile/api/response/user_detail_response.dart';
 import 'package:mobile/cubit/user_cubit/user_cubit.dart';
 import 'package:mobile/cubit/user_cubit/user_state.dart';
 import 'package:mobile/custom_widgets/submit_button.dart';
+import 'package:mobile/helpers/base64Validator.dart';
 import 'package:mobile/helpers/show_error_snack_bar.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -23,7 +24,6 @@ class EditUserDetailsPage extends StatefulWidget {
 }
 
 class _EditUserDetailsPageState extends State<EditUserDetailsPage> {
-
   double pagePadding = 10;
 
   String? _backgroundImageBase64;
@@ -39,7 +39,6 @@ class _EditUserDetailsPageState extends State<EditUserDetailsPage> {
 
   @override
   Widget build(BuildContext context) {
-    print(_avatarImageBase64);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.background,
@@ -58,16 +57,16 @@ class _EditUserDetailsPageState extends State<EditUserDetailsPage> {
         },
         builder: (context, state) {
           return ListView(
-            padding: EdgeInsets.symmetric(horizontal: 2*pagePadding),
+            padding: EdgeInsets.symmetric(horizontal: 2 * pagePadding),
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.5 - pagePadding,
+                    width:
+                        MediaQuery.of(context).size.width * 0.5 - pagePadding,
                     child: Center(
-                      child: (_backgroundImageBase64 != null &&
-                              _isBase64Valid(_backgroundImageBase64!))
+                      child: (isBase64Valid(_backgroundImageBase64!))
                           ? ClipRRect(
                               borderRadius: BorderRadius.circular(10),
                               child: SizedBox(
@@ -84,7 +83,8 @@ class _EditUserDetailsPageState extends State<EditUserDetailsPage> {
                               child: Container(
                                 width: 200,
                                 height: 100,
-                                color: Theme.of(context).colorScheme.onBackground,
+                                color:
+                                    Theme.of(context).colorScheme.onBackground,
                               ),
                             ),
                     ),
@@ -100,12 +100,11 @@ class _EditUserDetailsPageState extends State<EditUserDetailsPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-
                   SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.5 - pagePadding,
+                    width:
+                        MediaQuery.of(context).size.width * 0.5 - pagePadding,
                     child: Center(
-                      child: (_avatarImageBase64 != null &&
-                              _isBase64Valid(_avatarImageBase64!))
+                      child: (isBase64Valid(_avatarImageBase64!))
                           ? ClipRRect(
                               borderRadius: BorderRadius.circular(100),
                               child: SizedBox(
@@ -121,7 +120,8 @@ class _EditUserDetailsPageState extends State<EditUserDetailsPage> {
                               width: 100,
                               height: 100,
                               decoration: BoxDecoration(
-                                color: Theme.of(context).colorScheme.onBackground,
+                                color:
+                                    Theme.of(context).colorScheme.onBackground,
                                 shape: BoxShape.circle,
                               ),
                             ),
@@ -148,15 +148,6 @@ class _EditUserDetailsPageState extends State<EditUserDetailsPage> {
         },
       ),
     );
-  }
-
-  bool _isBase64Valid(String base64) {
-    try {
-      base64Decode(base64);
-      return true;
-    } catch (_) {
-      return false;
-    }
   }
 
   void _pickImage({required Images imageType}) async {
