@@ -3,11 +3,11 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mobile/api/response/user_detail_response.dart';
 import 'package:mobile/cubit/user_cubit/user_cubit.dart';
 import 'package:mobile/cubit/user_cubit/user_state.dart';
+import 'package:mobile/custom_widgets/custom_date_picker.dart';
 import 'package:mobile/custom_widgets/custom_text_form_field/custom_text_form_field.dart';
 import 'package:mobile/custom_widgets/submit_button.dart';
 import 'package:mobile/helpers/base64Validator.dart';
@@ -36,7 +36,7 @@ class _EditUserDetailsPageState extends State<EditUserDetailsPage> {
   @override
   void initState() {
     super.initState();
-    date = _todaysDate();
+    date = todayDate();
     _backgroundImageBase64 = widget.userDetail.backgroundBase64;
     _avatarImageBase64 = widget.userDetail.avatarBase64;
   }
@@ -164,12 +164,21 @@ class _EditUserDetailsPageState extends State<EditUserDetailsPage> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Expanded(child: _customDatePicker()),
-                        if (date != _todaysDate())
+                        Expanded(
+                          child: CustomDatePicker(
+                            selectedDate: date,
+                            onDateChange: (newDate) {
+                              setState(() {
+                                date = newDate;
+                              });
+                            },
+                          ),
+                        ),
+                        if (date != todayDate())
                           IconButton(
                             onPressed: () {
                               setState(() {
-                                date = _todaysDate();
+                                date = todayDate();
                               });
                             },
                             icon: const Icon(Icons.close),
@@ -185,7 +194,10 @@ class _EditUserDetailsPageState extends State<EditUserDetailsPage> {
                 const SizedBox(
                   height: 20,
                 ),
-                const CustomTextFormField(hintText: 'About me'),
+                const CustomTextFormField(
+                  hintText: 'About me',
+                  maxLength: 500,
+                ),
                 const SizedBox(
                   height: 20,
                 ),
@@ -205,85 +217,6 @@ class _EditUserDetailsPageState extends State<EditUserDetailsPage> {
         ),
       ),
     );
-  }
-
-  DateTime _todaysDate() {
-    DateTime today = DateTime.now();
-    return DateTime(today.year, today.month, today.day);
-  }
-
-  Widget _customDatePicker() {
-    return SizedBox(
-      height: 61,
-      child: ElevatedButton(
-        style: ButtonStyle(
-          padding: MaterialStateProperty.all(
-            const EdgeInsets.symmetric(horizontal: 14.0),
-          ),
-          elevation: MaterialStateProperty.all(0.0),
-          backgroundColor: MaterialStateProperty.all<Color>(
-              Theme.of(context).colorScheme.onBackground),
-          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-            RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(25.0),
-            ),
-          ),
-        ),
-        onPressed: _showDatePicker,
-        child: Row(
-          children: [
-            Text(
-              _birthDayButtonContent(),
-              style: GoogleFonts.rubik(
-                color: Theme.of(context).colorScheme.onPrimary,
-                fontSize: 16,
-              ),
-              textAlign: TextAlign.left,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  void _showDatePicker() async {
-    DateTime? newDate = await showDatePicker(
-      builder: (context, child) {
-        return Theme(
-          data: Theme.of(context).copyWith(
-            colorScheme: Theme.of(context).brightness == Brightness.light
-                ? ColorScheme.light(
-                    primary: Theme.of(context).colorScheme.secondaryContainer,
-                  )
-                : ColorScheme.dark(
-                    primary: Theme.of(context).colorScheme.secondaryContainer,
-                  ),
-            primaryColor: Theme.of(context).colorScheme.secondaryContainer,
-            textButtonTheme: TextButtonThemeData(
-              style: TextButton.styleFrom(
-                foregroundColor: Theme.of(context).colorScheme.onPrimary,
-              ),
-            ),
-          ),
-          child: child!,
-        );
-      },
-      context: context,
-      initialDate: date,
-      firstDate: DateTime(1900),
-      lastDate: DateTime(2100),
-    );
-
-    if (newDate == null) return;
-    setState(() {
-      date = newDate;
-    });
-  }
-
-  String _birthDayButtonContent() {
-    return (date == todayDate())
-        ? "Birthday"
-        : "${date.day}.${date.month}.${date.year}";
   }
 
   void _pickImage({required Images imageType}) async {
