@@ -8,7 +8,7 @@ import 'package:mobile/custom_widgets/custom_shimmer/custom_shimmer.dart';
 import 'package:mobile/helpers/base64Validator.dart';
 
 class ProfilePicture extends StatelessWidget {
-  const ProfilePicture({Key? key});
+  const ProfilePicture({super.key});
 
   @override
   Widget build(BuildContext context) {
