@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:mobile/api/response/user_detail_response.dart';
 import 'package:mobile/cubit/user_cubit/user_cubit.dart';
 import 'package:mobile/cubit/user_cubit/user_state.dart';
+import 'package:mobile/custom_widgets/country_picker.dart';
 import 'package:mobile/custom_widgets/custom_date_picker.dart';
 import 'package:mobile/custom_widgets/custom_form_filed/custom_form_field.dart';
 import 'package:mobile/custom_widgets/submit_button.dart';
@@ -77,8 +78,8 @@ class _EditUserDetailsPageState extends State<EditUserDetailsPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       SizedBox(
-                        width:
-                            MediaQuery.of(context).size.width * 0.5 - pagePadding,
+                        width: MediaQuery.of(context).size.width * 0.5 -
+                            pagePadding,
                         child: Center(
                           child: (isBase64Valid(_backgroundImageBase64))
                               ? ClipRRect(
@@ -119,8 +120,8 @@ class _EditUserDetailsPageState extends State<EditUserDetailsPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       SizedBox(
-                        width:
-                            MediaQuery.of(context).size.width * 0.5 - pagePadding,
+                        width: MediaQuery.of(context).size.width * 0.5 -
+                            pagePadding,
                         child: Center(
                           child: (isBase64Valid(_avatarImageBase64))
                               ? ClipRRect(
@@ -212,13 +213,35 @@ class _EditUserDetailsPageState extends State<EditUserDetailsPage> {
                   const SizedBox(
                     height: 20,
                   ),
-                  CustomFormField(
-                    hintText: 'Country',
-                    isRequired: false,
-                    onSaved: (newValue) {
-                      if (newValue == null) return;
-                      _country = newValue;
-                    },
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(25),
+                    child: Container(
+                      color: Theme.of(context).colorScheme.onBackground,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: CustomCountryPicker(
+                              selectedCountry: _country,
+                              onCountryChange: (newCountry) {
+                                setState(() {
+                                  _country = newCountry;
+                                });
+                              },
+                            ),
+                          ),
+                          if (_country != null && _country != '')
+                            IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  _country = null;
+                                });
+                              },
+                              icon: const Icon(Icons.close),
+                            )
+                        ],
+                      ),
+                    ),
                   ),
                   const SizedBox(
                     height: 20,

@@ -46,6 +46,7 @@ dependencies:
   jwt_decoder:
   shimmer:
   image_picker:
+  country_picker:
 
 dev_dependencies:
   flutter_test:
