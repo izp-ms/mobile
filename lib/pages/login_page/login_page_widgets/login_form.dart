@@ -60,7 +60,7 @@ class _LoginFormState extends State<LoginForm> {
                     padding: const EdgeInsets.only(top: 20, bottom: 30),
                     child: Column(
                       children: [
-                        FormTextField(
+                        CustomFormField(
                           onSaved: (newValue) {
                             if (newValue == null) return;
                             _userEmail = newValue;
@@ -69,7 +69,7 @@ class _LoginFormState extends State<LoginForm> {
                           inputIcon: Icons.email,
                         ),
                         SizedBox(height: gapBetweenTextFields),
-                        FormTextField(
+                        CustomFormField(
                           onSaved: (newValue) {
                             if (newValue == null) return;
                             _userPassword = newValue;

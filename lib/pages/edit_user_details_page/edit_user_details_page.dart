@@ -8,7 +8,7 @@ import 'package:mobile/api/response/user_detail_response.dart';
 import 'package:mobile/cubit/user_cubit/user_cubit.dart';
 import 'package:mobile/cubit/user_cubit/user_state.dart';
 import 'package:mobile/custom_widgets/custom_date_picker.dart';
-import 'package:mobile/custom_widgets/custom_text_form_field/custom_text_form_field.dart';
+import 'package:mobile/custom_widgets/custom_form_filed/custom_form_field.dart';
 import 'package:mobile/custom_widgets/submit_button.dart';
 import 'package:mobile/helpers/base64Validator.dart';
 import 'package:mobile/helpers/show_error_snack_bar.dart';
@@ -29,9 +29,15 @@ class EditUserDetailsPage extends StatefulWidget {
 class _EditUserDetailsPageState extends State<EditUserDetailsPage> {
   double pagePadding = 10;
   late DateTime date;
+  final ImagePicker _picker = ImagePicker();
+  final _formKey = GlobalKey<FormState>();
+
   String? _backgroundImageBase64;
   String? _avatarImageBase64;
-  final ImagePicker _picker = ImagePicker();
+  String? _userName;
+  String? _userSecondName;
+  String? _country;
+  String? _aboutMe;
 
   @override
   void initState() {
@@ -62,161 +68,206 @@ class _EditUserDetailsPageState extends State<EditUserDetailsPage> {
             }
           },
           builder: (context, state) {
-            return ListView(
-              padding: EdgeInsets.symmetric(horizontal: 2 * pagePadding),
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    SizedBox(
-                      width:
-                          MediaQuery.of(context).size.width * 0.5 - pagePadding,
-                      child: Center(
-                        child: (isBase64Valid(_backgroundImageBase64))
-                            ? ClipRRect(
-                                borderRadius: BorderRadius.circular(10),
-                                child: SizedBox(
-                                  width: 200,
-                                  height: 100,
-                                  child: Image.memory(
-                                    base64Decode(_backgroundImageBase64!),
-                                    fit: BoxFit.cover,
+            return Form(
+              key: _formKey,
+              child: ListView(
+                padding: EdgeInsets.symmetric(horizontal: 2 * pagePadding),
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      SizedBox(
+                        width:
+                            MediaQuery.of(context).size.width * 0.5 - pagePadding,
+                        child: Center(
+                          child: (isBase64Valid(_backgroundImageBase64))
+                              ? ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: SizedBox(
+                                    width: 200,
+                                    height: 100,
+                                    child: Image.memory(
+                                      base64Decode(_backgroundImageBase64!),
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                )
+                              : ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: Container(
+                                    width: 200,
+                                    height: 100,
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onBackground,
                                   ),
                                 ),
-                              )
-                            : ClipRRect(
-                                borderRadius: BorderRadius.circular(10),
-                                child: Container(
-                                  width: 200,
-                                  height: 100,
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onBackground,
-                                ),
-                              ),
+                        ),
                       ),
-                    ),
-                    SubmitButton(
-                      buttonText: AppLocalizations.of(context).pickPhoto,
-                      onButtonPressed: () {
-                        _pickImage(imageType: Images.background);
-                      },
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    SizedBox(
-                      width:
-                          MediaQuery.of(context).size.width * 0.5 - pagePadding,
-                      child: Center(
-                        child: (isBase64Valid(_avatarImageBase64))
-                            ? ClipRRect(
-                                borderRadius: BorderRadius.circular(100),
-                                child: SizedBox(
+                      SubmitButton(
+                        buttonText: AppLocalizations.of(context).pickPhoto,
+                        onButtonPressed: () {
+                          _pickImage(imageType: Images.background);
+                        },
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      SizedBox(
+                        width:
+                            MediaQuery.of(context).size.width * 0.5 - pagePadding,
+                        child: Center(
+                          child: (isBase64Valid(_avatarImageBase64))
+                              ? ClipRRect(
+                                  borderRadius: BorderRadius.circular(100),
+                                  child: SizedBox(
+                                    width: 100,
+                                    height: 100,
+                                    child: Image.memory(
+                                      base64Decode(_avatarImageBase64!),
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                )
+                              : Container(
                                   width: 100,
                                   height: 100,
-                                  child: Image.memory(
-                                    base64Decode(_avatarImageBase64!),
-                                    fit: BoxFit.cover,
+                                  decoration: BoxDecoration(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onBackground,
+                                    shape: BoxShape.circle,
                                   ),
                                 ),
-                              )
-                            : Container(
-                                width: 100,
-                                height: 100,
-                                decoration: BoxDecoration(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onBackground,
-                                  shape: BoxShape.circle,
-                                ),
-                              ),
+                        ),
+                      ),
+                      SubmitButton(
+                        buttonText: AppLocalizations.of(context).pickPhoto,
+                        onButtonPressed: () {
+                          _pickImage(imageType: Images.avatar);
+                        },
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  CustomFormField(
+                    hintText: 'Name',
+                    isRequired: false,
+                    onSaved: (newValue) {
+                      if (newValue == null) return;
+                      _userName = newValue;
+                    },
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  CustomFormField(
+                    hintText: 'Second name',
+                    isRequired: false,
+                    onSaved: (newValue) {
+                      if (newValue == null) return;
+                      _userSecondName = newValue;
+                    },
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(25),
+                    child: Container(
+                      color: Theme.of(context).colorScheme.onBackground,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: CustomDatePicker(
+                              selectedDate: date,
+                              onDateChange: (newDate) {
+                                setState(() {
+                                  date = newDate;
+                                });
+                              },
+                            ),
+                          ),
+                          if (date != todayDate())
+                            IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  date = todayDate();
+                                });
+                              },
+                              icon: const Icon(Icons.close),
+                            )
+                        ],
                       ),
                     ),
-                    SubmitButton(
-                      buttonText: AppLocalizations.of(context).pickPhoto,
-                      onButtonPressed: () {
-                        _pickImage(imageType: Images.avatar);
-                      },
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                const CustomTextFormField(hintText: 'Name'),
-                const SizedBox(
-                  height: 20,
-                ),
-                const CustomTextFormField(hintText: 'Second name'),
-                const SizedBox(
-                  height: 20,
-                ),
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(25),
-                  child: Container(
-                    color: Theme.of(context).colorScheme.onBackground,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          child: CustomDatePicker(
-                            selectedDate: date,
-                            onDateChange: (newDate) {
-                              setState(() {
-                                date = newDate;
-                              });
-                            },
-                          ),
-                        ),
-                        if (date != todayDate())
-                          IconButton(
-                            onPressed: () {
-                              setState(() {
-                                date = todayDate();
-                              });
-                            },
-                            icon: const Icon(Icons.close),
-                          )
-                      ],
-                    ),
                   ),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                const CustomTextFormField(hintText: 'Country'),
-                const SizedBox(
-                  height: 20,
-                ),
-                const CustomTextFormField(
-                  hintText: 'About me',
-                  maxLength: 500,
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                SubmitButton(
-                  buttonText: AppLocalizations.of(context).save,
-                  onButtonPressed: () {
-                    print(_backgroundImageBase64);
-                    print("===");
-                    print(_avatarImageBase64);
-                    print("===");
-                    print(date.toString());
-                  },
-                ),
-              ],
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  CustomFormField(
+                    hintText: 'Country',
+                    isRequired: false,
+                    onSaved: (newValue) {
+                      if (newValue == null) return;
+                      _country = newValue;
+                    },
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  CustomFormField(
+                    hintText: 'About me',
+                    isRequired: false,
+                    maxLength: 500,
+                    onSaved: (newValue) {
+                      if (newValue == null) return;
+                      _aboutMe = newValue;
+                    },
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  SubmitButton(
+                    buttonText: AppLocalizations.of(context).save,
+                    onButtonPressed: () {
+                      saveUserData(context);
+
+                      print(_backgroundImageBase64);
+                      print("===");
+                      print(_avatarImageBase64);
+                      print("===");
+                      print(_userName);
+                      print("===");
+                      print(_userSecondName);
+                      print("===");
+                      print(date.toString());
+                      print(_country);
+                      print("===");
+                      print(_aboutMe);
+                    },
+                  ),
+                ],
+              ),
             );
           },
         ),
       ),
     );
+  }
+
+  Future<void> saveUserData(BuildContext context) async {
+    if (_formKey.currentState!.validate()) {
+      FocusManager.instance.primaryFocus?.unfocus();
+      _formKey.currentState!.save();
+    }
   }
 
   void _pickImage({required Images imageType}) async {

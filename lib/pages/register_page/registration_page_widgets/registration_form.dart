@@ -66,7 +66,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                     padding: const EdgeInsets.only(top: 20, bottom: 30),
                     child: Column(
                       children: [
-                        FormTextField(
+                        CustomFormField(
                           onSaved: (newValue) {
                             if (newValue == null) return;
                             _userEmail = newValue;
@@ -75,7 +75,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                           inputIcon: Icons.email,
                         ),
                         SizedBox(height: gapBetweenTextFields),
-                        FormTextField(
+                        CustomFormField(
                           onSaved: (newValue) {
                             if (newValue == null) return;
                             _userName = newValue;
@@ -84,7 +84,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                           inputIcon: Icons.person,
                         ),
                         SizedBox(height: gapBetweenTextFields),
-                        FormTextField(
+                        CustomFormField(
                           onSaved: (newValue) {
                             if (newValue == null) return;
                             _userPassword = newValue;
@@ -94,7 +94,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                           isPasswordField: true,
                         ),
                         SizedBox(height: gapBetweenTextFields),
-                        FormTextField(
+                        CustomFormField(
                           onSaved: (newValue) {
                             if (newValue == null) return;
                             _userConfirmPassword = newValue;

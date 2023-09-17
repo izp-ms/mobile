@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-InputDecoration authTextFieldDecoration(context, hintText, inputIcon) {
+InputDecoration customTextFieldDecoration(context, hintText, inputIcon) {
   return InputDecoration(
     fillColor: Theme.of(context).colorScheme.onBackground,
-    suffixIcon: Icon(
-      inputIcon,
-      color: Theme.of(context).colorScheme.secondary,
-    ),
-    labelText: hintText,
+    suffixIcon: (inputIcon != null)
+        ? Icon(
+            inputIcon,
+            color: Theme.of(context).colorScheme.secondary,
+          )
+        : null,
+    labelText: (hintText != null) ? hintText : null,
     labelStyle: GoogleFonts.rubik(
       color: Theme.of(context).colorScheme.onPrimary,
     ),
