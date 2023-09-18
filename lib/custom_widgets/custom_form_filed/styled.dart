@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mobile/constants/theme.dart';
 
 InputDecoration customTextFieldDecoration(context, hintText, inputIcon) {
   return InputDecoration(
@@ -32,21 +33,21 @@ InputDecoration customTextFieldDecoration(context, hintText, inputIcon) {
         width: 2,
       ),
     ),
-    errorBorder: OutlineInputBorder(
-      borderRadius: const BorderRadius.all(
+    errorBorder: const OutlineInputBorder(
+      borderRadius: BorderRadius.all(
         Radius.circular(25),
       ),
       borderSide: BorderSide(
-        color: Theme.of(context).colorScheme.error,
+        color: SharedColors.error,
         width: 2,
       ),
     ),
-    focusedErrorBorder: OutlineInputBorder(
-      borderRadius: const BorderRadius.all(
+    focusedErrorBorder: const OutlineInputBorder(
+      borderRadius: BorderRadius.all(
         Radius.circular(25),
       ),
       borderSide: BorderSide(
-        color: Theme.of(context).colorScheme.error,
+        color: SharedColors.error,
         width: 1,
       ),
     ),

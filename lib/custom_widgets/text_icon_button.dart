@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mobile/constants/theme.dart';
 
 class TextIconButton extends StatelessWidget {
   final String text;
@@ -21,7 +22,7 @@ class TextIconButton extends StatelessWidget {
     this.fontSize = 10.0,
     this.iconSize = 15.0,
     this.mainAxisAlignment = MainAxisAlignment.end,
-    this.color = Colors.black,  // Default value
+    this.color = SharedColors.black,  // Default value
   });
 
   @override
