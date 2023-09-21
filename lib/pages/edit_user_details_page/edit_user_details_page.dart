@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:mobile/api/request/user_detail_request.dart';
 import 'package:mobile/api/response/user_detail_response.dart';
 import 'package:mobile/cubit/user_cubit/user_cubit.dart';
 import 'package:mobile/cubit/user_cubit/user_state.dart';
@@ -14,7 +15,7 @@ import 'package:mobile/custom_widgets/submit_button.dart';
 import 'package:mobile/helpers/base64Validator.dart';
 import 'package:mobile/helpers/show_error_snack_bar.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:mobile/helpers/todaysDate.dart';
+import 'package:mobile/pages/profile_page/profile_page.dart';
 
 enum Images { avatar, background }
 
@@ -203,11 +204,11 @@ class _EditUserDetailsPageState extends State<EditUserDetailsPage> {
                               },
                             ),
                           ),
-                          if (date != todayDate())
+                          if (date != null)
                             IconButton(
                               onPressed: () {
                                 setState(() {
-                                  date = todayDate();
+                                  date = null;
                                 });
                               },
                               icon: const Icon(Icons.close),
@@ -267,21 +268,9 @@ class _EditUserDetailsPageState extends State<EditUserDetailsPage> {
                   ),
                   SubmitButton(
                     buttonText: AppLocalizations.of(context).save,
+                    isLoading: state is LoadingState,
                     onButtonPressed: () {
                       saveUserData(context);
-
-                      print(_backgroundImageBase64);
-                      print("===");
-                      print(_avatarImageBase64);
-                      print("===");
-                      print(_userName);
-                      print("===");
-                      print(_userSecondName);
-                      print("===");
-                      print(date.toString());
-                      print(_country);
-                      print("===");
-                      print(_aboutMe);
                     },
                   ),
                 ],
@@ -297,7 +286,34 @@ class _EditUserDetailsPageState extends State<EditUserDetailsPage> {
     if (_formKey.currentState!.validate()) {
       FocusManager.instance.primaryFocus?.unfocus();
       _formKey.currentState!.save();
+
+      final userCubit = context.read<UserCubit>();
+
+      final userDto = UserDetailRequest(
+          id: widget.userDetail.id,
+          firstName: _userName,
+          lastName: _userSecondName,
+          birthDate: date == null ? null : date.toString(),
+          avatarBase64: _avatarImageBase64,
+          backgroundBase64: _backgroundImageBase64,
+          description: _aboutMe,
+          country: _country);
+
+      try {
+        await userCubit
+            .putUserDetail(userDto)
+            .then((value) => _navigateToProfilePage(context));
+      } catch (e) {
+        showErrorSnackBar(context, "An error occurred: $e");
+      }
     }
+  }
+
+  void _navigateToProfilePage(BuildContext context) {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => const ProfilePage()),
+    );
   }
 
   void _pickImage({required Images imageType}) async {
