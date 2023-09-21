@@ -8,7 +8,7 @@ import 'package:mobile/custom_widgets/custom_drawer/custom_drawer.dart';
 import 'package:mobile/custom_widgets/main_page_app_bar.dart';
 import 'package:mobile/helpers/show_error_snack_bar.dart';
 import 'package:mobile/pages/edit_user_details_page/edit_user_details_page.dart';
-import 'package:mobile/pages/profile_page/profile_page_widgets/personal_info_section.dart';
+import 'package:mobile/pages/profile_page/profile_page_widgets/personal_info_section/personal_info_section.dart';
 import 'package:mobile/pages/profile_page/profile_page_widgets/profile_pictures_stack/profile_pictures_stack.dart';
 import 'package:mobile/pages/profile_page/profile_page_widgets/statistics_section/statistics_section.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
