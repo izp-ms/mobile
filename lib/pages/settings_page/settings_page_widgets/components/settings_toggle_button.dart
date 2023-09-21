@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/constants/theme.dart';
 
 class SettingsToggleButtons extends StatefulWidget {
   final void Function(int index) onSelected;
@@ -36,8 +35,8 @@ class _SettingsToggleButtonsState extends State<SettingsToggleButtons> {
   Widget build(BuildContext context) {
     return ToggleButtons(
       borderRadius: BorderRadius.circular(30.0),
-      borderColor: SharedColors.inactiveOption,
-      selectedBorderColor: SharedColors.inactiveOption,
+      borderColor: Colors.grey[500],
+      selectedBorderColor: Colors.grey[500],
       fillColor: Theme.of(context).colorScheme.secondaryContainer,
       selectedColor: Theme.of(context).colorScheme.onPrimary,
       color: Theme.of(context).colorScheme.onPrimary,

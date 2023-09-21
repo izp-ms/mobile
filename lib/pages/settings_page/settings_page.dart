@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:mobile/constants/theme.dart';
 import 'package:mobile/custom_widgets/custom_drawer/custom_drawer.dart';
 import 'package:mobile/custom_widgets/main_page_app_bar.dart';
 import 'package:mobile/pages/settings_page/settings_page_widgets/content_and_display.dart';
@@ -46,7 +45,7 @@ class SettingsPage extends StatelessWidget {
                     fontSize: 15.0,
                     iconSize: 20.0,
                     mainAxisAlignment: MainAxisAlignment.center,
-                    color: Theme.of(context).colorScheme.onPrimary,
+                    color: Colors.black,  // Red color for both text and icon
                   )
                 ),
                 const SizedBox(height: 10),
@@ -54,14 +53,14 @@ class SettingsPage extends StatelessWidget {
                   child: Text(
                     AppLocalizations.of(context).postcardia.toUpperCase(),
                     style: GoogleFonts.rubik(
-                        fontSize: 18, color: SharedColors.inactiveOption),
+                        fontSize: 18, color: Colors.grey[500]),
                   ),
                 ),
                 Center(
                   child: Text(
                     AppLocalizations.of(context).version,
                     style: GoogleFonts.rubik(
-                        fontSize: 18, color: SharedColors.inactiveOption),
+                        fontSize: 18, color: Colors.grey[500]),
                   ),
                 ),
               ],
