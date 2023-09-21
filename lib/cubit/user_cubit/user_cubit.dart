@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:mobile/api/request/user_detail_request.dart';
 import 'package:mobile/cubit/user_cubit/user_state.dart';
 import 'package:mobile/repositories/secure_storage_repository.dart';
 import 'package:mobile/repositories/user_repository.dart';
@@ -24,6 +25,19 @@ class UserCubit extends Cubit<UserState> {
       }
 
       emit(LoadedState(response, nickName));
+    } catch (e) {
+      emit(
+        ErrorState(e.toString()),
+      );
+    }
+  }
+
+  Future<void> putUserDetail(UserDetailRequest userDetailRequest) async {
+    emit(LoadingState());
+    try {
+      await _repository.putUserDetail(userDetailRequest);
+
+      getUserDetail();
     } catch (e) {
       emit(
         ErrorState(e.toString()),

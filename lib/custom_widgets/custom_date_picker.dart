@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:mobile/helpers/todaysDate.dart';
 
 class CustomDatePicker extends StatelessWidget {
-  final DateTime selectedDate;
+  final DateTime? selectedDate;
   final ValueChanged<DateTime> onDateChange;
 
   const CustomDatePicker({
     super.key,
-    required this.selectedDate,
+    this.selectedDate,
     required this.onDateChange,
   });
 
@@ -44,9 +44,9 @@ class CustomDatePicker extends StatelessWidget {
   }
 
   String _getButtonText() {
-    return (selectedDate == todayDate())
+    return (selectedDate == null)
         ? "Birthday"
-        : "${selectedDate.day}.${selectedDate.month}.${selectedDate.year}";
+        : "${selectedDate?.day}.${selectedDate?.month}.${selectedDate?.year}";
   }
 
   void _showDatePicker(BuildContext context) async {
@@ -72,7 +72,7 @@ class CustomDatePicker extends StatelessWidget {
         );
       },
       context: context,
-      initialDate: selectedDate,
+      initialDate: selectedDate ?? todayDate(),
       firstDate: DateTime(1900),
       lastDate: DateTime(2100),
     );

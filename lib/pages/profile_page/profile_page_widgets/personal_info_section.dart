@@ -5,6 +5,7 @@ import 'package:mobile/cubit/user_cubit/user_cubit.dart';
 import 'package:mobile/cubit/user_cubit/user_state.dart';
 import 'package:mobile/custom_widgets/custom_shimmer/custom_shimmer.dart';
 import 'package:mobile/extensions/capitalize.dart';
+import 'package:mobile/helpers/date_extractor.dart';
 
 class PersonalInfoSection extends StatefulWidget {
   const PersonalInfoSection({
@@ -38,16 +39,15 @@ class _PersonalInfoSectionState extends State<PersonalInfoSection> {
                   if (state.userDetail.birthDate != null)
                     _buildRowWithIcon(
                       icon: Icons.cake_outlined,
-                      text: state.userDetail.birthDate.toString(),
+                      text: dateExtractor(state.userDetail.birthDate.toString())!,
                     ),
-                  if (state.userDetail.id != null) ...[
-                    // TODO wyjebania
+                  if (state.userDetail.country != null) ...[
                     const SizedBox(
                       height: 8,
                     ),
                     _buildRowWithIcon(
                       icon: Icons.flag,
-                      text: "Afganistan",
+                      text: state.userDetail.country!,
                     ),
                   ],
                   if (state.userDetail.description != null) ...[
