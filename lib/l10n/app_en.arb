@@ -34,5 +34,7 @@
   "choseDateFormat": "Chose date format",
   "useMetricSystem": "Use Metric System",
   "termsAndPolicies": "Terms and Policies",
-  "privacy": "Privacy"
+  "privacy": "Privacy",
+  "pickPhoto": "Pick photo",
+  "save": "Save"
 }

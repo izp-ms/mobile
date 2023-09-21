@@ -4,9 +4,11 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:mobile/api/request/register_request.dart';
 import 'package:mobile/cubit/auth_cubit/auth_cubit.dart';
 import 'package:mobile/cubit/auth_cubit/auth_state.dart';
-import 'package:mobile/custom_widgets/auth_form_filed/login_form_field.dart';
+import 'package:mobile/custom_widgets/custom_form_filed/custom_form_field.dart';
 import 'package:mobile/custom_widgets/submit_button.dart';
 import 'package:mobile/custom_widgets/switch_page_link.dart';
+import 'package:mobile/helpers/show_error_snack_bar.dart';
+import 'package:mobile/helpers/show_success_snack_bar.dart';
 import 'package:mobile/pages/login_page/login_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -37,11 +39,11 @@ class _RegistrationFormState extends State<RegistrationForm> {
     return BlocConsumer<AuthCubit, AuthState>(
       listener: (context, state) {
         if (state is RegisterSuccessState) {
-          _showSuccessSnackBar(context, "Successfully register user.");
+          showSuccessSnackBar(context, "Successfully register user.");
           context.read<AuthCubit>().resetState();
           _navigateToLoginPage(context);
         } else if (state is ErrorState) {
-          _showErrorSnackBar(context, state.errorMessage);
+          showErrorSnackBar(context, state.errorMessage);
         }
       },
       builder: (context, state) {
@@ -64,7 +66,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                     padding: const EdgeInsets.only(top: 20, bottom: 30),
                     child: Column(
                       children: [
-                        FormTextField(
+                        CustomFormField(
                           onSaved: (newValue) {
                             if (newValue == null) return;
                             _userEmail = newValue;
@@ -73,7 +75,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                           inputIcon: Icons.email,
                         ),
                         SizedBox(height: gapBetweenTextFields),
-                        FormTextField(
+                        CustomFormField(
                           onSaved: (newValue) {
                             if (newValue == null) return;
                             _userName = newValue;
@@ -82,7 +84,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                           inputIcon: Icons.person,
                         ),
                         SizedBox(height: gapBetweenTextFields),
-                        FormTextField(
+                        CustomFormField(
                           onSaved: (newValue) {
                             if (newValue == null) return;
                             _userPassword = newValue;
@@ -92,7 +94,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                           isPasswordField: true,
                         ),
                         SizedBox(height: gapBetweenTextFields),
-                        FormTextField(
+                        CustomFormField(
                           onSaved: (newValue) {
                             if (newValue == null) return;
                             _userConfirmPassword = newValue;
@@ -150,7 +152,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
       try {
         await authCubit.registerUser(registerDto);
       } catch (e) {
-        _showErrorSnackBar(context, "An error occurred: $e");
+        showErrorSnackBar(context, "An error occurred: $e");
       }
     }
   }
@@ -162,27 +164,8 @@ class _RegistrationFormState extends State<RegistrationForm> {
     );
   }
 
-  void _showSuccessSnackBar(BuildContext context, String message) {
-    final snackBar = SnackBar(
-      content: Text(message),
-      backgroundColor: Colors.green,
-    );
-    if (context.mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-    }
-  }
-
-  void _showErrorSnackBar(BuildContext context, String message) {
-    final snackBar = SnackBar(
-      content: Text(message),
-      backgroundColor: Colors.red,
-    );
-    if (context.mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-    }
-  }
-
-  void onSignInLinkPress(context) {
+  void onSignInLinkPress(BuildContext context) {
+    context.read<AuthCubit>().resetState();
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (context) => const LoginPage()));
   }
