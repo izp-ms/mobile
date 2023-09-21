@@ -11,6 +11,7 @@ class CustomFormField extends StatelessWidget {
     this.isPasswordField = false,
     this.isRequired = true,
     this.maxLength,
+    this.initialValue
   });
 
   final String? hintText;
@@ -19,6 +20,7 @@ class CustomFormField extends StatelessWidget {
   final bool isPasswordField;
   final bool isRequired;
   final int? maxLength;
+  final String? initialValue;
 
 
   @override
@@ -30,6 +32,7 @@ class CustomFormField extends StatelessWidget {
         }
         return null;
       },
+      initialValue: initialValue,
       style: GoogleFonts.rubik(fontSize: 14),
       decoration: customTextFieldDecoration(context, hintText, inputIcon),
       cursorColor: Theme.of(context).colorScheme.secondary,

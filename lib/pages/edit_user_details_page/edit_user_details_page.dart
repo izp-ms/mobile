@@ -29,7 +29,7 @@ class EditUserDetailsPage extends StatefulWidget {
 
 class _EditUserDetailsPageState extends State<EditUserDetailsPage> {
   double pagePadding = 10;
-  late DateTime date;
+  late DateTime? date;
   final ImagePicker _picker = ImagePicker();
   final _formKey = GlobalKey<FormState>();
 
@@ -43,9 +43,13 @@ class _EditUserDetailsPageState extends State<EditUserDetailsPage> {
   @override
   void initState() {
     super.initState();
-    date = todayDate();
+    date = widget.userDetail.birthDate;
     _backgroundImageBase64 = widget.userDetail.backgroundBase64;
     _avatarImageBase64 = widget.userDetail.avatarBase64;
+    _userName = widget.userDetail.firstName;
+    _userSecondName = widget.userDetail.lastName;
+    _country = widget.userDetail.country;
+    _aboutMe = widget.userDetail.description;
   }
 
   @override
@@ -160,6 +164,7 @@ class _EditUserDetailsPageState extends State<EditUserDetailsPage> {
                   ),
                   CustomFormField(
                     hintText: 'Name',
+                    initialValue: _userName,
                     isRequired: false,
                     onSaved: (newValue) {
                       if (newValue == null) return;
@@ -171,6 +176,7 @@ class _EditUserDetailsPageState extends State<EditUserDetailsPage> {
                   ),
                   CustomFormField(
                     hintText: 'Second name',
+                    initialValue: _userSecondName,
                     isRequired: false,
                     onSaved: (newValue) {
                       if (newValue == null) return;
@@ -248,6 +254,7 @@ class _EditUserDetailsPageState extends State<EditUserDetailsPage> {
                   ),
                   CustomFormField(
                     hintText: 'About me',
+                    initialValue: _aboutMe,
                     isRequired: false,
                     maxLength: 500,
                     onSaved: (newValue) {

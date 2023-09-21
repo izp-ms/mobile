@@ -10,7 +10,7 @@ class UserRepository {
   final String _baseUrl = ApiConstants.baseUrl;
 
   Future<dynamic> getUserDetail() async {
-    final url = '$_baseUrl/UserDetail';
+    final url = '$_baseUrl/User';
     final uri = Uri.parse(url);
     final token = await SecureStorageRepository.read(key: 'token');
 

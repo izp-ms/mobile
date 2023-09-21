@@ -40,14 +40,13 @@ class _PersonalInfoSectionState extends State<PersonalInfoSection> {
                       icon: Icons.cake_outlined,
                       text: state.userDetail.birthDate.toString(),
                     ),
-                  if (state.userDetail.id != null) ...[
-                    // TODO wyjebania
+                  if (state.userDetail.country != null) ...[
                     const SizedBox(
                       height: 8,
                     ),
                     _buildRowWithIcon(
                       icon: Icons.flag,
-                      text: "Afganistan",
+                      text: state.userDetail.country!,
                     ),
                   ],
                   if (state.userDetail.description != null) ...[
