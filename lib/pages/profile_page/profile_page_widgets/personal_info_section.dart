@@ -39,7 +39,8 @@ class _PersonalInfoSectionState extends State<PersonalInfoSection> {
                   if (state.userDetail.birthDate != null)
                     _buildRowWithIcon(
                       icon: Icons.cake_outlined,
-                      text: dateExtractor(state.userDetail.birthDate.toString())!,
+                      text:
+                          dateExtractor(state.userDetail.birthDate.toString())!,
                     ),
                   if (state.userDetail.country != null) ...[
                     const SizedBox(
@@ -70,10 +71,15 @@ class _PersonalInfoSectionState extends State<PersonalInfoSection> {
                               ),
                             );
                           },
-                          body: Text(
-                            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec consectetur ante odio, quis volutpat diam iaculis sit amet. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Suspendisse potenti. Vivamus hendrerit cras.",
-                            style: GoogleFonts.rubik(
-                              fontSize: 18,
+                          body: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 15),
+                            width: double.infinity,
+                            child: Text(
+                              state.userDetail.description!,
+                              style: GoogleFonts.rubik(
+                                fontSize: 18,
+                              ),
+                              textAlign: TextAlign.start,
                             ),
                           ),
                           isExpanded: isDescriptionOpen,

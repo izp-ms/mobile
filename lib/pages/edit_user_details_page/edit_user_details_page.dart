@@ -29,10 +29,12 @@ class EditUserDetailsPage extends StatefulWidget {
 }
 
 class _EditUserDetailsPageState extends State<EditUserDetailsPage> {
-  double pagePadding = 10;
   late DateTime? date;
   final ImagePicker _picker = ImagePicker();
   final _formKey = GlobalKey<FormState>();
+  static const double separatorSize = 20;
+  static const double constraintSize = 200;
+  static const double avatarCircleSize = 100;
 
   String? _backgroundImageBase64;
   String? _avatarImageBase64;
@@ -74,211 +76,250 @@ class _EditUserDetailsPageState extends State<EditUserDetailsPage> {
             }
           },
           builder: (context, state) {
-            return Form(
-              key: _formKey,
-              child: ListView(
-                padding: EdgeInsets.symmetric(horizontal: 2 * pagePadding),
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.5 -
-                            pagePadding,
-                        child: Center(
-                          child: (isBase64Valid(_backgroundImageBase64))
-                              ? ClipRRect(
-                                  borderRadius: BorderRadius.circular(10),
-                                  child: SizedBox(
-                                    width: 200,
-                                    height: 100,
-                                    child: Image.memory(
-                                      base64Decode(_backgroundImageBase64!),
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                )
-                              : ClipRRect(
-                                  borderRadius: BorderRadius.circular(10),
-                                  child: Container(
-                                    width: 200,
-                                    height: 100,
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onBackground,
-                                  ),
-                                ),
-                        ),
-                      ),
-                      SubmitButton(
-                        buttonText: AppLocalizations.of(context).pickPhoto,
-                        onButtonPressed: () {
-                          _pickImage(imageType: Images.background);
-                        },
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.5 -
-                            pagePadding,
-                        child: Center(
-                          child: (isBase64Valid(_avatarImageBase64))
-                              ? ClipRRect(
-                                  borderRadius: BorderRadius.circular(100),
-                                  child: SizedBox(
-                                    width: 100,
-                                    height: 100,
-                                    child: Image.memory(
-                                      base64Decode(_avatarImageBase64!),
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                )
-                              : Container(
-                                  width: 100,
-                                  height: 100,
-                                  decoration: BoxDecoration(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onBackground,
-                                    shape: BoxShape.circle,
-                                  ),
-                                ),
-                        ),
-                      ),
-                      SubmitButton(
-                        buttonText: AppLocalizations.of(context).pickPhoto,
-                        onButtonPressed: () {
-                          _pickImage(imageType: Images.avatar);
-                        },
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  CustomFormField(
-                    hintText: 'Name',
-                    initialValue: _userName,
-                    isRequired: false,
-                    onSaved: (newValue) {
-                      if (newValue == null) return;
-                      _userName = newValue;
+            return Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 3 * constraintSize),
+                child: Form(
+                  key: _formKey,
+                  child: ListView.separated(
+                    padding: const EdgeInsets.all(separatorSize),
+                    itemCount: 7,
+                    separatorBuilder: (BuildContext context, int index) {
+                      return const SizedBox(height: separatorSize);
+                    },
+                    itemBuilder: (BuildContext context, int index) {
+                      switch (index) {
+                        case 0:
+                          return _imagesSection(context);
+                        case 1:
+                          return CustomFormField(
+                            hintText: 'Name',
+                            initialValue: _userName,
+                            isRequired: false,
+                            onSaved: (newValue) {
+                              if (newValue == null) return;
+                              _userName = newValue;
+                            },
+                          );
+                        case 2:
+                          return CustomFormField(
+                            hintText: 'Second name',
+                            initialValue: _userSecondName,
+                            isRequired: false,
+                            onSaved: (newValue) {
+                              if (newValue == null) return;
+                              _userSecondName = newValue;
+                            },
+                          );
+                        case 3:
+                          return _birthdayPicker(context);
+                        case 4:
+                          return _countryPicker(context);
+                        case 5:
+                          return CustomFormField(
+                            hintText: 'About me',
+                            initialValue: _aboutMe,
+                            isRequired: false,
+                            maxLength: 500,
+                            onSaved: (newValue) {
+                              if (newValue == null) return;
+                              _aboutMe = newValue;
+                            },
+                          );
+                        case 6:
+                          return SubmitButton(
+                            buttonText: AppLocalizations.of(context).save,
+                            isLoading: state is LoadingState,
+                            onButtonPressed: () {
+                              saveUserData(context);
+                            },
+                          );
+                        default:
+                          return const SizedBox.shrink();
+                      }
                     },
                   ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  CustomFormField(
-                    hintText: 'Second name',
-                    initialValue: _userSecondName,
-                    isRequired: false,
-                    onSaved: (newValue) {
-                      if (newValue == null) return;
-                      _userSecondName = newValue;
-                    },
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(25),
-                    child: Container(
-                      color: Theme.of(context).colorScheme.onBackground,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Expanded(
-                            child: CustomDatePicker(
-                              selectedDate: date,
-                              onDateChange: (newDate) {
-                                setState(() {
-                                  date = newDate;
-                                });
-                              },
-                            ),
-                          ),
-                          if (date != null)
-                            IconButton(
-                              onPressed: () {
-                                setState(() {
-                                  date = null;
-                                });
-                              },
-                              icon: const Icon(Icons.close),
-                            )
-                        ],
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(25),
-                    child: Container(
-                      color: Theme.of(context).colorScheme.onBackground,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Expanded(
-                            child: CustomCountryPicker(
-                              selectedCountry: _country,
-                              onCountryChange: (newCountry) {
-                                setState(() {
-                                  _country = newCountry;
-                                });
-                              },
-                            ),
-                          ),
-                          if (_country != null && _country != '')
-                            IconButton(
-                              onPressed: () {
-                                setState(() {
-                                  _country = null;
-                                });
-                              },
-                              icon: const Icon(Icons.close),
-                            )
-                        ],
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  CustomFormField(
-                    hintText: 'About me',
-                    initialValue: _aboutMe,
-                    isRequired: false,
-                    maxLength: 500,
-                    onSaved: (newValue) {
-                      if (newValue == null) return;
-                      _aboutMe = newValue;
-                    },
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  SubmitButton(
-                    buttonText: AppLocalizations.of(context).save,
-                    isLoading: state is LoadingState,
-                    onButtonPressed: () {
-                      saveUserData(context);
-                    },
-                  ),
-                ],
+                ),
               ),
             );
           },
         ),
       ),
+    );
+  }
+
+  ClipRRect _countryPicker(BuildContext context) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(25),
+      child: Container(
+        color: Theme.of(context).colorScheme.onBackground,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: CustomCountryPicker(
+                selectedCountry: _country,
+                onCountryChange: (newCountry) {
+                  setState(() {
+                    _country = newCountry;
+                  });
+                },
+              ),
+            ),
+            if (_country != null && _country != '')
+              IconButton(
+                onPressed: () {
+                  setState(() {
+                    _country = null;
+                  });
+                },
+                icon: const Icon(Icons.close),
+              )
+          ],
+        ),
+      ),
+    );
+  }
+
+  ClipRRect _birthdayPicker(BuildContext context) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(25),
+      child: Container(
+        color: Theme.of(context).colorScheme.onBackground,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: CustomDatePicker(
+                selectedDate: date,
+                onDateChange: (newDate) {
+                  setState(() {
+                    date = newDate;
+                  });
+                },
+              ),
+            ),
+            if (date != null)
+              IconButton(
+                onPressed: () {
+                  setState(() {
+                    date = null;
+                  });
+                },
+                icon: const Icon(Icons.close),
+              )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Column _imagesSection(BuildContext context) {
+    return Column(
+      children: [
+        ConstrainedBox(
+          constraints: const BoxConstraints(
+            maxWidth: 2 * constraintSize,
+          ),
+          child: _backgroundImagePicker(context),
+        ),
+        const SizedBox(
+          height: separatorSize,
+        ),
+        ConstrainedBox(
+          constraints: const BoxConstraints(
+            maxWidth: 2 * constraintSize,
+          ),
+          child: _profileImagePicker(context),
+        ),
+      ],
+    );
+  }
+
+  Row _profileImagePicker(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Flexible(
+          child: Padding(
+            padding: const EdgeInsets.only(right: 5),
+            child: Center(
+              child: (isBase64Valid(_avatarImageBase64))
+                  ? ClipRRect(
+                      borderRadius: BorderRadius.circular(avatarCircleSize),
+                      child: SizedBox(
+                        width: avatarCircleSize,
+                        height: avatarCircleSize,
+                        child: Image.memory(
+                          base64Decode(_avatarImageBase64!),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    )
+                  : Container(
+                      width: avatarCircleSize,
+                      height: avatarCircleSize,
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.onBackground,
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+            ),
+          ),
+        ),
+        Flexible(
+          child: Padding(
+            padding: const EdgeInsets.only(left: 5),
+            child: SubmitButton(
+              buttonText: AppLocalizations.of(context).pickPhoto,
+              onButtonPressed: () {
+                _pickImage(imageType: Images.avatar);
+              },
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Row _backgroundImagePicker(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Flexible(
+          child: Padding(
+            padding: const EdgeInsets.only(right: 5),
+            child: (isBase64Valid(_backgroundImageBase64))
+                ? ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: AspectRatio(
+                      aspectRatio: 2,
+                      child: Image.memory(
+                        base64Decode(_backgroundImageBase64!),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  )
+                : ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: Container(
+                      color: Theme.of(context).colorScheme.onBackground,
+                    ),
+                  ),
+          ),
+        ),
+        Flexible(
+          child: Padding(
+            padding: const EdgeInsets.only(left: 5),
+            child: SubmitButton(
+              buttonText: AppLocalizations.of(context).pickPhoto,
+              onButtonPressed: () {
+                _pickImage(imageType: Images.background);
+              },
+            ),
+          ),
+        ),
+      ],
     );
   }
 
