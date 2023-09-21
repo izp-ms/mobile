@@ -31,18 +31,19 @@ class _PersonalInfoSectionState extends State<PersonalInfoSection> {
               height: 12,
             ),
             if (state is LoadedState) ...[
-              const SizedBox(
-                height: 8,
-              ),
               if (state.userDetail.birthDate != null)
-                RowWithIcon(
-                  icon: Icons.cake_outlined,
-                  text: formatDateString(
-                      dateExtractor(state.userDetail.birthDate.toString())!),
+                Padding(
+                  padding: const EdgeInsets.only(top: 15),
+
+                  child: RowWithIcon(
+                    icon: Icons.cake_outlined,
+                    text: formatDateString(
+                        dateExtractor(state.userDetail.birthDate.toString())!),
+                  ),
                 ),
               if (state.userDetail.country != null)
                 Padding(
-                  padding: const EdgeInsets.only(top: 8),
+                  padding: const EdgeInsets.only(top: 15),
                   child: RowWithIcon(
                     icon: Icons.flag,
                     text: state.userDetail.country!,
