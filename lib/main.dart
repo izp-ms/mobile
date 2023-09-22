@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:mobile/constants/ColorProvider.dart';
 import 'package:mobile/cubit/auth_cubit/auth_cubit.dart';
 import 'package:mobile/cubit/user_cubit/user_cubit.dart';
 import 'package:mobile/pages/login_page/login_page.dart';
@@ -25,6 +26,7 @@ Future<void> main() async {
   HttpOverrides.global = MyHttpOverrides();
   WidgetsFlutterBinding.ensureInitialized();
   final token = await SecureStorageRepository.read(key: 'token');
+  await ColorProvider.loadColors();
   runApp(MyApp(token: token));
 }
 
@@ -65,39 +67,39 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           useMaterial3: true,
-          colorScheme: const ColorScheme(
+          colorScheme: ColorScheme(
             brightness: Brightness.light,
-            primary: Color(0xFFA6ECFF),
+            primary: ColorProvider.getColor('primary', theme: 'light'),
             onPrimary: Colors.black,
-            secondary: Color(0xFF30535B),
+            secondary: ColorProvider.getColor('secondary', theme: 'light'),
             onSecondary: Colors.black,
             primaryContainer: Colors.black,
-            secondaryContainer: Color(0xFFA6ECFF),
-            onSecondaryContainer: Color(0xFF1C1C1C),
+            secondaryContainer: ColorProvider.getColor('primary', theme: 'light'),
+            onSecondaryContainer: ColorProvider.getColor('onSecondaryContainer', theme: 'light'),
             error: Colors.red,
             onError: Colors.white,
-            background: Color(0xFFE3E6E7),
-            onBackground: Color(0xFFC4CDCD),
-            surface: Color(0xFFDAE0E0),
-            onSurface: Color(0xFF1C1C1C),
+            background: ColorProvider.getColor('background', theme: 'light'),
+            onBackground: ColorProvider.getColor('onBackground', theme: 'light'),
+            surface: ColorProvider.getColor('surface', theme: 'light'),
+            onSurface: ColorProvider.getColor('onSecondaryContainer', theme: 'light'),
           ),
         ),
         darkTheme: ThemeData(
           useMaterial3: true,
-          colorScheme: const ColorScheme(
+          colorScheme: ColorScheme(
             brightness: Brightness.dark,
-            primary: Color(0xFF1C1C1C),
+            primary: ColorProvider.getColor('primary', theme: 'dark'),
             onPrimary: Colors.white,
-            secondary: Color(0xFFA6ECFF),
+            secondary: ColorProvider.getColor('secondary', theme: 'dark'),
             onSecondary: Colors.white,
-            primaryContainer: Color(0xFFA6ECFF),
-            secondaryContainer: Color(0xFFA6ECFF),
-            onSecondaryContainer: Color(0xFF1C1C1C),
+            primaryContainer: ColorProvider.getColor('secondary', theme: 'dark'),
+            secondaryContainer: ColorProvider.getColor('secondary', theme: 'dark'),
+            onSecondaryContainer: ColorProvider.getColor('onSecondaryContainer', theme: 'dark'),
             error: Colors.red,
             onError: Colors.white,
-            background: Color(0xFF282828),
-            onBackground: Color(0xFF1C1C1C),
-            surface: Color(0xFF464646),
+            background: ColorProvider.getColor('background', theme: 'dark'),
+            onBackground: ColorProvider.getColor('onBackground', theme: 'dark'),
+            surface: ColorProvider.getColor('surface', theme: 'dark'),
             onSurface: Colors.white,
           ),
         ),

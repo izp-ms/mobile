@@ -10,7 +10,7 @@ class TextIconButton extends StatelessWidget {
   final double fontSize;
   final double iconSize;
   final MainAxisAlignment mainAxisAlignment;
-  final Color color;  // New argument
+  final Color? color;  // New argument
 
   TextIconButton({
     required this.text,
@@ -21,7 +21,7 @@ class TextIconButton extends StatelessWidget {
     this.fontSize = 10.0,
     this.iconSize = 15.0,
     this.mainAxisAlignment = MainAxisAlignment.end,
-    this.color = Colors.black,  // Default value
+    this.color
   });
 
   @override
