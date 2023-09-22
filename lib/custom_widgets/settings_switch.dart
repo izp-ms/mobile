@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/constants/ColorProvider.dart';
 
 class SwitchWidget extends StatefulWidget {
   const SwitchWidget({super.key});
@@ -35,13 +36,13 @@ class _SwitchWidgetState extends State<SwitchWidget> {
       },
       activeColor: Theme.of(context).colorScheme.onError,
       activeTrackColor: Theme.of(context).colorScheme.secondaryContainer,
-      inactiveThumbColor: Colors.grey[500],
+      inactiveThumbColor: ColorProvider.getColor('inactive'),
       trackOutlineColor: MaterialStateProperty.resolveWith(
             (final Set<MaterialState> states) {
           if (states.contains(MaterialState.selected)) {
             return null;
           }
-          return Colors.grey[500];
+          return ColorProvider.getColor('inactive');
         },
       ),
       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
