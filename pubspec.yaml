@@ -48,6 +48,8 @@ dependencies:
   image_picker:
   country_picker:
   auto_size_text:
+  location:
+  provider:
 
 dev_dependencies:
   flutter_test:

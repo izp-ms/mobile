@@ -12,6 +12,9 @@ import 'package:mobile/pages/postcards_page/postcards_page.dart';
 import 'package:mobile/repositories/auth_repository.dart';
 import 'package:mobile/repositories/secure_storage_repository.dart';
 import 'package:mobile/repositories/user_repository.dart';
+import 'package:mobile/services/location_service/location_service.dart';
+import 'package:mobile/services/location_service/user_location.dart';
+import 'package:provider/provider.dart';
 
 class MyHttpOverrides extends HttpOverrides {
   @override
@@ -53,58 +56,71 @@ class MyApp extends StatelessWidget {
           create: (context) => UserCubit(UserRepository()),
         ),
       ],
-      child: MaterialApp(
-        title: 'postcardia',
-        localizationsDelegates: const [
-          AppLocalizations.delegate,
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
-        supportedLocales: const [
-          Locale('en'),
-        ],
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          useMaterial3: true,
-          colorScheme: ColorScheme(
-            brightness: Brightness.light,
-            primary: ColorProvider.getColor('primary', theme: 'light'),
-            onPrimary: Colors.black,
-            secondary: ColorProvider.getColor('secondary', theme: 'light'),
-            onSecondary: Colors.black,
-            primaryContainer: Colors.black,
-            secondaryContainer: ColorProvider.getColor('primary', theme: 'light'),
-            onSecondaryContainer: ColorProvider.getColor('onSecondaryContainer', theme: 'light'),
-            error: Colors.red,
-            onError: Colors.white,
-            background: ColorProvider.getColor('background', theme: 'light'),
-            onBackground: ColorProvider.getColor('onBackground', theme: 'light'),
-            surface: ColorProvider.getColor('surface', theme: 'light'),
-            onSurface: ColorProvider.getColor('onSecondaryContainer', theme: 'light'),
+      child: StreamProvider<UserLocation>(
+        create: (context) => LocationService().locationStream,
+        initialData: UserLocation(longitude: 0, latitude: 0),
+        child: MaterialApp(
+          title: 'postcardia',
+          localizationsDelegates: const [
+            AppLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: const [
+            Locale('en'),
+          ],
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(
+            useMaterial3: true,
+            colorScheme: ColorScheme(
+              brightness: Brightness.light,
+              primary: ColorProvider.getColor('primary', theme: 'light'),
+              onPrimary: Colors.black,
+              secondary: ColorProvider.getColor('secondary', theme: 'light'),
+              onSecondary: Colors.black,
+              primaryContainer: Colors.black,
+              secondaryContainer:
+                  ColorProvider.getColor('primary', theme: 'light'),
+              onSecondaryContainer: ColorProvider.getColor(
+                  'onSecondaryContainer',
+                  theme: 'light'),
+              error: Colors.red,
+              onError: Colors.white,
+              background: ColorProvider.getColor('background', theme: 'light'),
+              onBackground:
+                  ColorProvider.getColor('onBackground', theme: 'light'),
+              surface: ColorProvider.getColor('surface', theme: 'light'),
+              onSurface: ColorProvider.getColor('onSecondaryContainer',
+                  theme: 'light'),
+            ),
           ),
-        ),
-        darkTheme: ThemeData(
-          useMaterial3: true,
-          colorScheme: ColorScheme(
-            brightness: Brightness.dark,
-            primary: ColorProvider.getColor('primary', theme: 'dark'),
-            onPrimary: Colors.white,
-            secondary: ColorProvider.getColor('secondary', theme: 'dark'),
-            onSecondary: Colors.white,
-            primaryContainer: ColorProvider.getColor('secondary', theme: 'dark'),
-            secondaryContainer: ColorProvider.getColor('secondary', theme: 'dark'),
-            onSecondaryContainer: ColorProvider.getColor('onSecondaryContainer', theme: 'dark'),
-            error: Colors.red,
-            onError: Colors.white,
-            background: ColorProvider.getColor('background', theme: 'dark'),
-            onBackground: ColorProvider.getColor('onBackground', theme: 'dark'),
-            surface: ColorProvider.getColor('surface', theme: 'dark'),
-            onSurface: Colors.white,
+          darkTheme: ThemeData(
+            useMaterial3: true,
+            colorScheme: ColorScheme(
+              brightness: Brightness.dark,
+              primary: ColorProvider.getColor('primary', theme: 'dark'),
+              onPrimary: Colors.white,
+              secondary: ColorProvider.getColor('secondary', theme: 'dark'),
+              onSecondary: Colors.white,
+              primaryContainer:
+                  ColorProvider.getColor('secondary', theme: 'dark'),
+              secondaryContainer:
+                  ColorProvider.getColor('secondary', theme: 'dark'),
+              onSecondaryContainer:
+                  ColorProvider.getColor('onSecondaryContainer', theme: 'dark'),
+              error: Colors.red,
+              onError: Colors.white,
+              background: ColorProvider.getColor('background', theme: 'dark'),
+              onBackground:
+                  ColorProvider.getColor('onBackground', theme: 'dark'),
+              surface: ColorProvider.getColor('surface', theme: 'dark'),
+              onSurface: Colors.white,
+            ),
           ),
+          themeMode: ThemeMode.system,
+          home: isAuthenticated ? const PostcardsPage() : const LoginPage(),
         ),
-        themeMode: ThemeMode.system,
-        home: isAuthenticated ? const PostcardsPage() : const LoginPage(),
       ),
     );
   }

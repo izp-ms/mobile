@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/pages/location_page/location_page.dart';
 import 'package:mobile/pages/login_page/login_page.dart';
 import 'package:mobile/pages/postcards_page/postcards_page.dart';
 import 'package:mobile/pages/profile_page/profile_page.dart';
@@ -64,6 +65,16 @@ class CustomDrawer extends Drawer {
                           onSettingsPress(context);
                         },
                       ),
+                      SizedBox(
+                        height: gapBetweenTiles,
+                      ),
+                      CustomDrawerTile(
+                        tileIcon: Icons.location_on_outlined,
+                        tileText: "Get postcard",
+                        onTilePress: () {
+                          onGetPostcardPress(context);
+                        },
+                      ),
                     ],
                   ),
                 ),
@@ -108,6 +119,15 @@ class CustomDrawer extends Drawer {
       context,
       MaterialPageRoute(
         builder: (context) => const SettingsPage(),
+      ),
+    );
+  }
+
+  void onGetPostcardPress(context) {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const LocationPage(),
       ),
     );
   }
