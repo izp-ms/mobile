@@ -48,6 +48,10 @@ dependencies:
   image_picker:
   country_picker:
   auto_size_text:
+  background_locator_2:
+  path_provider:
+  location_permissions:
+  permission_handler:
 
 dev_dependencies:
   flutter_test:

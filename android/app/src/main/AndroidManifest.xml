@@ -1,9 +1,18 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
     <application
         android:requestLegacyExternalStorage="true"
         android:label="mobile"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+        <service android:name="yukams.app.background_locator_2.IsolateHolderService"
+            android:permission="android.permission.FOREGROUND_SERVICE"
+            android:exported="true"
+            android:foregroundServiceType = "location"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"
