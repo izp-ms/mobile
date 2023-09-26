@@ -52,6 +52,7 @@ dependencies:
   path_provider:
   location_permissions:
   permission_handler:
+  geolocator:
 
 dev_dependencies:
   flutter_test:

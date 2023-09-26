@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:isolate';
 import 'dart:ui';
 
@@ -7,9 +8,11 @@ import 'package:background_locator_2/settings/android_settings.dart';
 import 'package:background_locator_2/settings/ios_settings.dart';
 import 'package:background_locator_2/settings/locator_settings.dart';
 import 'package:flutter/material.dart';
-import 'package:location_permissions/location_permissions.dart';
+import 'package:geolocator/geolocator.dart' as gl;
+import 'package:google_fonts/google_fonts.dart';
 import 'package:mobile/custom_widgets/custom_drawer/custom_drawer.dart';
 import 'package:mobile/custom_widgets/main_page_app_bar.dart';
+import 'package:mobile/custom_widgets/submit_button.dart';
 import 'package:mobile/repositories/location_service_repository/file_manager.dart';
 import 'package:mobile/repositories/location_service_repository/location_callback_handler.dart';
 import 'package:mobile/repositories/location_service_repository/location_service_repository.dart';
@@ -26,12 +29,19 @@ class _CollectPostcardPageState extends State<CollectPostcardPage> {
   ReceivePort port = ReceivePort();
 
   String logStr = '';
-  late bool? isRunning;
+  bool isRunning = false;
   LocationDto? lastLocation;
+  StreamController<String> streamController = StreamController();
+  late StreamSubscription<gl.ServiceStatus> serviceStatusStream;
 
   @override
   void initState() {
     super.initState();
+
+    serviceStatusStream = gl.Geolocator.getServiceStatusStream()
+        .listen((gl.ServiceStatus status) {
+      setState(() {});
+    });
 
     if (IsolateNameServer.lookupPortByName(
             LocationServiceRepository.isolateName) !=
@@ -51,17 +61,15 @@ class _CollectPostcardPageState extends State<CollectPostcardPage> {
     initPlatformState();
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
   Future<void> updateUI(dynamic data) async {
     final log = await FileManager.readLogFile();
 
     LocationDto? locationDto =
         (data != null) ? LocationDto.fromJson(data) : null;
-    await _updateNotificationText(locationDto!);
+
+    if (locationDto != null) {
+      await _updateNotificationText(locationDto);
+    }
 
     setState(() {
       if (data != null) {
@@ -72,10 +80,6 @@ class _CollectPostcardPageState extends State<CollectPostcardPage> {
   }
 
   Future<void> _updateNotificationText(LocationDto data) async {
-    if (data == null) {
-      return;
-    }
-
     await BackgroundLocator.updateNotificationText(
         title: "new location received",
         msg: "${DateTime.now()}",
@@ -94,72 +98,94 @@ class _CollectPostcardPageState extends State<CollectPostcardPage> {
     print('Running ${isRunning.toString()}');
   }
 
+  Future<bool> checkGpsStatus() async {
+    var isEnabled = await Permission.location.serviceStatus.isEnabled;
+    print(isEnabled);
+    return isEnabled;
+  }
+
+  // StreamSubscription<gl.ServiceStatus> serviceStatusStream =
+  //     gl.Geolocator.getServiceStatusStream().listen((gl.ServiceStatus status) {
+  //   print("AAAAAAA znieniono gpsa");
+  //   print(status);
+  // });
+
   @override
   Widget build(BuildContext context) {
-    final start = SizedBox(
-      width: double.maxFinite,
-      child: ElevatedButton(
-        child: const Text('Start'),
-        onPressed: () {
-          _onStart();
-        },
-      ),
-    );
-    final stop = SizedBox(
-      width: double.maxFinite,
-      child: ElevatedButton(
-        child: const Text('Stop'),
-        onPressed: () {
-          onStop();
-        },
-      ),
-    );
-    final clear = SizedBox(
-      width: double.maxFinite,
-      child: ElevatedButton(
-        child: const Text('Clear Log'),
-        onPressed: () {
-          FileManager.clearLogFile();
-          setState(() {
-            logStr = '';
-          });
-        },
-      ),
-    );
-    String msgStatus = "-";
-    if (isRunning != null) {
-      if (isRunning!) {
-        msgStatus = 'Is running';
-      } else {
-        msgStatus = 'Is not running';
-      }
-    }
-    final status = Text("Status: $msgStatus");
-
-    final log = Text(
-      logStr,
-    );
-
+    // final log = Text( //Keep just in case if something went wrong
+    //   logStr,
+    // );
+    print("budowanko");
     return Scaffold(
       appBar: const MainPageAppBar(),
       drawer: CustomDrawer(context),
       body: Container(
         width: double.maxFinite,
         padding: const EdgeInsets.all(22),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[start, stop, clear, status, log],
-          ),
+        child: FutureBuilder<bool>(
+          future: checkGpsStatus(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return CircularProgressIndicator(); // Show a loading indicator while checking GPS status
+            } else if (snapshot.hasError) {
+              return Text('Error: ${snapshot.error}');
+            } else if (snapshot.data == false) {
+              return Text('Please turn on GPS to use this feature.');
+            } else {
+              return SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Padding(
+                            padding: EdgeInsets.only(right: 8),
+                            child: SubmitButton(
+                              buttonText: 'Start',
+                              onButtonPressed: () {
+                                _onStart();
+                              },
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Padding(
+                            padding: EdgeInsets.only(left: 8),
+                            child: SubmitButton(
+                              buttonText: 'Stop',
+                              onButtonPressed: () {
+                                _onStop();
+                              },
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 30),
+                      child: Text(
+                        "Status ${isRunning ? "Runing" : "Not runing"}",
+                        style: GoogleFonts.rubik(
+                          fontSize: 20,
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              );
+            }
+          },
         ),
       ),
     );
   }
 
-  void onStop() async {
+  void _onStop() async {
     await BackgroundLocator.unRegisterLocationUpdate();
     final _isRunning = await BackgroundLocator.isServiceRunning();
     setState(() {
+      FileManager.clearLogFile();
       isRunning = _isRunning;
     });
   }
@@ -172,6 +198,7 @@ class _CollectPostcardPageState extends State<CollectPostcardPage> {
       setState(() {
         isRunning = _isRunning;
         lastLocation = null;
+        logStr = '';
       });
     } else {
       // show error
@@ -179,37 +206,12 @@ class _CollectPostcardPageState extends State<CollectPostcardPage> {
   }
 
   Future<bool> _checkLocationPermission() async {
-    final access = await LocationPermissions().checkPermissionStatus();
     var permission = await Permission.location.request().isGranted;
-    print(permission);
     if (permission) {
       return true;
     } else {
       return false;
     }
-    // switch (access) {
-    //   case PermissionStatus.unknown:
-    //   case PermissionStatus.denied:
-    //   case PermissionStatus.restricted:
-    //     print("brak permissionow");
-    //     // final permission = await LocationPermissions().requestPermissions(
-    //     //   permissionLevel: LocationPermissionLevel.locationAlways,
-    //     // );
-    //     var permission = await Permission.contacts.request().isGranted;
-    //     print(permission);
-    //     if (permission) {
-    //       return true;
-    //     } else {
-    //       return false;
-    //     }
-    //     break;
-    //   case PermissionStatus.granted:
-    //     return true;
-    //     break;
-    //   default:
-    //     return false;
-    //     break;
-    // }
   }
 
   Future<void> _startLocator() async {
@@ -230,26 +232,21 @@ class _CollectPostcardPageState extends State<CollectPostcardPage> {
         distanceFilter: 0,
         client: LocationClient.google,
         androidNotificationSettings: AndroidNotificationSettings(
-            notificationChannelName: 'Location tracking',
-            notificationTitle: 'Start Location Tracking',
-            notificationMsg: 'Track location in background',
-            notificationBigMsg:
-                'Background location is on to keep the app up-tp-date with your location. This is required for main features to work properly when the app is not running.',
-            notificationIconColor: Colors.grey,
-            notificationTapCallback:
-                LocationCallbackHandler.notificationCallback),
+          notificationChannelName: 'Location tracking',
+          notificationTitle: 'Start Location Tracking',
+          notificationMsg: 'Track location in background',
+          notificationBigMsg:
+              'Background location is on to keep the app up-tp-date with your location. This is required for main features to work properly when the app is not running.',
+          notificationIconColor: Colors.grey,
+          notificationTapCallback: LocationCallbackHandler.notificationCallback,
+        ),
       ),
     );
   }
 
-// @override
-// Widget build(BuildContext context) {
-//   return Scaffold(
-//     appBar: const MainPageAppBar(),
-//     drawer: CustomDrawer(context),
-//     body: const Center(
-//       child: Text("Collect"),
-//     ),
-//   );
-// }
+  @override
+  void dispose() {
+    serviceStatusStream.cancel();
+    super.dispose();
+  }
 }
