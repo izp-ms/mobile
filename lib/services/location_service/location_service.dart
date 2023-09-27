@@ -3,6 +3,10 @@ import 'dart:isolate';
 import 'dart:math';
 import 'dart:ui';
 import 'package:background_locator_2/location_dto.dart';
+import 'package:mobile/api/request/coordinates_request.dart';
+import 'package:mobile/cubit/collect_postcard_cubit/collect_postcard_cubit.dart';
+import 'package:mobile/helpers/show_error_snack_bar.dart';
+import 'package:mobile/services/collect_postcard_service.dart';
 import 'file_manager.dart';
 
 class LocationService {
@@ -56,23 +60,16 @@ class LocationService {
     send?.send(locationDto.toJson());
     _count++;
 
-    // final url = 'https://gorest.co.in/public/v2/posts';
-    // final uri = Uri.parse(url);
+    CoordinatesRequest coordinatesRequest = CoordinatesRequest(
+        longitude: locationDto.longitude.toString(),
+        latitude: locationDto.latitude.toString());
+
+    // final collectPostcardCubit = context.read<CollectPostcardCubit>();
     //
-    // final client = http.Client();
-    // final response = await client.get(
-    //   uri,
-    //   headers: <String, String>{
-    //     'Content-Type': 'application/json; charset=UTF-8',
-    //   },
-    // );
-    //
-    // print("%%%%%%%%%%%%%%%%%%%%%%%%%");
-    //
-    // print(response.statusCode);
-    //
-    // if (response.ok) {
-    //   print(response);
+    // try {
+    //   await collectPostcardCubit.postCoordinates(coordinatesRequest);
+    // } catch (e) {
+    //   showErrorSnackBar(context, "An error occurred: $e");
     // }
   }
 
@@ -85,7 +82,8 @@ class LocationService {
   static Future<void> setLogPosition(int count, LocationDto data) async {
     final date = DateTime.now();
     await FileManager.writeToLogFile(
-        '$count : ${formatDateLog(date)} --> ${formatLog(data)} --- isMocked: ${data.isMocked}\n');
+        '$count : ${formatDateLog(date)} --> ${formatLog(
+            data)} --- isMocked: ${data.isMocked}\n');
   }
 
   static double dp(double val, int places) {
