@@ -12,7 +12,7 @@ import 'package:geolocator/geolocator.dart' as gl;
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mobile/custom_widgets/custom_drawer/custom_drawer.dart';
 import 'package:mobile/custom_widgets/main_page_app_bar.dart';
-import 'package:mobile/custom_widgets/submit_button.dart';
+import 'package:mobile/custom_widgets/settings_switch.dart';
 import 'package:mobile/repositories/location_service_repository/file_manager.dart';
 import 'package:mobile/repositories/location_service_repository/location_callback_handler.dart';
 import 'package:mobile/repositories/location_service_repository/location_service_repository.dart';
@@ -100,22 +100,14 @@ class _CollectPostcardPageState extends State<CollectPostcardPage> {
 
   Future<bool> checkGpsStatus() async {
     var isEnabled = await Permission.location.serviceStatus.isEnabled;
-    print(isEnabled);
     return isEnabled;
   }
-
-  // StreamSubscription<gl.ServiceStatus> serviceStatusStream =
-  //     gl.Geolocator.getServiceStatusStream().listen((gl.ServiceStatus status) {
-  //   print("AAAAAAA znieniono gpsa");
-  //   print(status);
-  // });
 
   @override
   Widget build(BuildContext context) {
     // final log = Text( //Keep just in case if something went wrong
     //   logStr,
     // );
-    print("budowanko");
     return Scaffold(
       appBar: const MainPageAppBar(),
       drawer: CustomDrawer(context),
@@ -125,51 +117,38 @@ class _CollectPostcardPageState extends State<CollectPostcardPage> {
         child: FutureBuilder<bool>(
           future: checkGpsStatus(),
           builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return CircularProgressIndicator(); // Show a loading indicator while checking GPS status
-            } else if (snapshot.hasError) {
+            if (snapshot.hasError) {
               return Text('Error: ${snapshot.error}');
             } else if (snapshot.data == false) {
-              return Text('Please turn on GPS to use this feature.');
+              return const Text('Please turn on GPS to use this feature.');
             } else {
               return SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Expanded(
-                          child: Padding(
-                            padding: EdgeInsets.only(right: 8),
-                            child: SubmitButton(
-                              buttonText: 'Start',
-                              onButtonPressed: () {
+                        Text(
+                          "Status ${isRunning ? "Runing" : "Not runing"}",
+                          style: GoogleFonts.rubik(
+                            fontSize: 20,
+                          ),
+                        ),
+                        SwitchWidget(
+                          value: isRunning,
+                          onChanged: (bool value) {
+                            setState(() {
+                              isRunning = value;
+                              if (isRunning) {
                                 _onStart();
-                              },
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: Padding(
-                            padding: EdgeInsets.only(left: 8),
-                            child: SubmitButton(
-                              buttonText: 'Stop',
-                              onButtonPressed: () {
+                              } else {
                                 _onStop();
-                              },
-                            ),
-                          ),
-                        ),
+                              }
+                            });
+                          },
+                        )
                       ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 30),
-                      child: Text(
-                        "Status ${isRunning ? "Runing" : "Not runing"}",
-                        style: GoogleFonts.rubik(
-                          fontSize: 20,
-                        ),
-                      ),
                     )
                   ],
                 ),
@@ -222,9 +201,10 @@ class _CollectPostcardPageState extends State<CollectPostcardPage> {
       initDataCallback: data,
       disposeCallback: LocationCallbackHandler.disposeCallback,
       iosSettings: const IOSSettings(
-          accuracy: LocationAccuracy.NAVIGATION,
-          distanceFilter: 0,
-          stopWithTerminate: true),
+        accuracy: LocationAccuracy.NAVIGATION,
+        distanceFilter: 0,
+        stopWithTerminate: true,
+      ),
       autoStop: false,
       androidSettings: const AndroidSettings(
         accuracy: LocationAccuracy.NAVIGATION,
