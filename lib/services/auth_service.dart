@@ -8,7 +8,7 @@ import 'package:mobile/api/response/token_response.dart';
 import 'package:mobile/constants/api_constants.dart';
 import 'package:mobile/extensions/is_ok.dart';
 
-class AuthRepository {
+class AuthService {
   final String _baseUrl = ApiConstants.baseUrl;
 
   Future<dynamic> login(LoginRequest loginRequest) async {

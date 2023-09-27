@@ -4,7 +4,7 @@ import 'package:mobile/pages/login_page/login_page.dart';
 import 'package:mobile/pages/postcards_page/postcards_page.dart';
 import 'package:mobile/pages/profile_page/profile_page.dart';
 import 'package:mobile/pages/settings_page/settings_page.dart';
-import 'package:mobile/repositories/secure_storage_repository.dart';
+import 'package:mobile/services/secure_storage_service.dart';
 import 'custom_drawer_tile.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -59,20 +59,20 @@ class CustomDrawer extends Drawer {
                         height: gapBetweenTiles,
                       ),
                       CustomDrawerTile(
-                        tileIcon: Icons.settings_outlined,
-                        tileText: AppLocalizations.of(context).settings,
+                        tileIcon: Icons.location_on_outlined,
+                        tileText: "Collect",
                         onTilePress: () {
-                          onSettingsPress(context);
+                          onCollectPostcardPress(context);
                         },
                       ),
                       SizedBox(
                         height: gapBetweenTiles,
                       ),
                       CustomDrawerTile(
-                        tileIcon: Icons.location_on_outlined,
-                        tileText: "Collect",
+                        tileIcon: Icons.settings_outlined,
+                        tileText: AppLocalizations.of(context).settings,
                         onTilePress: () {
-                          onCollectPostcardPress(context);
+                          onSettingsPress(context);
                         },
                       ),
                     ],
@@ -133,7 +133,7 @@ class CustomDrawer extends Drawer {
   }
 
   Future<void> onLogOutPress(context) async {
-    await SecureStorageRepository.delete(key: 'token');
+    await SecureStorageService.delete(key: 'token');
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(

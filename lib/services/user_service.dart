@@ -5,15 +5,15 @@ import 'package:mobile/api/response/error_message_response.dart';
 import 'package:mobile/api/response/user_detail_response.dart';
 import 'package:mobile/constants/api_constants.dart';
 import 'package:mobile/extensions/is_ok.dart';
-import 'package:mobile/repositories/secure_storage_repository.dart';
+import 'package:mobile/services/secure_storage_service.dart';
 
-class UserRepository {
+class UserService {
   final String _baseUrl = ApiConstants.baseUrl;
 
   Future<dynamic> getUserDetail() async {
     final url = '$_baseUrl/User';
     final uri = Uri.parse(url);
-    final token = await SecureStorageRepository.read(key: 'token');
+    final token = await SecureStorageService.read(key: 'token');
 
     final client = http.Client();
     final response = await client.get(
@@ -38,7 +38,7 @@ class UserRepository {
   Future<dynamic> putUserDetail(UserDetailRequest userDetailRequest) async {
     final url = '$_baseUrl/User';
     final uri = Uri.parse(url);
-    final token = await SecureStorageRepository.read(key: 'token');
+    final token = await SecureStorageService.read(key: 'token');
 
     final client = http.Client();
     final response = await client.put(

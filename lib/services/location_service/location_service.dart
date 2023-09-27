@@ -2,20 +2,15 @@ import 'dart:async';
 import 'dart:isolate';
 import 'dart:math';
 import 'dart:ui';
-
 import 'package:background_locator_2/location_dto.dart';
-import 'package:http/http.dart' as http;
-import 'package:mobile/extensions/is_ok.dart';
-
-
 import 'file_manager.dart';
 
-class LocationServiceRepository {
-  static LocationServiceRepository _instance = LocationServiceRepository._();
+class LocationService {
+  static LocationService _instance = LocationService._();
 
-  LocationServiceRepository._();
+  LocationService._();
 
-  factory LocationServiceRepository() {
+  factory LocationService() {
     return _instance;
   }
 
@@ -61,24 +56,24 @@ class LocationServiceRepository {
     send?.send(locationDto.toJson());
     _count++;
 
-    final url = 'https://gorest.co.in/public/v2/posts';
-    final uri = Uri.parse(url);
-
-    final client = http.Client();
-    final response = await client.get(
-      uri,
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-    );
-
-    print("%%%%%%%%%%%%%%%%%%%%%%%%%");
-
-    print(response.statusCode);
-
-    if (response.ok) {
-      print(response);
-    }
+    // final url = 'https://gorest.co.in/public/v2/posts';
+    // final uri = Uri.parse(url);
+    //
+    // final client = http.Client();
+    // final response = await client.get(
+    //   uri,
+    //   headers: <String, String>{
+    //     'Content-Type': 'application/json; charset=UTF-8',
+    //   },
+    // );
+    //
+    // print("%%%%%%%%%%%%%%%%%%%%%%%%%");
+    //
+    // print(response.statusCode);
+    //
+    // if (response.ok) {
+    //   print(response);
+    // }
   }
 
   static Future<void> setLogLabel(String label) async {

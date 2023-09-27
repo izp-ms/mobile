@@ -13,9 +13,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:mobile/custom_widgets/custom_drawer/custom_drawer.dart';
 import 'package:mobile/custom_widgets/main_page_app_bar.dart';
 import 'package:mobile/custom_widgets/settings_switch.dart';
-import 'package:mobile/repositories/location_service_repository/file_manager.dart';
-import 'package:mobile/repositories/location_service_repository/location_callback_handler.dart';
-import 'package:mobile/repositories/location_service_repository/location_service_repository.dart';
+import 'package:mobile/services/location_service/file_manager.dart';
+import 'package:mobile/services/location_service/location_callback_handler.dart';
+import 'package:mobile/services/location_service/location_service.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class CollectPostcardPage extends StatefulWidget {
@@ -44,14 +44,14 @@ class _CollectPostcardPageState extends State<CollectPostcardPage> {
     });
 
     if (IsolateNameServer.lookupPortByName(
-            LocationServiceRepository.isolateName) !=
+            LocationService.isolateName) !=
         null) {
       IsolateNameServer.removePortNameMapping(
-          LocationServiceRepository.isolateName);
+          LocationService.isolateName);
     }
 
     IsolateNameServer.registerPortWithName(
-        port.sendPort, LocationServiceRepository.isolateName);
+        port.sendPort, LocationService.isolateName);
 
     port.listen(
       (dynamic data) async {

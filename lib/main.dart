@@ -9,9 +9,9 @@ import 'package:mobile/cubit/user_cubit/user_cubit.dart';
 import 'package:mobile/pages/login_page/login_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:mobile/pages/postcards_page/postcards_page.dart';
-import 'package:mobile/repositories/auth_repository.dart';
-import 'package:mobile/repositories/secure_storage_repository.dart';
-import 'package:mobile/repositories/user_repository.dart';
+import 'package:mobile/services/auth_service.dart';
+import 'package:mobile/services/secure_storage_service.dart';
+import 'package:mobile/services/user_service.dart';
 
 class MyHttpOverrides extends HttpOverrides {
   @override
@@ -25,7 +25,7 @@ class MyHttpOverrides extends HttpOverrides {
 Future<void> main() async {
   HttpOverrides.global = MyHttpOverrides();
   WidgetsFlutterBinding.ensureInitialized();
-  final token = await SecureStorageRepository.read(key: 'token');
+  final token = await SecureStorageService.read(key: 'token');
   await ColorProvider.loadColors();
   runApp(MyApp(token: token));
 }
@@ -47,10 +47,10 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider<AuthCubit>(
-          create: (context) => AuthCubit(AuthRepository()),
+          create: (context) => AuthCubit(AuthService()),
         ),
         BlocProvider<UserCubit>(
-          create: (context) => UserCubit(UserRepository()),
+          create: (context) => UserCubit(UserService()),
         ),
       ],
       child: MaterialApp(
