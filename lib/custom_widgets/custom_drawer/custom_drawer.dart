@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/pages/collect_postcard_page/collect_postcard_page.dart';
 import 'package:mobile/pages/login_page/login_page.dart';
 import 'package:mobile/pages/postcards_page/postcards_page.dart';
 import 'package:mobile/pages/profile_page/profile_page.dart';
 import 'package:mobile/pages/settings_page/settings_page.dart';
-import 'package:mobile/repositories/secure_storage_repository.dart';
+import 'package:mobile/services/secure_storage_service.dart';
 import 'custom_drawer_tile.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -52,6 +53,16 @@ class CustomDrawer extends Drawer {
                         tileText: AppLocalizations.of(context).postcards,
                         onTilePress: () {
                           onPostcardsPress(context);
+                        },
+                      ),
+                      SizedBox(
+                        height: gapBetweenTiles,
+                      ),
+                      CustomDrawerTile(
+                        tileIcon: Icons.location_on_outlined,
+                        tileText: "Collect",
+                        onTilePress: () {
+                          onCollectPostcardPress(context);
                         },
                       ),
                       SizedBox(
@@ -112,8 +123,17 @@ class CustomDrawer extends Drawer {
     );
   }
 
+  void onCollectPostcardPress(context) {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const CollectPostcardPage(),
+      ),
+    );
+  }
+
   Future<void> onLogOutPress(context) async {
-    await SecureStorageRepository.delete(key: 'token');
+    await SecureStorageService.delete(key: 'token');
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(

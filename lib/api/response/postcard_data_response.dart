@@ -1,28 +1,40 @@
-class PostcardDataResponse {
-  final int id;
-  final String imageBase64;
-  final String country;
-  final String city;
-  final String longitude;
-  final String latitude;
+class PostcardsDataResponse {
+  int? id;
+  String? imageBase64;
+  String? country;
+  String? city;
+  String? longitude;
+  String? latitude;
+  int? collectRangeInMeters;
 
-  PostcardDataResponse({
-    required this.id,
-    required this.imageBase64,
-    required this.country,
-    required this.city,
-    required this.longitude,
-    required this.latitude,
-  });
+  PostcardsDataResponse(
+      {this.id,
+      this.imageBase64,
+      this.country,
+      this.city,
+      this.longitude,
+      this.latitude,
+      this.collectRangeInMeters});
 
-  factory PostcardDataResponse.fromJson(Map<String, dynamic> json) {
-    return PostcardDataResponse(
-      id: json['id'],
-      imageBase64: json['imageBase64'],
-      country: json['country'],
-      city: json['city'],
-      longitude: json['longitude'],
-      latitude: json['latitude'],
-    );
+  PostcardsDataResponse.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    imageBase64 = json['imageBase64'];
+    country = json['country'];
+    city = json['city'];
+    longitude = json['longitude'];
+    latitude = json['latitude'];
+    collectRangeInMeters = json['collectRangeInMeters'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['imageBase64'] = imageBase64;
+    data['country'] = country;
+    data['city'] = city;
+    data['longitude'] = longitude;
+    data['latitude'] = latitude;
+    data['collectRangeInMeters'] = collectRangeInMeters;
+    return data;
   }
 }

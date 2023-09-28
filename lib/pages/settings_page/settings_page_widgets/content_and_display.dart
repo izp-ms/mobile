@@ -3,10 +3,17 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:mobile/custom_widgets/settings_switch.dart';
 
-class ContentAndDisplay extends StatelessWidget {
+class ContentAndDisplay extends StatefulWidget {
   const ContentAndDisplay({
     super.key,
   });
+
+  @override
+  State<ContentAndDisplay> createState() => _ContentAndDisplayState();
+}
+
+class _ContentAndDisplayState extends State<ContentAndDisplay> {
+  bool switchThemeValue = false;
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +48,14 @@ class ContentAndDisplay extends StatelessWidget {
                       fontSize: 18,
                     ),
                   ),
-                  SwitchWidget()
+                  SwitchWidget(
+                    value: switchThemeValue,
+                    onChanged: (bool value) {
+                      setState(() {
+                        switchThemeValue = value;
+                      });
+                    },
+                  )
                 ],
               ),
               SizedBox(height: 3),
