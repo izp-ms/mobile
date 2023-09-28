@@ -11,12 +11,9 @@ import 'package:mobile/cubit/user_cubit/user_cubit.dart';
 import 'package:mobile/pages/login_page/login_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:mobile/pages/postcards_page/postcards_page.dart';
-import 'package:mobile/repositories/auth_repository.dart';
-import 'package:mobile/repositories/postcard_repository.dart';
-import 'package:mobile/repositories/secure_storage_repository.dart';
-import 'package:mobile/repositories/user_repository.dart';
 import 'package:mobile/services/auth_service.dart';
 import 'package:mobile/services/collect_postcard_service.dart';
+import 'package:mobile/services/postcard_repository.dart';
 import 'package:mobile/services/secure_storage_service.dart';
 import 'package:mobile/services/user_service.dart';
 
@@ -63,7 +60,7 @@ class MyApp extends StatelessWidget {
           create: (context) => CollectPostcardCubit(CollectPostcardService()),
         ),
         BlocProvider<PostcardCubit>(
-          create: (context) => PostcardCubit(PostcardRepository()),
+          create: (context) => PostcardCubit(PostcardService()),
         )
       ],
       child: MaterialApp(

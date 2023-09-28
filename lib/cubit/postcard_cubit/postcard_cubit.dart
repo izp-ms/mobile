@@ -1,9 +1,9 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile/cubit/postcard_cubit/postcard_state.dart';
-import 'package:mobile/repositories/postcard_repository.dart';
+import 'package:mobile/services/postcard_repository.dart';
 
 class PostcardCubit extends Cubit<PostcardState> {
-  final PostcardRepository _repository;
+  final PostcardService _repository;
 
   PostcardCubit(this._repository) : super(InitState());
 

@@ -5,13 +5,13 @@ import 'package:mobile/api/response/error_message_response.dart';
 import 'package:mobile/api/response/postcard_data_response.dart';
 import 'package:mobile/constants/api_constants.dart';
 import 'package:mobile/extensions/is_ok.dart';
-import 'package:mobile/repositories/secure_storage_repository.dart';
+import 'package:mobile/services/secure_storage_service.dart';
 
-class PostcardRepository {
+class PostcardService {
   final String _baseUrl = ApiConstants.baseUrl;
 
   Future<dynamic> getPostcardData() async {
-    final token = await SecureStorageRepository.read(key: 'token');
+    final token = await SecureStorageService.read(key: 'token');
     Map<String, dynamic> decodedToken = JwtDecoder.decode(token!);
     String userId = decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'];
 
@@ -29,7 +29,7 @@ class PostcardRepository {
 
     if (response.ok) {
       final responseJson = json.decode(response.body);
-      final postcardDetail = PostcardDataResponse.fromJson(responseJson); // Using PostcardResponse to decode
+      final postcardDetail = PostcardsDataResponse.fromJson(responseJson);
       return postcardDetail;
     } else {
       final errorJson = json.decode(response.body);

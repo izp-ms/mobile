@@ -12,6 +12,6 @@ class ErrorState extends PostcardState {
 }
 
 class LoadedState extends PostcardState {
-  final PostcardDataResponse postcard;
+  final PostcardsDataResponse postcard;
   LoadedState(this.postcard);
 }
