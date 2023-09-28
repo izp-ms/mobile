@@ -4,13 +4,19 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:mobile/custom_widgets/settings_switch.dart';
 import 'package:mobile/pages/settings_page/settings_page_widgets/components/settings_toggle_button.dart';
 
-class UnitsFormat extends StatelessWidget {
+class UnitsFormat extends StatefulWidget {
   const UnitsFormat({
     super.key,
   });
 
   @override
+  State<UnitsFormat> createState() => _UnitsFormatState();
+}
+
+class _UnitsFormatState extends State<UnitsFormat> {
+  @override
   Widget build(BuildContext context) {
+    bool useMetricSystemValue = false;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -75,7 +81,14 @@ class UnitsFormat extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const SwitchWidget(),
+                  SwitchWidget(
+                    value: useMetricSystemValue,
+                    onChanged: (bool value) {
+                      setState(() {
+                        useMetricSystemValue = value;
+                      });
+                    },
+                  ),
                 ],
               ),
             ],

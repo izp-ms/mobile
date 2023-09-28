@@ -5,13 +5,15 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:mobile/constants/ColorProvider.dart';
 import 'package:mobile/cubit/auth_cubit/auth_cubit.dart';
+import 'package:mobile/cubit/collect_postcard_cubit/collect_postcard_cubit.dart';
 import 'package:mobile/cubit/user_cubit/user_cubit.dart';
 import 'package:mobile/pages/login_page/login_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:mobile/pages/postcards_page/postcards_page.dart';
-import 'package:mobile/repositories/auth_repository.dart';
-import 'package:mobile/repositories/secure_storage_repository.dart';
-import 'package:mobile/repositories/user_repository.dart';
+import 'package:mobile/services/auth_service.dart';
+import 'package:mobile/services/collect_postcard_service.dart';
+import 'package:mobile/services/secure_storage_service.dart';
+import 'package:mobile/services/user_service.dart';
 
 class MyHttpOverrides extends HttpOverrides {
   @override
@@ -25,7 +27,7 @@ class MyHttpOverrides extends HttpOverrides {
 Future<void> main() async {
   HttpOverrides.global = MyHttpOverrides();
   WidgetsFlutterBinding.ensureInitialized();
-  final token = await SecureStorageRepository.read(key: 'token');
+  final token = await SecureStorageService.read(key: 'token');
   await ColorProvider.loadColors();
   runApp(MyApp(token: token));
 }
@@ -47,10 +49,13 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider<AuthCubit>(
-          create: (context) => AuthCubit(AuthRepository()),
+          create: (context) => AuthCubit(AuthService()),
         ),
         BlocProvider<UserCubit>(
-          create: (context) => UserCubit(UserRepository()),
+          create: (context) => UserCubit(UserService()),
+        ),
+        BlocProvider<CollectPostcardCubit>(
+          create: (context) => CollectPostcardCubit(CollectPostcardService()),
         ),
       ],
       child: MaterialApp(
@@ -74,14 +79,18 @@ class MyApp extends StatelessWidget {
             secondary: ColorProvider.getColor('secondary', theme: 'light'),
             onSecondary: Colors.black,
             primaryContainer: Colors.black,
-            secondaryContainer: ColorProvider.getColor('primary', theme: 'light'),
-            onSecondaryContainer: ColorProvider.getColor('onSecondaryContainer', theme: 'light'),
+            secondaryContainer:
+                ColorProvider.getColor('primary', theme: 'light'),
+            onSecondaryContainer:
+                ColorProvider.getColor('onSecondaryContainer', theme: 'light'),
             error: Colors.red,
             onError: Colors.white,
             background: ColorProvider.getColor('background', theme: 'light'),
-            onBackground: ColorProvider.getColor('onBackground', theme: 'light'),
+            onBackground:
+                ColorProvider.getColor('onBackground', theme: 'light'),
             surface: ColorProvider.getColor('surface', theme: 'light'),
-            onSurface: ColorProvider.getColor('onSecondaryContainer', theme: 'light'),
+            onSurface:
+                ColorProvider.getColor('onSecondaryContainer', theme: 'light'),
           ),
         ),
         darkTheme: ThemeData(
@@ -92,9 +101,12 @@ class MyApp extends StatelessWidget {
             onPrimary: Colors.white,
             secondary: ColorProvider.getColor('secondary', theme: 'dark'),
             onSecondary: Colors.white,
-            primaryContainer: ColorProvider.getColor('secondary', theme: 'dark'),
-            secondaryContainer: ColorProvider.getColor('secondary', theme: 'dark'),
-            onSecondaryContainer: ColorProvider.getColor('onSecondaryContainer', theme: 'dark'),
+            primaryContainer:
+                ColorProvider.getColor('secondary', theme: 'dark'),
+            secondaryContainer:
+                ColorProvider.getColor('secondary', theme: 'dark'),
+            onSecondaryContainer:
+                ColorProvider.getColor('onSecondaryContainer', theme: 'dark'),
             error: Colors.red,
             onError: Colors.white,
             background: ColorProvider.getColor('background', theme: 'dark'),

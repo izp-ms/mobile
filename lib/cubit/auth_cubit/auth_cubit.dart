@@ -2,11 +2,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile/api/request/login_request.dart';
 import 'package:mobile/api/request/register_request.dart';
 import 'package:mobile/cubit/auth_cubit/auth_state.dart';
-import 'package:mobile/repositories/auth_repository.dart';
-import 'package:mobile/repositories/secure_storage_repository.dart';
+import 'package:mobile/services/auth_service.dart';
+import 'package:mobile/services/secure_storage_service.dart';
 
 class AuthCubit extends Cubit<AuthState> {
-  final AuthRepository _repository;
+  final AuthService _repository;
 
   AuthCubit(this._repository) : super(InitState());
 
@@ -15,7 +15,7 @@ class AuthCubit extends Cubit<AuthState> {
     try {
       final response = await _repository.login(loginRequest);
 
-      await SecureStorageRepository.write(key: 'token', value: response);
+      await SecureStorageService.write(key: 'token', value: response);
 
       emit(LoginSuccessState(response));
     } catch (e) {
