@@ -1,5 +1,6 @@
 import 'dart:convert';
-import 'package:http/http.dart' as http;
+import 'dart:io';
+import 'package:http/io_client.dart';
 import 'package:mobile/api/request/coordinates_request.dart';
 import 'package:mobile/api/response/error_message_response.dart';
 import 'package:mobile/api/response/post_coordinates_response.dart';
@@ -15,9 +16,19 @@ class CollectPostcardService {
     final uri = Uri.parse(url);
     final token = await SecureStorageService.read(key: 'token');
 
-    print(url);
+    // final client = http.Client();
+    // final response = await client.post(
+    //   uri,
+    //   headers: <String, String>{
+    //     'Content-Type': 'application/json; charset=UTF-8',
+    //     'Authorization': 'Bearer $token',
+    //   },
+    //   body: json.encode(coordinatesRequest.toJson()),
+    // );
 
-    final client = http.Client();
+    final ioc = HttpClient();
+    ioc.badCertificateCallback = (X509Certificate cert, String host, int port) => true;
+    final client = IOClient(ioc);
     final response = await client.post(
       uri,
       headers: <String, String>{
@@ -26,8 +37,6 @@ class CollectPostcardService {
       },
       body: json.encode(coordinatesRequest.toJson()),
     );
-
-    print(response.statusCode);
 
     if (response.ok) {
       final responseJson = json.decode(response.body);

@@ -69,6 +69,17 @@ class _CollectPostcardPageState extends State<CollectPostcardPage> {
 
     if (locationDto != null) {
       await _updateNotificationText(locationDto);
+
+      // final collectPostcardCubit = context.read<CollectPostcardCubit>();
+      // CoordinatesRequest coordinatesRequest = CoordinatesRequest(
+      //     longitude: locationDto.longitude.toString(),
+      //     latitude: locationDto.latitude.toString());
+      //
+      // try {
+      //   await collectPostcardCubit.postCoordinates(coordinatesRequest);
+      // } catch (e) {
+      //   showErrorSnackBar(context, "An error occurred: $e");
+      // }
     }
 
     setState(() {
