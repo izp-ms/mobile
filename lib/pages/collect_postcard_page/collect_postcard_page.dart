@@ -10,6 +10,7 @@ import 'package:background_locator_2/settings/locator_settings.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart' as gl;
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mobile/api/response/post_coordinates_response.dart';
 import 'package:mobile/custom_widgets/custom_drawer/custom_drawer.dart';
 import 'package:mobile/custom_widgets/main_page_app_bar.dart';
 import 'package:mobile/custom_widgets/settings_switch.dart';
@@ -43,11 +44,9 @@ class _CollectPostcardPageState extends State<CollectPostcardPage> {
       setState(() {});
     });
 
-    if (IsolateNameServer.lookupPortByName(
-            LocationService.isolateName) !=
+    if (IsolateNameServer.lookupPortByName(LocationService.isolateName) !=
         null) {
-      IsolateNameServer.removePortNameMapping(
-          LocationService.isolateName);
+      IsolateNameServer.removePortNameMapping(LocationService.isolateName);
     }
 
     IsolateNameServer.registerPortWithName(
@@ -62,39 +61,15 @@ class _CollectPostcardPageState extends State<CollectPostcardPage> {
   }
 
   Future<void> updateUI(dynamic data) async {
-    final log = await FileManager.readLogFile();
 
-    LocationDto? locationDto =
-        (data != null) ? LocationDto.fromJson(data) : null;
+    PostCoordinatesResponse? postCoordinatesResponse =
+        (data != null) ? PostCoordinatesResponse.fromJson(data) : null;
 
-    if (locationDto != null) {
-      await _updateNotificationText(locationDto);
-
-      // final collectPostcardCubit = context.read<CollectPostcardCubit>();
-      // CoordinatesRequest coordinatesRequest = CoordinatesRequest(
-      //     longitude: locationDto.longitude.toString(),
-      //     latitude: locationDto.latitude.toString());
-      //
-      // try {
-      //   await collectPostcardCubit.postCoordinates(coordinatesRequest);
-      // } catch (e) {
-      //   showErrorSnackBar(context, "An error occurred: $e");
-      // }
+    if (postCoordinatesResponse != null) {
+      print("Received new postcards");
     }
 
-    setState(() {
-      if (data != null) {
-        lastLocation = locationDto;
-      }
-      logStr = log;
-    });
-  }
-
-  Future<void> _updateNotificationText(LocationDto data) async {
-    await BackgroundLocator.updateNotificationText(
-        title: "new location received",
-        msg: "${DateTime.now()}",
-        bigMsg: "${data.latitude}, ${data.longitude}");
+    setState(() {});
   }
 
   Future<void> initPlatformState() async {

@@ -16,16 +16,6 @@ class CollectPostcardService {
     final uri = Uri.parse(url);
     final token = await SecureStorageService.read(key: 'token');
 
-    // final client = http.Client();
-    // final response = await client.post(
-    //   uri,
-    //   headers: <String, String>{
-    //     'Content-Type': 'application/json; charset=UTF-8',
-    //     'Authorization': 'Bearer $token',
-    //   },
-    //   body: json.encode(coordinatesRequest.toJson()),
-    // );
-
     final ioc = HttpClient();
     ioc.badCertificateCallback = (X509Certificate cert, String host, int port) => true;
     final client = IOClient(ioc);
