@@ -36,5 +36,7 @@
   "termsAndPolicies": "Terms and Policies",
   "privacy": "Privacy",
   "pickPhoto": "Pick photo",
-  "save": "Save"
+  "save": "Save",
+  "sortBy": "Sort by",
+  "filters": "Filters"
 }
