@@ -92,6 +92,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                           hintText: AppLocalizations.of(context).password,
                           inputIcon: Icons.lock,
                           isPasswordField: true,
+                          canToogleVisibility: true,
                         ),
                         SizedBox(height: gapBetweenTextFields),
                         CustomFormField(
@@ -102,6 +103,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                           hintText: AppLocalizations.of(context).password,
                           inputIcon: Icons.lock,
                           isPasswordField: true,
+                          canToogleVisibility: true,
                         ),
                       ],
                     ),

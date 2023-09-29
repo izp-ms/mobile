@@ -49,7 +49,7 @@ class _PersonalInfoSectionState extends State<PersonalInfoSection> {
                     text: state.userDetail.country!,
                   ),
                 ),
-              if (state.userDetail.description != null)
+              if (state.userDetail.description != null && state.userDetail.description!.isNotEmpty)
                 AboutMeSection(description: state.userDetail.description!)
             ],
           ],
