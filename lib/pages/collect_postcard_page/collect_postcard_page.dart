@@ -15,6 +15,7 @@ import 'package:mobile/api/response/post_coordinates_response.dart';
 import 'package:mobile/custom_widgets/custom_drawer/custom_drawer.dart';
 import 'package:mobile/custom_widgets/main_page_app_bar.dart';
 import 'package:mobile/custom_widgets/settings_switch.dart';
+import 'package:mobile/pages/collect_postcard_page/collect_postcard_page_widgets/postcard_list_shimmer.dart';
 import 'package:mobile/pages/collect_postcard_page/collect_postcard_page_widgets/postcard_list_with_title.dart';
 import 'package:mobile/services/location_service/file_manager.dart';
 import 'package:mobile/services/location_service/location_callback_handler.dart';
@@ -124,7 +125,7 @@ class _CollectPostcardPageState extends State<CollectPostcardPage> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              "Status ${isRunning ? "Runing" : "Not runing"}",
+                              "Locate postcards: ${isRunning ? "On" : "Off"}",
                               style: GoogleFonts.rubik(
                                 fontSize: 20,
                               ),
@@ -144,7 +145,9 @@ class _CollectPostcardPageState extends State<CollectPostcardPage> {
                             )
                           ],
                         ),
-                        if (lastReceivedPostcards != null)
+                        if (lastReceivedPostcards == null && isRunning)
+                          const PostcardListShimmer(),
+                        if (lastReceivedPostcards != null && isRunning)
                           Column(
                             children: [
                               if (lastReceivedPostcards?.postcardsCollected !=
