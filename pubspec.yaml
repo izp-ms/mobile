@@ -53,6 +53,7 @@ dependencies:
   location_permissions:
   permission_handler:
   geolocator:
+  cached_memory_image:
 
 dev_dependencies:
   flutter_test:

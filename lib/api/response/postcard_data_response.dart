@@ -3,6 +3,7 @@ class PostcardsDataResponse {
   String? imageBase64;
   String? country;
   String? city;
+  String? title;
   String? longitude;
   String? latitude;
   int? collectRangeInMeters;
@@ -12,6 +13,7 @@ class PostcardsDataResponse {
       this.imageBase64,
       this.country,
       this.city,
+      this.title,
       this.longitude,
       this.latitude,
       this.collectRangeInMeters});
@@ -21,6 +23,7 @@ class PostcardsDataResponse {
     imageBase64 = json['imageBase64'];
     country = json['country'];
     city = json['city'];
+    title = json['title'];
     longitude = json['longitude'];
     latitude = json['latitude'];
     collectRangeInMeters = json['collectRangeInMeters'];
@@ -32,6 +35,7 @@ class PostcardsDataResponse {
     data['imageBase64'] = imageBase64;
     data['country'] = country;
     data['city'] = city;
+    data['title'] = title;
     data['longitude'] = longitude;
     data['latitude'] = latitude;
     data['collectRangeInMeters'] = collectRangeInMeters;

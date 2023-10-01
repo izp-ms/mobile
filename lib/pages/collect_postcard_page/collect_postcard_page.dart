@@ -3,10 +3,11 @@ import 'dart:isolate';
 import 'dart:ui';
 
 import 'package:background_locator_2/background_locator.dart';
-import 'package:background_locator_2/location_dto.dart';
 import 'package:background_locator_2/settings/android_settings.dart';
 import 'package:background_locator_2/settings/ios_settings.dart';
 import 'package:background_locator_2/settings/locator_settings.dart';
+import 'package:cached_memory_image/cached_image_base64_manager.dart';
+import 'package:cached_memory_image/cached_image_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart' as gl;
 import 'package:google_fonts/google_fonts.dart';
@@ -14,6 +15,7 @@ import 'package:mobile/api/response/post_coordinates_response.dart';
 import 'package:mobile/custom_widgets/custom_drawer/custom_drawer.dart';
 import 'package:mobile/custom_widgets/main_page_app_bar.dart';
 import 'package:mobile/custom_widgets/settings_switch.dart';
+import 'package:mobile/pages/collect_postcard_page/collect_postcard_page_widgets/postcard_list_with_title.dart';
 import 'package:mobile/services/location_service/file_manager.dart';
 import 'package:mobile/services/location_service/location_callback_handler.dart';
 import 'package:mobile/services/location_service/location_service.dart';
@@ -28,11 +30,13 @@ class CollectPostcardPage extends StatefulWidget {
 
 class _CollectPostcardPageState extends State<CollectPostcardPage> {
   ReceivePort port = ReceivePort();
+  final CachedImageManager _cachedImageManager =
+      CachedImageBase64Manager.instance();
 
   String logStr = '';
   bool isRunning = false;
-  LocationDto? lastLocation;
   StreamController<String> streamController = StreamController();
+  PostCoordinatesResponse? lastReceivedPostcards;
   late StreamSubscription<gl.ServiceStatus> serviceStatusStream;
 
   @override
@@ -61,7 +65,6 @@ class _CollectPostcardPageState extends State<CollectPostcardPage> {
   }
 
   Future<void> updateUI(dynamic data) async {
-
     PostCoordinatesResponse? postCoordinatesResponse =
         (data != null) ? PostCoordinatesResponse.fromJson(data) : null;
 
@@ -69,7 +72,9 @@ class _CollectPostcardPageState extends State<CollectPostcardPage> {
       print("Received new postcards");
     }
 
-    setState(() {});
+    setState(() {
+      lastReceivedPostcards = postCoordinatesResponse;
+    });
   }
 
   Future<void> initPlatformState() async {
@@ -98,8 +103,7 @@ class _CollectPostcardPageState extends State<CollectPostcardPage> {
       appBar: const MainPageAppBar(),
       drawer: CustomDrawer(context),
       body: Container(
-        width: double.maxFinite,
-        padding: const EdgeInsets.all(22),
+        padding: const EdgeInsets.all(20),
         child: FutureBuilder<bool>(
           future: checkGpsStatus(),
           builder: (context, snapshot) {
@@ -108,35 +112,60 @@ class _CollectPostcardPageState extends State<CollectPostcardPage> {
             } else if (snapshot.data == false) {
               return const Text('Please turn on GPS to use this feature.');
             } else {
-              return SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              return Align(
+                alignment: Alignment.topCenter,
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 600),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Text(
-                          "Status ${isRunning ? "Runing" : "Not runing"}",
-                          style: GoogleFonts.rubik(
-                            fontSize: 20,
-                          ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Status ${isRunning ? "Runing" : "Not runing"}",
+                              style: GoogleFonts.rubik(
+                                fontSize: 20,
+                              ),
+                            ),
+                            SwitchWidget(
+                              value: isRunning,
+                              onChanged: (bool value) {
+                                setState(() {
+                                  isRunning = value;
+                                  if (isRunning) {
+                                    _onStart();
+                                  } else {
+                                    _onStop();
+                                  }
+                                });
+                              },
+                            )
+                          ],
                         ),
-                        SwitchWidget(
-                          value: isRunning,
-                          onChanged: (bool value) {
-                            setState(() {
-                              isRunning = value;
-                              if (isRunning) {
-                                _onStart();
-                              } else {
-                                _onStop();
-                              }
-                            });
-                          },
-                        )
+                        if (lastReceivedPostcards != null)
+                          Column(
+                            children: [
+                              if (lastReceivedPostcards?.postcardsCollected !=
+                                  null)
+                                PostcardListWithTitle(
+                                  title: "Postcards collected",
+                                  postcards: lastReceivedPostcards!
+                                      .postcardsCollected!,
+                                ),
+                              if (lastReceivedPostcards?.postcardsNearby !=
+                                  null)
+                                PostcardListWithTitle(
+                                  title: "Postcards nearby",
+                                  postcards:
+                                      lastReceivedPostcards!.postcardsNearby!,
+                                ),
+                            ],
+                          )
                       ],
-                    )
-                  ],
+                    ),
+                  ),
                 ),
               );
             }
@@ -162,7 +191,7 @@ class _CollectPostcardPageState extends State<CollectPostcardPage> {
 
       setState(() {
         isRunning = _isRunning;
-        lastLocation = null;
+        lastReceivedPostcards = null;
         logStr = '';
       });
     } else {
