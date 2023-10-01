@@ -1,9 +1,10 @@
-import 'dart:typed_data';
-
 import 'package:cached_memory_image/cached_memory_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mobile/api/response/postcard_data_response.dart';
+import 'package:mobile/helpers/custom_page_route.dart';
+import 'package:mobile/helpers/get_image_Uint8List.dart';
+import 'package:mobile/pages/collect_postcard_page/collect_postcard_page.dart';
 
 class PostcardListCard extends StatelessWidget {
   const PostcardListCard({super.key, required this.postcard});
@@ -18,18 +19,27 @@ class PostcardListCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(25),
       ),
       child: ListTile(
+        onTap: () => Navigator.of(context).push(
+          customPageRoute(
+            CollectPostcardPage(postcard: postcard),
+            AxisDirection.left,
+          ),
+        ),
         key: Key(postcard.id.toString()),
         contentPadding: EdgeInsets.all(20),
         leading: Container(
           color: Colors.white,
           height: 60,
           width: 45,
-          child: CachedMemoryImage(
-            uniqueKey: postcard.id.toString(),
-            errorWidget: const Text('Error'),
-            bytes: _getImageUint8List(postcard.imageBase64),
-            placeholder: const CircularProgressIndicator(),
-            fit: BoxFit.cover,
+          child: Padding(
+            padding: const EdgeInsets.all(2.0),
+            child: CachedMemoryImage(
+              uniqueKey: postcard.id.toString(),
+              errorWidget: const Text('Error'),
+              bytes: getImageUint8List(postcard.imageBase64),
+              placeholder: const CircularProgressIndicator(),
+              fit: BoxFit.cover,
+            ),
           ),
         ),
         trailing: Icon(Icons.arrow_forward_ios_outlined),
@@ -47,11 +57,5 @@ class PostcardListCard extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  Uint8List? _getImageUint8List(imageBase64) {
-    final imageData = imageBase64!;
-    final UriData? data = Uri.parse(imageData).data;
-    return data?.contentAsBytes();
   }
 }

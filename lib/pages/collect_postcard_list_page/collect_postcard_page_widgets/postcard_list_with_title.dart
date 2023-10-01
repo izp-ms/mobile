@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mobile/api/response/postcard_data_response.dart';
-import 'package:mobile/pages/collect_postcard_page/collect_postcard_page_widgets/postcard_list_card.dart';
+import 'package:mobile/pages/collect_postcard_list_page/collect_postcard_page_widgets/postcard_list_card.dart';
 
 class PostcardListWithTitle extends StatelessWidget {
   const PostcardListWithTitle({

@@ -1,94 +1,38 @@
 import 'dart:async';
-import 'dart:isolate';
-import 'dart:ui';
 
-import 'package:background_locator_2/background_locator.dart';
-import 'package:background_locator_2/settings/android_settings.dart';
-import 'package:background_locator_2/settings/ios_settings.dart';
-import 'package:background_locator_2/settings/locator_settings.dart';
-import 'package:cached_memory_image/cached_image_base64_manager.dart';
-import 'package:cached_memory_image/cached_image_manager.dart';
+import 'package:cached_memory_image/cached_memory_image.dart';
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart' as gl;
 import 'package:google_fonts/google_fonts.dart';
-import 'package:mobile/api/response/post_coordinates_response.dart';
-import 'package:mobile/custom_widgets/custom_drawer/custom_drawer.dart';
-import 'package:mobile/custom_widgets/main_page_app_bar.dart';
-import 'package:mobile/custom_widgets/settings_switch.dart';
-import 'package:mobile/pages/collect_postcard_page/collect_postcard_page_widgets/location_disabled_content.dart';
-import 'package:mobile/pages/collect_postcard_page/collect_postcard_page_widgets/postcard_list_shimmer.dart';
-import 'package:mobile/pages/collect_postcard_page/collect_postcard_page_widgets/postcard_list_with_title.dart';
-import 'package:mobile/services/location_service/file_manager.dart';
-import 'package:mobile/services/location_service/location_callback_handler.dart';
-import 'package:mobile/services/location_service/location_service.dart';
+import 'package:mobile/api/response/postcard_data_response.dart';
+import 'package:mobile/custom_widgets/submit_button.dart';
+import 'package:mobile/helpers/get_image_Uint8List.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:geolocator/geolocator.dart' as gl;
+
 
 class CollectPostcardPage extends StatefulWidget {
-  const CollectPostcardPage({super.key});
+  const CollectPostcardPage({
+    super.key,
+    required this.postcard,
+  });
+
+  final PostcardsDataResponse postcard;
 
   @override
   State<CollectPostcardPage> createState() => _CollectPostcardPageState();
 }
 
 class _CollectPostcardPageState extends State<CollectPostcardPage> {
-  ReceivePort port = ReceivePort();
-  final CachedImageManager _cachedImageManager =
-      CachedImageBase64Manager.instance();
-
-  String logStr = '';
-  bool isRunning = false;
-  StreamController<String> streamController = StreamController();
-  PostCoordinatesResponse? lastReceivedPostcards;
   late StreamSubscription<gl.ServiceStatus> serviceStatusStream;
 
-  @override
+
   void initState() {
     super.initState();
 
     serviceStatusStream = gl.Geolocator.getServiceStatusStream()
         .listen((gl.ServiceStatus status) {
-      setState(() {});
+      Navigator.of(context).pop();
     });
-
-    if (IsolateNameServer.lookupPortByName(LocationService.isolateName) !=
-        null) {
-      IsolateNameServer.removePortNameMapping(LocationService.isolateName);
-    }
-
-    IsolateNameServer.registerPortWithName(
-        port.sendPort, LocationService.isolateName);
-
-    port.listen(
-      (dynamic data) async {
-        await updateUI(data);
-      },
-    );
-    initPlatformState();
-  }
-
-  Future<void> updateUI(dynamic data) async {
-    PostCoordinatesResponse? postCoordinatesResponse =
-        (data != null) ? PostCoordinatesResponse.fromJson(data) : null;
-
-    if (postCoordinatesResponse != null) {
-      print("Received new postcards");
-    }
-
-    setState(() {
-      lastReceivedPostcards = postCoordinatesResponse;
-    });
-  }
-
-  Future<void> initPlatformState() async {
-    print('Initializing...');
-    await BackgroundLocator.initialize();
-    logStr = await FileManager.readLogFile();
-    print('Initialization done');
-    final _isRunning = await BackgroundLocator.isServiceRunning();
-    setState(() {
-      isRunning = _isRunning;
-    });
-    print('Running ${isRunning.toString()}');
   }
 
   Future<bool> checkGpsStatus() async {
@@ -98,155 +42,109 @@ class _CollectPostcardPageState extends State<CollectPostcardPage> {
 
   @override
   Widget build(BuildContext context) {
-    // final log = Text( //Keep just in case if something went wrong
-    //   logStr,
-    // );
     return Scaffold(
-      appBar: const MainPageAppBar(),
-      drawer: CustomDrawer(context),
-      body: Container(
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.background,
+        leading: IconButton(
+          padding: const EdgeInsets.only(left: 30),
+          iconSize: 30,
+          onPressed: () => Navigator.of(context).pop(),
+          icon: const Icon(Icons.arrow_back),
+        ),
+      ),
+      body: Padding(
         padding: const EdgeInsets.all(20),
-        child: FutureBuilder<bool>(
-          future: checkGpsStatus(),
-          builder: (context, snapshot) {
-            if (snapshot.hasError) {
-              return Text('Error: ${snapshot.error}');
-            } else if (snapshot.data == false) {
-              return const LocationDisabledContent();
-            } else {
-              return Align(
-                alignment: Alignment.topCenter,
-                child: ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: 600),
-                  child: SingleChildScrollView(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "Locate postcards: ${isRunning ? "On" : "Off"}",
-                              style: GoogleFonts.rubik(
-                                fontSize: 20,
-                              ),
-                            ),
-                            SwitchWidget(
-                              value: isRunning,
-                              onChanged: (bool value) {
-                                setState(() {
-                                  isRunning = value;
-                                  if (isRunning) {
-                                    _onStart();
-                                  } else {
-                                    _onStop();
-                                  }
-                                });
-                              },
-                            )
-                          ],
-                        ),
-                        if (lastReceivedPostcards == null && isRunning)
-                          const PostcardListShimmer(),
-                        if (lastReceivedPostcards != null && isRunning)
-                          Column(
-                            children: [
-                              if (lastReceivedPostcards?.postcardsCollected !=
-                                  null)
-                                PostcardListWithTitle(
-                                  title: "Postcards collected",
-                                  postcards: lastReceivedPostcards!
-                                      .postcardsCollected!,
-                                ),
-                              if (lastReceivedPostcards?.postcardsNearby !=
-                                  null)
-                                PostcardListWithTitle(
-                                  title: "Postcards nearby",
-                                  postcards:
-                                      lastReceivedPostcards!.postcardsNearby!,
-                                ),
-                            ],
-                          )
-                      ],
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Container(
+              color: Colors.white,
+              height: 240,
+              width: 180,
+              child: Padding(
+                padding: const EdgeInsets.all(7.0),
+                child: CachedMemoryImage(
+                  uniqueKey: widget.postcard.id.toString(),
+                  errorWidget: const Text('Error'),
+                  bytes: getImageUint8List(widget.postcard.imageBase64),
+                  placeholder: const CircularProgressIndicator(),
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 15),
+              child: Text(
+                widget.postcard.title ?? "Postcard id: ${widget.postcard.id}",
+                style: GoogleFonts.rubik(
+                  fontSize: 30,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Longitude: ${widget.postcard.longitude}",
+                    style: GoogleFonts.rubik(
+                      fontSize: 25,
                     ),
                   ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    "Latitude: ${widget.postcard.latitude}",
+                    style: GoogleFonts.rubik(
+                      fontSize: 25,
+                    ),
+                  ),
+                  if (widget.postcard.country != null) ...[
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      "Country: ${widget.postcard.country}",
+                      style: GoogleFonts.rubik(
+                        fontSize: 25,
+                      ),
+                    ),
+                  ],
+                  if (widget.postcard.city != null) ...[
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      "City: ${widget.postcard.city}",
+                      style: GoogleFonts.rubik(
+                        fontSize: 25,
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Align(
+              alignment: Alignment.center,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 15),
+                child: SubmitButton(
+                  buttonText: "Claim postcard",
+                  onButtonPressed: () {
+                    print("Tu będzie wysyłane zapytanie");
+                  },
                 ),
-              );
-            }
-          },
+              ),
+            ),
+          ],
         ),
       ),
     );
-  }
-
-  void _onStop() async {
-    await BackgroundLocator.unRegisterLocationUpdate();
-    final _isRunning = await BackgroundLocator.isServiceRunning();
-    setState(() {
-      FileManager.clearLogFile();
-      lastReceivedPostcards = null;
-      isRunning = _isRunning;
-    });
-  }
-
-  void _onStart() async {
-    if (await _checkLocationPermission()) {
-      await _startLocator();
-      final _isRunning = await BackgroundLocator.isServiceRunning();
-
-      setState(() {
-        isRunning = _isRunning;
-        lastReceivedPostcards = null;
-        logStr = '';
-      });
-    } else {
-      // show error
-    }
-  }
-
-  Future<bool> _checkLocationPermission() async {
-    var permission = await Permission.location.request().isGranted;
-    if (permission) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  Future<void> _startLocator() async {
-    Map<String, dynamic> data = {'countInit': 1};
-    return await BackgroundLocator.registerLocationUpdate(
-      LocationCallbackHandler.callback,
-      initCallback: LocationCallbackHandler.initCallback,
-      initDataCallback: data,
-      disposeCallback: LocationCallbackHandler.disposeCallback,
-      iosSettings: const IOSSettings(
-        accuracy: LocationAccuracy.NAVIGATION,
-        distanceFilter: 0,
-        stopWithTerminate: true,
-      ),
-      autoStop: false,
-      androidSettings: const AndroidSettings(
-        accuracy: LocationAccuracy.NAVIGATION,
-        interval: 5,
-        distanceFilter: 0,
-        client: LocationClient.google,
-        androidNotificationSettings: AndroidNotificationSettings(
-          notificationChannelName: 'Location tracking',
-          notificationTitle: 'Start Location Tracking',
-          notificationMsg: 'Track location in background',
-          notificationBigMsg:
-              'Background location is on to keep the app up-tp-date with your location. This is required for main features to work properly when the app is not running.',
-          notificationIconColor: Colors.grey,
-          notificationTapCallback: LocationCallbackHandler.notificationCallback,
-        ),
-      ),
-    );
-  }
-
-  @override
-  void dispose() {
-    serviceStatusStream.cancel();
-    super.dispose();
   }
 }
