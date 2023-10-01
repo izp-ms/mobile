@@ -15,6 +15,7 @@ import 'package:mobile/api/response/post_coordinates_response.dart';
 import 'package:mobile/custom_widgets/custom_drawer/custom_drawer.dart';
 import 'package:mobile/custom_widgets/main_page_app_bar.dart';
 import 'package:mobile/custom_widgets/settings_switch.dart';
+import 'package:mobile/pages/collect_postcard_page/collect_postcard_page_widgets/location_disabled_content.dart';
 import 'package:mobile/pages/collect_postcard_page/collect_postcard_page_widgets/postcard_list_shimmer.dart';
 import 'package:mobile/pages/collect_postcard_page/collect_postcard_page_widgets/postcard_list_with_title.dart';
 import 'package:mobile/services/location_service/file_manager.dart';
@@ -111,7 +112,7 @@ class _CollectPostcardPageState extends State<CollectPostcardPage> {
             if (snapshot.hasError) {
               return Text('Error: ${snapshot.error}');
             } else if (snapshot.data == false) {
-              return const Text('Please turn on GPS to use this feature.');
+              return const LocationDisabledContent();
             } else {
               return Align(
                 alignment: Alignment.topCenter,
@@ -183,6 +184,7 @@ class _CollectPostcardPageState extends State<CollectPostcardPage> {
     final _isRunning = await BackgroundLocator.isServiceRunning();
     setState(() {
       FileManager.clearLogFile();
+      lastReceivedPostcards = null;
       isRunning = _isRunning;
     });
   }
