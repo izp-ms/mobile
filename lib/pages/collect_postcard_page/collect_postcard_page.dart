@@ -8,7 +8,7 @@ import 'package:mobile/custom_widgets/submit_button.dart';
 import 'package:mobile/helpers/get_image_Uint8List.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:geolocator/geolocator.dart' as gl;
-
+import 'package:url_launcher/url_launcher.dart';
 
 class CollectPostcardPage extends StatefulWidget {
   const CollectPostcardPage({
@@ -24,7 +24,6 @@ class CollectPostcardPage extends StatefulWidget {
 
 class _CollectPostcardPageState extends State<CollectPostcardPage> {
   late StreamSubscription<gl.ServiceStatus> serviceStatusStream;
-
 
   void initState() {
     super.initState();
@@ -135,9 +134,9 @@ class _CollectPostcardPageState extends State<CollectPostcardPage> {
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 15),
                 child: SubmitButton(
-                  buttonText: "Claim postcard",
+                  buttonText: "Show me route",
                   onButtonPressed: () {
-                    print("Tu będzie wysyłane zapytanie");
+                    _launchGoogleMapsUrl();
                   },
                 ),
               ),
@@ -146,5 +145,13 @@ class _CollectPostcardPageState extends State<CollectPostcardPage> {
         ),
       ),
     );
+  }
+
+  Future<void> _launchGoogleMapsUrl() async {
+    Uri url = Uri.parse(
+        "https://www.google.com/maps/dir/?api=1&destination=${widget.postcard.latitude},${widget.postcard.longitude}");
+    if (!await launchUrl(url)) {
+      throw Exception('Could not launch $url');
+    }
   }
 }

@@ -154,6 +154,7 @@ class _CollectPostcardListPageState extends State<CollectPostcardListPage> {
                                   title: "Postcards collected",
                                   postcards: lastReceivedPostcards!
                                       .postcardsCollected!,
+                                  isReadyToCollect: true,
                                 ),
                               if (lastReceivedPostcards?.postcardsNearby !=
                                   null)
