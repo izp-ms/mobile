@@ -16,6 +16,7 @@ class CustomFormField extends StatefulWidget {
     this.initialValue,
     this.validator,
     this.onChanged,
+    this.autovalidateMode,
   }) : super(key: key);
 
   final String? hintText;
@@ -28,6 +29,7 @@ class CustomFormField extends StatefulWidget {
   final String? initialValue;
   final FormFieldValidator<String>? validator;
   final ValueChanged<String>? onChanged;
+  final AutovalidateMode? autovalidateMode;
 
   @override
   _CustomFormFieldState createState() => _CustomFormFieldState();
@@ -63,18 +65,19 @@ class _CustomFormFieldState extends State<CustomFormField> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      autovalidateMode: widget.autovalidateMode ?? AutovalidateMode.onUserInteraction,
       onChanged: widget.onChanged,
       validator: widget.validator ?? (value) {
           if (widget.isRequired && (value == null || value.isEmpty)) {
-            return 'Please enter some value';
+            return AppLocalizations.of(context).enterValue;
           }
 
           if (widget.hintText == AppLocalizations.of(context).email && !_isValidEmail(value!)) {
-            return 'Enter a valid email';
+            return AppLocalizations.of(context).enterValidEmail;
           }
 
           if (widget.hintText == AppLocalizations.of(context).password && !_isStrongPassword(value!)) {
-            return 'Provide strong password';
+            return AppLocalizations.of(context).provideStrongPassword;
           }
 
           return null;
@@ -86,7 +89,6 @@ class _CustomFormFieldState extends State<CustomFormField> {
       enableSuggestions: widget.canToogleVisibility,
       autocorrect: widget.canToogleVisibility,
       onSaved: widget.onSaved,
-      autovalidateMode: AutovalidateMode.onUserInteraction,
       maxLength: widget.maxLength,
       decoration: widget.canToogleVisibility
           ? customTextFieldDecoration(context, widget.hintText, widget.inputIcon).copyWith(

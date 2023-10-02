@@ -66,6 +66,7 @@ class _LoginFormState extends State<LoginForm> {
                           },
                           hintText: AppLocalizations.of(context).email,
                           inputIcon: Icons.email,
+                          autovalidateMode: AutovalidateMode.disabled,
                         ),
                         SizedBox(height: gapBetweenTextFields),
                         CustomFormField(
@@ -76,6 +77,7 @@ class _LoginFormState extends State<LoginForm> {
                           hintText: AppLocalizations.of(context).password,
                           isPasswordField: _isPasswordHidden,
                           canToogleVisibility: true,
+                          autovalidateMode: AutovalidateMode.disabled,
                         ),
                       ],
                     ),

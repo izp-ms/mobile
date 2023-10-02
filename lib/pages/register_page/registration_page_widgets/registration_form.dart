@@ -103,7 +103,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                           },
                           validator: (value) {
                             if (_isSignUpPressed && _userPassword != value) {
-                              return 'Passwords do not match';
+                              return AppLocalizations.of(context).noMatchingPassword;
                             }
                             return null;
                           },

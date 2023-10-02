@@ -4,6 +4,7 @@ import 'package:mobile/cubit/user_cubit/user_cubit.dart';
 import 'package:mobile/cubit/user_cubit/user_state.dart';
 import 'package:mobile/helpers/date_extractor.dart';
 import 'package:mobile/helpers/formatDateString.dart';
+import 'package:mobile/helpers/shared_preferences.dart';
 import 'package:mobile/pages/profile_page/profile_page_widgets/personal_info_section/personal_info_section_widgets/about_me_section.dart';
 import 'package:mobile/pages/profile_page/profile_page_widgets/personal_info_section/personal_info_section_widgets/row_with_icon.dart';
 import 'package:mobile/pages/profile_page/profile_page_widgets/personal_info_section/personal_info_section_widgets/user_name_section/shimmer.dart';
@@ -19,6 +20,20 @@ class PersonalInfoSection extends StatefulWidget {
 }
 
 class _PersonalInfoSectionState extends State<PersonalInfoSection> {
+
+  String? dateFormatPreference;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadDateFormatPreference();
+  }
+
+  void _loadDateFormatPreference() async {
+    dateFormatPreference = await AppSharedPreferences.getDatePreference();
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<UserCubit, UserState>(
@@ -31,14 +46,14 @@ class _PersonalInfoSectionState extends State<PersonalInfoSection> {
               height: 12,
             ),
             if (state is LoadedState) ...[
-              if (state.userDetail.birthDate != null)
+              if (state.userDetail.birthDate != null && dateFormatPreference != null)
                 Padding(
                   padding: const EdgeInsets.only(top: 15),
-
                   child: RowWithIcon(
                     icon: Icons.cake_outlined,
                     text: formatDateString(
-                        dateExtractor(state.userDetail.birthDate.toString())!),
+                        dateExtractor(state.userDetail.birthDate.toString())!,
+                        dateFormatPreference!),
                   ),
                 ),
               if (state.userDetail.country != null)

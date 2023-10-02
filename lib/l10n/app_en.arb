@@ -38,5 +38,9 @@
   "pickPhoto": "Pick photo",
   "save": "Save",
   "sortBy": "Sort by",
-  "filters": "Filters"
+  "filters": "Filters",
+  "noMatchingPassword": "Passwords are not the same",
+  "enterValue": "Please enter some value",
+  "enterValidEmail": "Enter a valid email",
+  "provideStrongPassword": "Provide strong password"
 }
