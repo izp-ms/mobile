@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/custom_widgets/custom_drawer/custom_drawer.dart';
-import 'package:mobile/custom_widgets/main_page_app_bar.dart';
+import 'package:mobile/custom_widgets/custom_appbars/main_page_app_bar.dart';
 
 class PostcardsPage extends StatefulWidget {
   const PostcardsPage({super.key});

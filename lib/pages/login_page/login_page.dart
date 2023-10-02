@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/custom_widgets/login_and_registration_app_bar.dart';
+import 'package:mobile/custom_widgets/custom_appbars/login_and_registration_app_bar.dart';
 import 'package:mobile/pages/login_page/login_page_widgets/login_form.dart';
 
 

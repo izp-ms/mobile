@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:mobile/constants/ColorProvider.dart';
 import 'package:mobile/custom_widgets/custom_drawer/custom_drawer.dart';
-import 'package:mobile/custom_widgets/main_page_app_bar.dart';
+import 'package:mobile/custom_widgets/custom_appbars/main_page_app_bar.dart';
 import 'package:mobile/pages/settings_page/settings_page_widgets/content_and_display.dart';
 import 'package:mobile/pages/settings_page/settings_page_widgets/privacy_settings.dart';
 import 'package:mobile/pages/settings_page/settings_page_widgets/units_format.dart';

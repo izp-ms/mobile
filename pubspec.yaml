@@ -55,6 +55,7 @@ dependencies:
   geolocator:
   cached_memory_image:
   url_launcher:
+  loading_animation_widget:
 
 dev_dependencies:
   flutter_test:

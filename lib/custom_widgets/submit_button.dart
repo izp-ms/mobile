@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class SubmitButton extends StatelessWidget {
   const SubmitButton({
@@ -39,10 +40,13 @@ class SubmitButton extends StatelessWidget {
 
   getButtonContent(context) {
     return isLoading
-        ? Center(
-            child: CircularProgressIndicator(
-              strokeWidth: 3,
-              color: Theme.of(context).colorScheme.onSecondaryContainer,
+        ? Padding(
+            padding: const EdgeInsets.only(left: 4),
+            child: Center(
+              child: LoadingAnimationWidget.horizontalRotatingDots(
+                color: Theme.of(context).colorScheme.onSecondaryContainer,
+                size: height,
+              ),
             ),
           )
         : AutoSizeText(

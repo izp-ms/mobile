@@ -4,6 +4,7 @@ import 'package:cached_memory_image/cached_memory_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mobile/api/response/postcard_data_response.dart';
+import 'package:mobile/custom_widgets/custom_appbars/app_bar_with_back_button.dart';
 import 'package:mobile/custom_widgets/submit_button.dart';
 import 'package:mobile/helpers/get_image_Uint8List.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -42,15 +43,7 @@ class _CollectPostcardPageState extends State<CollectPostcardPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.background,
-        leading: IconButton(
-          padding: const EdgeInsets.only(left: 30),
-          iconSize: 30,
-          onPressed: () => Navigator.of(context).pop(),
-          icon: const Icon(Icons.arrow_back),
-        ),
-      ),
+      appBar: const AppBarWithBackButton(),
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(

@@ -13,7 +13,7 @@ import 'package:geolocator/geolocator.dart' as gl;
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mobile/api/response/post_coordinates_response.dart';
 import 'package:mobile/custom_widgets/custom_drawer/custom_drawer.dart';
-import 'package:mobile/custom_widgets/main_page_app_bar.dart';
+import 'package:mobile/custom_widgets/custom_appbars/main_page_app_bar.dart';
 import 'package:mobile/custom_widgets/settings_switch.dart';
 import 'package:mobile/helpers/check_gps_status.dart';
 import 'package:mobile/pages/collect_postcard_list_page/collect_postcard_page_widgets/location_disabled_content.dart';
@@ -101,17 +101,17 @@ class _CollectPostcardListPageState extends State<CollectPostcardListPage> {
     return Scaffold(
       appBar: const MainPageAppBar(),
       drawer: CustomDrawer(context),
-      body: Container(
-        padding: const EdgeInsets.all(20),
-        child: FutureBuilder<bool>(
-          future: checkGpsStatus(),
-          builder: (context, snapshot) {
-            if (snapshot.hasError) {
-              return Text('Error: ${snapshot.error}');
-            } else if (snapshot.data == false) {
-              return const LocationDisabledContent();
-            } else {
-              return Align(
+      body: FutureBuilder<bool>(
+        future: checkGpsStatus(),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return Text('Error: ${snapshot.error}');
+          } else if (snapshot.data == false) {
+            return const LocationDisabledContent();
+          } else {
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 20.0),
+              child: Align(
                 alignment: Alignment.topCenter,
                 child: ConstrainedBox(
                   constraints: const BoxConstraints(maxWidth: 600),
@@ -119,7 +119,7 @@ class _CollectPostcardListPageState extends State<CollectPostcardListPage> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.only(bottom: 10),
+                        padding: const EdgeInsets.fromLTRB(20,0,20,10),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -146,39 +146,45 @@ class _CollectPostcardListPageState extends State<CollectPostcardListPage> {
                         ),
                       ),
                       Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20.0),
                           child: ListView(
-                        children: [
-                          if (lastReceivedPostcards == null && isRunning)
-                            const PostcardListShimmer(),
-                          if (lastReceivedPostcards != null && isRunning)
-                            Column(
-                              children: [
-                                if (lastReceivedPostcards?.postcardsCollected !=
-                                    null)
-                                  PostcardListWithTitle(
-                                    title: "Postcards collected",
-                                    postcards: lastReceivedPostcards!
-                                        .postcardsCollected!,
-                                    isReadyToCollect: true,
-                                  ),
-                                if (lastReceivedPostcards?.postcardsNearby !=
-                                    null)
-                                  PostcardListWithTitle(
-                                    title: "Postcards nearby",
-                                    postcards:
-                                        lastReceivedPostcards!.postcardsNearby!,
-                                  ),
-                              ],
-                            )
-                        ],
-                      ))
+                            children: [
+                              if (lastReceivedPostcards == null && isRunning)
+                                const PostcardListShimmer(),
+                              if (lastReceivedPostcards != null && isRunning)
+                                Column(
+                                  children: [
+                                    if (lastReceivedPostcards
+                                            ?.postcardsCollected !=
+                                        null)
+                                      PostcardListWithTitle(
+                                        title: "Postcards collected",
+                                        postcards: lastReceivedPostcards!
+                                            .postcardsCollected!,
+                                        isReadyToCollect: true,
+                                      ),
+                                    if (lastReceivedPostcards
+                                            ?.postcardsNearby !=
+                                        null)
+                                      PostcardListWithTitle(
+                                        title: "Postcards nearby",
+                                        postcards: lastReceivedPostcards!
+                                            .postcardsNearby!,
+                                      ),
+                                  ],
+                                )
+                            ],
+                          ),
+                        ),
+                      )
                     ],
                   ),
                 ),
-              );
-            }
-          },
-        ),
+              ),
+            );
+          }
+        },
       ),
     );
   }
