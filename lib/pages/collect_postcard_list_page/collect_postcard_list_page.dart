@@ -115,11 +115,12 @@ class _CollectPostcardListPageState extends State<CollectPostcardListPage> {
                 alignment: Alignment.topCenter,
                 child: ConstrainedBox(
                   constraints: const BoxConstraints(maxWidth: 600),
-                  child: SingleChildScrollView(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Row(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 10),
+                        child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
@@ -143,30 +144,35 @@ class _CollectPostcardListPageState extends State<CollectPostcardListPage> {
                             )
                           ],
                         ),
-                        if (lastReceivedPostcards == null && isRunning)
-                          const PostcardListShimmer(),
-                        if (lastReceivedPostcards != null && isRunning)
-                          Column(
-                            children: [
-                              if (lastReceivedPostcards?.postcardsCollected !=
-                                  null)
-                                PostcardListWithTitle(
-                                  title: "Postcards collected",
-                                  postcards: lastReceivedPostcards!
-                                      .postcardsCollected!,
-                                  isReadyToCollect: true,
-                                ),
-                              if (lastReceivedPostcards?.postcardsNearby !=
-                                  null)
-                                PostcardListWithTitle(
-                                  title: "Postcards nearby",
-                                  postcards:
-                                      lastReceivedPostcards!.postcardsNearby!,
-                                ),
-                            ],
-                          )
-                      ],
-                    ),
+                      ),
+                      Expanded(
+                          child: ListView(
+                        children: [
+                          if (lastReceivedPostcards == null && isRunning)
+                            const PostcardListShimmer(),
+                          if (lastReceivedPostcards != null && isRunning)
+                            Column(
+                              children: [
+                                if (lastReceivedPostcards?.postcardsCollected !=
+                                    null)
+                                  PostcardListWithTitle(
+                                    title: "Postcards collected",
+                                    postcards: lastReceivedPostcards!
+                                        .postcardsCollected!,
+                                    isReadyToCollect: true,
+                                  ),
+                                if (lastReceivedPostcards?.postcardsNearby !=
+                                    null)
+                                  PostcardListWithTitle(
+                                    title: "Postcards nearby",
+                                    postcards:
+                                        lastReceivedPostcards!.postcardsNearby!,
+                                  ),
+                              ],
+                            )
+                        ],
+                      ))
+                    ],
                   ),
                 ),
               );
