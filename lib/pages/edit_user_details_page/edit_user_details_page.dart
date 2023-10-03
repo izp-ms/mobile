@@ -36,6 +36,7 @@ class _EditUserDetailsPageState extends State<EditUserDetailsPage> {
   static const double separatorSize = 20;
   static const double constraintSize = 200;
   static const double avatarCircleSize = 100;
+  static const double backgroundHeight = 100;
 
   String? _backgroundImageBase64;
   String? _avatarImageBase64;
@@ -276,6 +277,7 @@ class _EditUserDetailsPageState extends State<EditUserDetailsPage> {
   }
 
   Row _backgroundImagePicker(BuildContext context) {
+    print(isBase64Valid(_backgroundImageBase64));
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -295,8 +297,12 @@ class _EditUserDetailsPageState extends State<EditUserDetailsPage> {
                   )
                 : ClipRRect(
                     borderRadius: BorderRadius.circular(10),
-                    child: Container(
-                      color: Theme.of(context).colorScheme.onBackground,
+                    child: AspectRatio(
+                      aspectRatio: 2,
+                      child: Container(
+                        height: backgroundHeight,
+                        color: Theme.of(context).colorScheme.onBackground,
+                      ),
                     ),
                   ),
           ),
@@ -371,5 +377,3 @@ class _EditUserDetailsPageState extends State<EditUserDetailsPage> {
     }
   }
 }
-
-
