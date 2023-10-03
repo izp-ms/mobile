@@ -3,20 +3,35 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:mobile/custom_widgets/settings_switch.dart';
 import 'package:mobile/pages/settings_page/settings_page_widgets/components/settings_toggle_button.dart';
+import 'package:mobile/helpers/shared_preferences.dart';
 
 class UnitsFormat extends StatefulWidget {
   const UnitsFormat({
-    super.key,
-  });
+    Key? key,
+    required this.metricSystemValue,
+    required this.dateFormatValue,
+  }) : super(key: key);
+
+  final bool metricSystemValue;
+  final String dateFormatValue;
 
   @override
   State<UnitsFormat> createState() => _UnitsFormatState();
 }
 
 class _UnitsFormatState extends State<UnitsFormat> {
+  bool useMetricSystemValue = false;
+  int dateFormatToggleButtonIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    useMetricSystemValue = widget.metricSystemValue;
+    dateFormatToggleButtonIndex = widget.dateFormatValue == 'DD.MM.YYYY' ? 0 : 1;
+  }
+
   @override
   Widget build(BuildContext context) {
-    bool useMetricSystemValue = false;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -56,10 +71,9 @@ class _UnitsFormatState extends State<UnitsFormat> {
               ),
               const SizedBox(height: 10),
               SettingsToggleButtons(
+                initialSelectedIndex: dateFormatToggleButtonIndex,
                 onSelected: (int index) {
-                  // Handle the selected index here
-                  print(
-                      "Selected format: ${index == 0 ? 'DD.MM.YYYY' : 'MM.DD.YYYY'}");
+                  AppSharedPreferences.saveDatePreference(index == 0 ? 'DD.MM.YYYY' : 'MM.DD.YYYY');
                 },
               ),
               const SizedBox(height: 5),
@@ -87,6 +101,7 @@ class _UnitsFormatState extends State<UnitsFormat> {
                       setState(() {
                         useMetricSystemValue = value;
                       });
+                      AppSharedPreferences.saveMetricSystemPreference(value);
                     },
                   ),
                 ],

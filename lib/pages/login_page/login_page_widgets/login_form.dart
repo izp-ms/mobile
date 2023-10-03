@@ -22,12 +22,11 @@ class LoginForm extends StatefulWidget {
 }
 
 class _LoginFormState extends State<LoginForm> {
-
-
   final double gapBetweenTextFields = 18;
   final _formKey = GlobalKey<FormState>();
   String _userEmail = '';
   String _userPassword = '';
+  bool _isPasswordHidden = true;
 
   @override
   Widget build(BuildContext context) {
@@ -67,6 +66,7 @@ class _LoginFormState extends State<LoginForm> {
                           },
                           hintText: AppLocalizations.of(context).email,
                           inputIcon: Icons.email,
+                          autovalidateMode: AutovalidateMode.disabled,
                         ),
                         SizedBox(height: gapBetweenTextFields),
                         CustomFormField(
@@ -75,8 +75,9 @@ class _LoginFormState extends State<LoginForm> {
                             _userPassword = newValue;
                           },
                           hintText: AppLocalizations.of(context).password,
-                          inputIcon: Icons.lock,
-                          isPasswordField: true,
+                          isPasswordField: _isPasswordHidden,
+                          canToogleVisibility: true,
+                          autovalidateMode: AutovalidateMode.disabled,
                         ),
                       ],
                     ),

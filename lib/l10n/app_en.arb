@@ -36,5 +36,11 @@
   "termsAndPolicies": "Terms and Policies",
   "privacy": "Privacy",
   "pickPhoto": "Pick photo",
-  "save": "Save"
+  "save": "Save",
+  "sortBy": "Sort by",
+  "filters": "Filters",
+  "noMatchingPassword": "Passwords are not the same",
+  "enterValue": "Please enter some value",
+  "enterValidEmail": "Enter a valid email",
+  "provideStrongPassword": "Provide strong password"
 }

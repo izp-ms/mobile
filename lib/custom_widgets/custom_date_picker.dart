@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/helpers/todaysDate.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class CustomDatePicker extends StatelessWidget {
+class CustomDatePicker extends StatefulWidget {
   final DateTime? selectedDate;
   final ValueChanged<DateTime> onDateChange;
 
@@ -10,6 +11,26 @@ class CustomDatePicker extends StatelessWidget {
     this.selectedDate,
     required this.onDateChange,
   });
+
+  @override
+  _CustomDatePickerState createState() => _CustomDatePickerState();
+}
+
+class _CustomDatePickerState extends State<CustomDatePicker> {
+  String? dateFormatPreference;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadDateFormatPreference();
+  }
+
+  void _loadDateFormatPreference() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      dateFormatPreference = prefs.getString('toggleDateValue') ?? "DD.MM.YYYY";
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,9 +65,13 @@ class CustomDatePicker extends StatelessWidget {
   }
 
   String _getButtonText() {
-    return (selectedDate == null)
-        ? "Birthday"
-        : "${selectedDate?.day}.${selectedDate?.month}.${selectedDate?.year}";
+    if (widget.selectedDate == null) return "Birthday";
+
+    if (dateFormatPreference == "MM.DD.YYYY") {
+      return "${widget.selectedDate?.month}.${widget.selectedDate?.day}.${widget.selectedDate?.year}";
+    }
+
+    return "${widget.selectedDate?.day}.${widget.selectedDate?.month}.${widget.selectedDate?.year}";
   }
 
   void _showDatePicker(BuildContext context) async {
@@ -72,12 +97,12 @@ class CustomDatePicker extends StatelessWidget {
         );
       },
       context: context,
-      initialDate: selectedDate ?? todayDate(),
+      initialDate: widget.selectedDate ?? todayDate(),
       firstDate: DateTime(1900),
       lastDate: DateTime(2100),
     );
 
     if (newDate == null) return;
-    onDateChange(newDate);
+    widget.onDateChange(newDate);
   }
 }

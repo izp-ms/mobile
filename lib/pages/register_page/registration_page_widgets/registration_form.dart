@@ -22,6 +22,7 @@ class RegistrationForm extends StatefulWidget {
 }
 
 class _RegistrationFormState extends State<RegistrationForm> {
+  bool _isSignUpPressed = false;
   final double gapBetweenTextFields = 18;
 
   final _formKey = GlobalKey<FormState>();
@@ -92,6 +93,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                           hintText: AppLocalizations.of(context).password,
                           inputIcon: Icons.lock,
                           isPasswordField: true,
+                          canToogleVisibility: true,
                         ),
                         SizedBox(height: gapBetweenTextFields),
                         CustomFormField(
@@ -99,9 +101,19 @@ class _RegistrationFormState extends State<RegistrationForm> {
                             if (newValue == null) return;
                             _userConfirmPassword = newValue;
                           },
+                          validator: (value) {
+                            if (_isSignUpPressed && _userPassword != value) {
+                              return AppLocalizations.of(context).noMatchingPassword;
+                            }
+                            return null;
+                          },
                           hintText: AppLocalizations.of(context).password,
                           inputIcon: Icons.lock,
                           isPasswordField: true,
+                          canToogleVisibility: true,
+                          onChanged: (value) {
+                            _isSignUpPressed = false;
+                          },
                         ),
                       ],
                     ),
@@ -139,6 +151,18 @@ class _RegistrationFormState extends State<RegistrationForm> {
     if (_formKey.currentState!.validate()) {
       FocusManager.instance.primaryFocus?.unfocus();
       _formKey.currentState!.save();
+
+      if(_userPassword != _userConfirmPassword)
+      {
+        setState(() {
+          _isSignUpPressed = true;
+        });
+        return;
+      }
+      else
+        {
+          bool _isSignUpPressed = false;
+        }
 
       final authCubit = context.read<AuthCubit>();
 

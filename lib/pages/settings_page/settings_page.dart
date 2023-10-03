@@ -11,7 +11,18 @@ import 'package:mobile/pages/settings_page/settings_page_widgets/units_format.da
 import '../../custom_widgets/text_icon_button.dart';
 
 class SettingsPage extends StatelessWidget {
-  const SettingsPage({super.key});
+  const SettingsPage({
+    Key? key,
+    required this.metricSystemValue,
+    required this.themeValue,
+    required this.dateFormatValue,
+    required this.languageValue
+  }) : super(key: key);
+
+  final bool metricSystemValue;
+  final bool themeValue;
+  final String dateFormatValue;
+  final String languageValue;
 
   @override
   Widget build(BuildContext context) {
@@ -21,11 +32,17 @@ class SettingsPage extends StatelessWidget {
       drawer: CustomDrawer(context),
       body: ListView(
         children: [
-          const SingleChildScrollView(
+          SingleChildScrollView(
             child: Column(
               children: [
-                ContentAndDisplay(),
-                UnitsFormat(),
+                ContentAndDisplay(
+                    themeValue: themeValue,
+                    languageValue: languageValue
+                ),
+                UnitsFormat(
+                    metricSystemValue: metricSystemValue,
+                    dateFormatValue: dateFormatValue
+                ),
                 PrivacySettings(),
               ],
             ),

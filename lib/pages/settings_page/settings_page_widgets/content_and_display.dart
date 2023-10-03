@@ -1,12 +1,21 @@
+import 'package:app_settings/app_settings.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:mobile/custom_widgets/settings_switch.dart';
+import 'package:mobile/helpers/shared_preferences.dart';
+import 'package:android_intent/android_intent.dart';
+import 'package:flutter/foundation.dart';
 
 class ContentAndDisplay extends StatefulWidget {
   const ContentAndDisplay({
-    super.key,
-  });
+    Key? key,
+    required this.themeValue,
+    required this.languageValue
+  }) : super(key: key);
+
+  final String languageValue;
+  final bool themeValue;
 
   @override
   State<ContentAndDisplay> createState() => _ContentAndDisplayState();
@@ -14,6 +23,12 @@ class ContentAndDisplay extends StatefulWidget {
 
 class _ContentAndDisplayState extends State<ContentAndDisplay> {
   bool switchThemeValue = false;
+
+  @override
+  void initState() {
+    super.initState();
+    switchThemeValue = widget.themeValue;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,6 +69,7 @@ class _ContentAndDisplayState extends State<ContentAndDisplay> {
                       setState(() {
                         switchThemeValue = value;
                       });
+                      AppSharedPreferences.saveThemePreference(value); // Save the preference when changed
                     },
                   )
                 ],
@@ -71,7 +87,7 @@ class _ContentAndDisplayState extends State<ContentAndDisplay> {
                       ),
                     ),
                     Text(
-                      AppLocalizations.of(context).chosenLanguage,
+                      "${widget.languageValue} >",
                       style: GoogleFonts.rubik(
                         fontSize: 18,
                       ),
@@ -81,7 +97,7 @@ class _ContentAndDisplayState extends State<ContentAndDisplay> {
               ),
               SizedBox(height: 15),
               GestureDetector(
-                onTap: () => {print("notifications")},
+                onTap: openNotificationSettings,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -105,5 +121,9 @@ class _ContentAndDisplayState extends State<ContentAndDisplay> {
         ),
       ],
     );
+  }
+
+  void openNotificationSettings() {
+    AppSettings.openAppSettings(type: AppSettingsType.notification);
   }
 }

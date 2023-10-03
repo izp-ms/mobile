@@ -5,6 +5,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:mobile/constants/ColorProvider.dart';
 import 'package:mobile/cubit/auth_cubit/auth_cubit.dart';
+import 'package:mobile/cubit/postcard_cubit/postcard_cubit.dart';
 import 'package:mobile/cubit/collect_postcard_cubit/collect_postcard_cubit.dart';
 import 'package:mobile/cubit/user_cubit/user_cubit.dart';
 import 'package:mobile/pages/login_page/login_page.dart';
@@ -12,6 +13,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:mobile/pages/postcards_page/postcards_page.dart';
 import 'package:mobile/services/auth_service.dart';
 import 'package:mobile/services/collect_postcard_service.dart';
+import 'package:mobile/services/postcard_repository.dart';
 import 'package:mobile/services/secure_storage_service.dart';
 import 'package:mobile/services/user_service.dart';
 
@@ -57,6 +59,9 @@ class MyApp extends StatelessWidget {
         BlocProvider<CollectPostcardCubit>(
           create: (context) => CollectPostcardCubit(CollectPostcardService()),
         ),
+        BlocProvider<PostcardCubit>(
+          create: (context) => PostcardCubit(PostcardService()),
+        )
       ],
       child: MaterialApp(
         title: 'postcardia',
