@@ -56,6 +56,8 @@ dependencies:
   cached_memory_image:
   url_launcher:
   loading_animation_widget:
+  flutter_animate:
+  easy_debounce:
 
 dev_dependencies:
   flutter_test:

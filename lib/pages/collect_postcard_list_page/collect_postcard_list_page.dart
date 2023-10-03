@@ -8,6 +8,7 @@ import 'package:background_locator_2/settings/ios_settings.dart';
 import 'package:background_locator_2/settings/locator_settings.dart';
 import 'package:cached_memory_image/cached_image_base64_manager.dart';
 import 'package:cached_memory_image/cached_image_manager.dart';
+import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart' as gl;
 import 'package:google_fonts/google_fonts.dart';
@@ -16,6 +17,7 @@ import 'package:mobile/custom_widgets/custom_drawer/custom_drawer.dart';
 import 'package:mobile/custom_widgets/custom_appbars/main_page_app_bar.dart';
 import 'package:mobile/custom_widgets/settings_switch.dart';
 import 'package:mobile/helpers/check_gps_status.dart';
+import 'package:mobile/pages/collect_postcard_list_page/collect_postcard_page_widgets/animation_section.dart';
 import 'package:mobile/pages/collect_postcard_list_page/collect_postcard_page_widgets/location_disabled_content.dart';
 import 'package:mobile/pages/collect_postcard_list_page/collect_postcard_page_widgets/postcard_list_shimmer.dart';
 import 'package:mobile/pages/collect_postcard_list_page/collect_postcard_page_widgets/postcard_list_with_title.dart';
@@ -76,9 +78,11 @@ class _CollectPostcardListPageState extends State<CollectPostcardListPage> {
       print("Received new postcards");
     }
 
-    setState(() {
-      lastReceivedPostcards = postCoordinatesResponse;
-    });
+    if (mounted) {
+      setState(() {
+        lastReceivedPostcards = postCoordinatesResponse;
+      });
+    }
   }
 
   Future<void> initPlatformState() async {
@@ -110,7 +114,7 @@ class _CollectPostcardListPageState extends State<CollectPostcardListPage> {
             return const LocationDisabledContent();
           } else {
             return Padding(
-              padding: const EdgeInsets.symmetric(vertical: 20.0),
+              padding: const EdgeInsets.only(bottom: 20.0),
               child: Align(
                 alignment: Alignment.topCenter,
                 child: ConstrainedBox(
@@ -118,33 +122,7 @@ class _CollectPostcardListPageState extends State<CollectPostcardListPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(20,0,20,10),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "Locate postcards: ${isRunning ? "On" : "Off"}",
-                              style: GoogleFonts.rubik(
-                                fontSize: 20,
-                              ),
-                            ),
-                            SwitchWidget(
-                              value: isRunning,
-                              onChanged: (bool value) {
-                                setState(() {
-                                  isRunning = value;
-                                  if (isRunning) {
-                                    _onStart();
-                                  } else {
-                                    _onStop();
-                                  }
-                                });
-                              },
-                            )
-                          ],
-                        ),
-                      ),
+                      _renderPageHeader(context),
                       Expanded(
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -186,6 +164,55 @@ class _CollectPostcardListPageState extends State<CollectPostcardListPage> {
           }
         },
       ),
+    );
+  }
+
+  Material _renderPageHeader(BuildContext context) {
+    return Material(
+      elevation: 10,
+      borderRadius: const BorderRadius.vertical(bottom: Radius.circular(25)),
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Locate postcards: ${isRunning ? "On" : "Off"}",
+                  style: GoogleFonts.rubik(
+                    fontSize: 20,
+                  ),
+                ),
+                SwitchWidget(
+                  value: isRunning,
+                  onChanged: (bool value) {
+                    onSwitchChanged(value);
+                  },
+                )
+              ],
+            ),
+          ),
+          if (isRunning) const AnimationSection(),
+        ],
+      ),
+    );
+  }
+
+  void onSwitchChanged(bool value) {
+    setState(() {
+      isRunning = value;
+    });
+    EasyDebounce.debounce(
+      'locate-postcards-switch',
+      const Duration(milliseconds: 500),
+      () => setState(() {
+        if (isRunning) {
+          _onStart();
+        } else {
+          _onStop();
+        }
+      }),
     );
   }
 

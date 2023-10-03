@@ -57,7 +57,6 @@ class LocationService {
     print('$_count location in dart: ${locationDto.toString()}');
     await setLogPosition(_count, locationDto);
     final SendPort? send = IsolateNameServer.lookupPortByName(isolateName);
-    // send?.send(locationDto.toJson());
     _count++;
 
     CoordinatesRequest coordinatesRequest = CoordinatesRequest(
@@ -66,8 +65,6 @@ class LocationService {
 
     PostCoordinatesResponse response =
         await collectPostcardService.postCoordinates(coordinatesRequest);
-
-    print(response.postcardsCollected?.length.toString());
 
     send?.send(response.toJson());
   }
