@@ -13,7 +13,7 @@ class AnimationSection extends StatelessWidget {
       children: [
         Animate(
           child: Container(
-            padding: const EdgeInsets.symmetric(vertical: 10),
+            padding: const EdgeInsets.only(bottom: 10),
             width: double.infinity,
             child: const Icon(
               Icons.local_post_office_outlined,

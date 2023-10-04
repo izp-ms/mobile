@@ -121,6 +121,8 @@ class CustomDrawer extends Drawer {
     bool themeValue = await AppSharedPreferences.getThemePreference();
     String dateFormatValue = await AppSharedPreferences.getDatePreference();
     String languageValue = await AppSharedPreferences.getLanguagePreference();
+    bool postcardLocationValue =
+        await AppSharedPreferences.getLocationPreference();
 
     Navigator.pushReplacement(
       context,
@@ -130,16 +132,21 @@ class CustomDrawer extends Drawer {
           themeValue: themeValue,
           dateFormatValue: dateFormatValue,
           languageValue: languageValue,
+          postcardLocationValue: postcardLocationValue,
         ),
       ),
     );
   }
 
-  void onCollectPostcardPress(context) {
+  void onCollectPostcardPress(context) async {
+    bool postcardLocationValue =
+        await AppSharedPreferences.getLocationPreference();
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
-        builder: (context) => const CollectPostcardListPage(),
+        builder: (context) => CollectPostcardListPage(
+          postcardLocationValue: postcardLocationValue,
+        ),
       ),
     );
   }

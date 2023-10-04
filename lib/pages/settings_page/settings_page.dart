@@ -11,18 +11,20 @@ import 'package:mobile/pages/settings_page/settings_page_widgets/units_format.da
 import '../../custom_widgets/text_icon_button.dart';
 
 class SettingsPage extends StatelessWidget {
-  const SettingsPage({
-    Key? key,
-    required this.metricSystemValue,
-    required this.themeValue,
-    required this.dateFormatValue,
-    required this.languageValue
-  }) : super(key: key);
+  const SettingsPage(
+      {Key? key,
+      required this.metricSystemValue,
+      required this.themeValue,
+      required this.dateFormatValue,
+      required this.languageValue,
+      required this.postcardLocationValue})
+      : super(key: key);
 
   final bool metricSystemValue;
   final bool themeValue;
   final String dateFormatValue;
   final String languageValue;
+  final bool postcardLocationValue;
 
   @override
   Widget build(BuildContext context) {
@@ -36,13 +38,13 @@ class SettingsPage extends StatelessWidget {
             child: Column(
               children: [
                 ContentAndDisplay(
-                    themeValue: themeValue,
-                    languageValue: languageValue
+                  themeValue: themeValue,
+                  languageValue: languageValue,
+                  postcardLocationValue: postcardLocationValue,
                 ),
                 UnitsFormat(
                     metricSystemValue: metricSystemValue,
-                    dateFormatValue: dateFormatValue
-                ),
+                    dateFormatValue: dateFormatValue),
                 PrivacySettings(),
               ],
             ),
@@ -52,32 +54,33 @@ class SettingsPage extends StatelessWidget {
             child: Column(
               children: [
                 Center(
-                  child: TextIconButton(
-                    text: AppLocalizations.of(context).deleteAccount,
-                    shouldHaveIcon: true,
-                    iconData: Icons.delete_forever,
-                    iconSide: IconSide.left,
-                    onTap: () {
-                      print("Delete account button tapped");
-                    },
-                    fontSize: 15.0,
-                    iconSize: 20.0,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                  )
-                ),
+                    child: TextIconButton(
+                  text: AppLocalizations.of(context).deleteAccount,
+                  shouldHaveIcon: true,
+                  iconData: Icons.delete_forever,
+                  iconSide: IconSide.left,
+                  onTap: () {
+                    print("Delete account button tapped");
+                  },
+                  fontSize: 15.0,
+                  iconSize: 20.0,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                )),
                 const SizedBox(height: 10),
                 Center(
                   child: Text(
                     AppLocalizations.of(context).postcardia.toUpperCase(),
                     style: GoogleFonts.rubik(
-                        fontSize: 18, color: ColorProvider.getColor('inactive')),
+                        fontSize: 18,
+                        color: ColorProvider.getColor('inactive')),
                   ),
                 ),
                 Center(
                   child: Text(
                     AppLocalizations.of(context).version,
                     style: GoogleFonts.rubik(
-                        fontSize: 18, color: ColorProvider.getColor('inactive')),
+                        fontSize: 18,
+                        color: ColorProvider.getColor('inactive')),
                   ),
                 ),
               ],

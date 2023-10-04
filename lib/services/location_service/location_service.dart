@@ -66,6 +66,8 @@ class LocationService {
     PostCoordinatesResponse response =
         await collectPostcardService.postCoordinates(coordinatesRequest);
 
+    print("Recived: ${response.postcardsCollected?.length}, and ${response.postcardsNearby?.length}");
+
     send?.send(response.toJson());
   }
 

@@ -1,21 +1,30 @@
 import 'package:app_settings/app_settings.dart';
+import 'package:background_locator_2/background_locator.dart';
+import 'package:background_locator_2/settings/android_settings.dart';
+import 'package:background_locator_2/settings/ios_settings.dart';
+import 'package:background_locator_2/settings/locator_settings.dart';
+import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:mobile/custom_widgets/settings_switch.dart';
 import 'package:mobile/helpers/shared_preferences.dart';
-import 'package:android_intent/android_intent.dart';
 import 'package:flutter/foundation.dart';
+import 'package:mobile/services/location_service/file_manager.dart';
+import 'package:mobile/services/location_service/location_callback_handler.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class ContentAndDisplay extends StatefulWidget {
-  const ContentAndDisplay({
-    Key? key,
-    required this.themeValue,
-    required this.languageValue
-  }) : super(key: key);
+  const ContentAndDisplay(
+      {Key? key,
+      required this.themeValue,
+      required this.languageValue,
+      required this.postcardLocationValue})
+      : super(key: key);
 
   final String languageValue;
   final bool themeValue;
+  final bool postcardLocationValue;
 
   @override
   State<ContentAndDisplay> createState() => _ContentAndDisplayState();
@@ -23,11 +32,13 @@ class ContentAndDisplay extends StatefulWidget {
 
 class _ContentAndDisplayState extends State<ContentAndDisplay> {
   bool switchThemeValue = false;
+  bool postcardLocationValue = false;
 
   @override
   void initState() {
     super.initState();
     switchThemeValue = widget.themeValue;
+    postcardLocationValue = widget.postcardLocationValue;
   }
 
   @override
@@ -65,16 +76,36 @@ class _ContentAndDisplayState extends State<ContentAndDisplay> {
                   ),
                   SwitchWidget(
                     value: switchThemeValue,
-                    onChanged: (bool value) {
+                    onChanged: (bool themeValue) {
                       setState(() {
-                        switchThemeValue = value;
+                        switchThemeValue = themeValue;
                       });
-                      AppSharedPreferences.saveThemePreference(value); // Save the preference when changed
+                      AppSharedPreferences.saveThemePreference(themeValue);
                     },
                   )
                 ],
               ),
-              SizedBox(height: 3),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Locate postcards: ${postcardLocationValue ? "On" : "Off"}",
+                    style: GoogleFonts.rubik(
+                      fontSize: 18,
+                    ),
+                  ),
+                  SwitchWidget(
+                    value: postcardLocationValue,
+                    onChanged: (bool locationValue) {
+                      setState(() {
+                        postcardLocationValue = locationValue;
+                      });
+                      _onLocationSwitchChanged(locationValue);
+                    },
+                  )
+                ],
+              ),
+              const SizedBox(height: 3),
               GestureDetector(
                 onTap: () => {print("app language")},
                 child: Row(
@@ -95,7 +126,7 @@ class _ContentAndDisplayState extends State<ContentAndDisplay> {
                   ],
                 ),
               ),
-              SizedBox(height: 15),
+              const SizedBox(height: 15),
               GestureDetector(
                 onTap: openNotificationSettings,
                 child: Row(
@@ -125,5 +156,75 @@ class _ContentAndDisplayState extends State<ContentAndDisplay> {
 
   void openNotificationSettings() {
     AppSettings.openAppSettings(type: AppSettingsType.notification);
+  }
+
+  void _onLocationSwitchChanged(bool value) {
+    EasyDebounce.debounce(
+      'locate-postcards-switch',
+      const Duration(milliseconds: 500),
+      () => setState(() {
+        if (postcardLocationValue) {
+          _onStart();
+        } else {
+          _onStop();
+        }
+        AppSharedPreferences.saveLocationPreference(postcardLocationValue);
+      }),
+    );
+  }
+
+  void _onStop() async {
+    await BackgroundLocator.unRegisterLocationUpdate();
+    setState(() {
+      FileManager.clearLogFile();
+    });
+  }
+
+  void _onStart() async {
+    if (await _checkLocationPermission()) {
+      await _startLocator();
+
+      setState(() {});
+    }
+  }
+
+  Future<bool> _checkLocationPermission() async {
+    var permission = await Permission.location.request().isGranted;
+    if (permission) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Future<void> _startLocator() async {
+    Map<String, dynamic> data = {'countInit': 1};
+    return await BackgroundLocator.registerLocationUpdate(
+      LocationCallbackHandler.callback,
+      initCallback: LocationCallbackHandler.initCallback,
+      initDataCallback: data,
+      disposeCallback: LocationCallbackHandler.disposeCallback,
+      iosSettings: const IOSSettings(
+        accuracy: LocationAccuracy.NAVIGATION,
+        distanceFilter: 0,
+        stopWithTerminate: true,
+      ),
+      autoStop: false,
+      androidSettings: const AndroidSettings(
+        accuracy: LocationAccuracy.NAVIGATION,
+        interval: 10,
+        distanceFilter: 0,
+        client: LocationClient.google,
+        androidNotificationSettings: AndroidNotificationSettings(
+          notificationChannelName: 'Location tracking',
+          notificationTitle: 'Start Location Tracking',
+          notificationMsg: 'Track location in background',
+          notificationBigMsg:
+              'Background location is on to keep the app up-tp-date with your location. This is required for main features to work properly when the app is not running.',
+          notificationIconColor: Colors.grey,
+          notificationTapCallback: LocationCallbackHandler.notificationCallback,
+        ),
+      ),
+    );
   }
 }

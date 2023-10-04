@@ -41,4 +41,13 @@ class AppSharedPreferences {
     return prefs.getString('languageValue') ?? "English";
   }
 
+  static Future<void> saveLocationPreference(bool value) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('locationValue', value);
+  }
+
+  static Future<bool> getLocationPreference() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getBool('locationValue') ?? false;
+  }
 }

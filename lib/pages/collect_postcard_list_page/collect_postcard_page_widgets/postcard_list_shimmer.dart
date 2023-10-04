@@ -30,7 +30,7 @@ class PostcardListShimmer extends StatelessWidget {
           itemBuilder: (BuildContext context, int index) {
             return CustomShimmer(
               context: context,
-              height: 120,
+              height: 190,
               radius: 25,
             );
           },
