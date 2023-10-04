@@ -25,18 +25,20 @@ class AnimationSection extends StatelessWidget {
                 .fadeIn(duration: 200.ms)
                 .then(delay: 500.ms) // baseline=800ms
                 .slide(
-                    curve: Curves.easeInOut,
-                    duration: 2000.ms,
-                    begin: Offset(0.3, 0),
-                    end: Offset(-0.3, 0))
+                  curve: Curves.easeInOut,
+                  duration: 2000.ms,
+                  begin: const Offset(0.3, 0),
+                  end: const Offset(-0.3, 0),
+                )
                 .tint(
                     color: Theme.of(context).colorScheme.secondaryContainer,
                     end: 0.6)
                 .then(delay: 500.ms)
                 .slide(
-                    curve: Curves.easeInOut,
-                    duration: 200.ms,
-                    end: Offset(0, -0.2))
+                  curve: Curves.easeInOut,
+                  duration: 200.ms,
+                  end: const Offset(0, -0.2),
+                )
                 .fadeOut(duration: 200.ms),
           ),
         ),
