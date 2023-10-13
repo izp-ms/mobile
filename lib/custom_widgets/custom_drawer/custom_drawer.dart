@@ -123,6 +123,8 @@ class CustomDrawer extends Drawer {
     String languageValue = await AppSharedPreferences.getLanguagePreference();
     bool postcardLocationValue =
         await AppSharedPreferences.getLocationPreference();
+    double notificationRangeValue =
+        await AppSharedPreferences.getNotificationRange();
 
     Navigator.pushReplacement(
       context,
@@ -133,6 +135,7 @@ class CustomDrawer extends Drawer {
           dateFormatValue: dateFormatValue,
           languageValue: languageValue,
           postcardLocationValue: postcardLocationValue,
+          notificationRangeValue: notificationRangeValue,
         ),
       ),
     );

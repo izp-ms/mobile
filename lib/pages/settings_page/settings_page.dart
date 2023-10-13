@@ -11,20 +11,22 @@ import 'package:mobile/pages/settings_page/settings_page_widgets/units_format.da
 import '../../custom_widgets/text_icon_button.dart';
 
 class SettingsPage extends StatelessWidget {
-  const SettingsPage(
-      {Key? key,
-      required this.metricSystemValue,
-      required this.themeValue,
-      required this.dateFormatValue,
-      required this.languageValue,
-      required this.postcardLocationValue})
-      : super(key: key);
+  const SettingsPage({
+    Key? key,
+    required this.metricSystemValue,
+    required this.themeValue,
+    required this.dateFormatValue,
+    required this.languageValue,
+    required this.postcardLocationValue,
+    required this.notificationRangeValue,
+  }) : super(key: key);
 
   final bool metricSystemValue;
   final bool themeValue;
   final String dateFormatValue;
   final String languageValue;
   final bool postcardLocationValue;
+  final double notificationRangeValue;
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +43,7 @@ class SettingsPage extends StatelessWidget {
                   themeValue: themeValue,
                   languageValue: languageValue,
                   postcardLocationValue: postcardLocationValue,
+                  notificationRangeValue: notificationRangeValue,
                 ),
                 UnitsFormat(
                     metricSystemValue: metricSystemValue,

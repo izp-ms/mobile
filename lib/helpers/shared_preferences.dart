@@ -50,4 +50,14 @@ class AppSharedPreferences {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getBool('locationValue') ?? false;
   }
+
+  static Future<void> saveNotificationRange(double value) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setDouble('notificationRange', value);
+  }
+
+  static Future<double> getNotificationRange() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getDouble('notificationRange') ?? 1000;
+  }
 }
