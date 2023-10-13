@@ -5,6 +5,7 @@ import 'dart:ui';
 import 'package:background_locator_2/location_dto.dart';
 import 'package:mobile/api/request/coordinates_request.dart';
 import 'package:mobile/api/response/post_coordinates_response.dart';
+import 'package:mobile/helpers/shared_preferences.dart';
 import 'package:mobile/services/collect_postcard_service.dart';
 import 'file_manager.dart';
 
@@ -59,14 +60,22 @@ class LocationService {
     final SendPort? send = IsolateNameServer.lookupPortByName(isolateName);
     _count++;
 
+    final postcardNotificationRange =
+        await AppSharedPreferences.getNotificationRange();
+
+    print("odległość: $postcardNotificationRange");
+
     CoordinatesRequest coordinatesRequest = CoordinatesRequest(
-        longitude: locationDto.longitude.toString(),
-        latitude: locationDto.latitude.toString());
+      longitude: locationDto.longitude.toString(),
+      latitude: locationDto.latitude.toString(),
+      postcardNotificationRangeInMeters: postcardNotificationRange.toInt(),
+    );
 
     PostCoordinatesResponse response =
         await collectPostcardService.postCoordinates(coordinatesRequest);
 
-    print("Recived: ${response.postcardsCollected?.length}, and ${response.postcardsNearby?.length}");
+    print(
+        "Recived: ${response.postcardsCollected?.length}, and ${response.postcardsNearby?.length}");
 
     send?.send(response.toJson());
   }
