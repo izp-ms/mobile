@@ -13,7 +13,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:mobile/pages/postcards_page/postcards_page.dart';
 import 'package:mobile/services/auth_service.dart';
 import 'package:mobile/services/collect_postcard_service.dart';
-import 'package:mobile/services/postcard_repository.dart';
+import 'package:mobile/services/postcard_service.dart';
 import 'package:mobile/services/secure_storage_service.dart';
 import 'package:mobile/services/user_service.dart';
 
