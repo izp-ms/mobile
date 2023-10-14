@@ -4,7 +4,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:mobile/custom_widgets/settings_switch.dart';
 import 'package:mobile/helpers/shared_preferences.dart';
-import 'package:android_intent/android_intent.dart';
 import 'package:flutter/foundation.dart';
 
 class ContentAndDisplay extends StatefulWidget {
