@@ -11,11 +11,14 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:mobile/api/response/post_coordinates_response.dart';
 import 'package:mobile/custom_widgets/custom_drawer/custom_drawer.dart';
 import 'package:mobile/custom_widgets/custom_appbars/main_page_app_bar.dart';
+import 'package:mobile/custom_widgets/submit_button.dart';
 import 'package:mobile/helpers/check_gps_status.dart';
+import 'package:mobile/helpers/shared_preferences.dart';
 import 'package:mobile/pages/collect_postcard_list_page/collect_postcard_page_widgets/animation_section.dart';
 import 'package:mobile/pages/collect_postcard_list_page/collect_postcard_page_widgets/location_disabled_content.dart';
 import 'package:mobile/pages/collect_postcard_list_page/collect_postcard_page_widgets/postcard_list_shimmer.dart';
 import 'package:mobile/pages/collect_postcard_list_page/collect_postcard_page_widgets/postcard_list_with_title.dart';
+import 'package:mobile/pages/settings_page/settings_page.dart';
 import 'package:mobile/services/location_service/file_manager.dart';
 import 'package:mobile/services/location_service/location_service.dart';
 
@@ -97,9 +100,6 @@ class _CollectPostcardListPageState extends State<CollectPostcardListPage> {
 
   @override
   Widget build(BuildContext context) {
-    // final log = Text( //Keep just in case if something went wrong
-    //   logStr,
-    // );
     return Scaffold(
       appBar: const MainPageAppBar(),
       drawer: CustomDrawer(context),
@@ -121,39 +121,43 @@ class _CollectPostcardListPageState extends State<CollectPostcardListPage> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       _renderPageHeader(context),
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                          child: ListView(
-                            children: [
-                              if (lastReceivedPostcards == null && isRunning)
-                                const PostcardListShimmer(),
-                              if (lastReceivedPostcards != null && isRunning)
-                                Column(
-                                  children: [
-                                    if (lastReceivedPostcards
-                                            ?.postcardsCollected !=
-                                        null)
-                                      PostcardListWithTitle(
-                                        title: "Postcards collected",
-                                        postcards: lastReceivedPostcards!
-                                            .postcardsCollected!,
-                                        isReadyToCollect: true,
-                                      ),
-                                    if (lastReceivedPostcards
-                                            ?.postcardsNearby !=
-                                        null)
-                                      PostcardListWithTitle(
-                                        title: "Postcards nearby",
-                                        postcards: lastReceivedPostcards!
-                                            .postcardsNearby!,
-                                      ),
-                                  ],
-                                )
-                            ],
+                      if (isRunning) ...[
+                        _pageContent(),
+                      ] else ...[
+                        Expanded(
+                          child: ConstrainedBox(
+                            constraints: BoxConstraints(maxWidth: 320),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Icon(
+                                  Icons.location_on_outlined,
+                                  size: 100,
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 12.0),
+                                  child: Text(
+                                    "You have to enable location in settings",
+                                    style: GoogleFonts.rubik(
+                                      fontSize: 20,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 12.0),
+                                  child: SubmitButton(
+                                    buttonText: "Go to settings",
+                                    onButtonPressed: () {
+                                      _goToSettings();
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                      )
+                        )
+                      ]
                     ],
                   ),
                 ),
@@ -161,6 +165,36 @@ class _CollectPostcardListPageState extends State<CollectPostcardListPage> {
             );
           }
         },
+      ),
+    );
+  }
+
+  Expanded _pageContent() {
+    return Expanded(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+        child: ListView(
+          children: [
+            if (lastReceivedPostcards == null && isRunning)
+              const PostcardListShimmer(),
+            if (lastReceivedPostcards != null && isRunning)
+              Column(
+                children: [
+                  if (lastReceivedPostcards?.postcardsCollected != null)
+                    PostcardListWithTitle(
+                      title: "Postcards collected",
+                      postcards: lastReceivedPostcards!.postcardsCollected!,
+                      isReadyToCollect: true,
+                    ),
+                  if (lastReceivedPostcards?.postcardsNearby != null)
+                    PostcardListWithTitle(
+                      title: "Postcards nearby",
+                      postcards: lastReceivedPostcards!.postcardsNearby!,
+                    ),
+                ],
+              )
+          ],
+        ),
       ),
     );
   }
@@ -194,5 +228,33 @@ class _CollectPostcardListPageState extends State<CollectPostcardListPage> {
   void dispose() {
     serviceStatusStream.cancel();
     super.dispose();
+  }
+
+  void _goToSettings() async {
+    bool metricSystemValue =
+        await AppSharedPreferences.getMetricSystemPreference();
+    bool themeValue = await AppSharedPreferences.getThemePreference();
+    String dateFormatValue = await AppSharedPreferences.getDatePreference();
+    String languageValue = await AppSharedPreferences.getLanguagePreference();
+    bool postcardLocationValue =
+        await AppSharedPreferences.getLocationPreference();
+    double notificationRangeValue =
+        await AppSharedPreferences.getNotificationRange();
+
+    if (context.mounted) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => SettingsPage(
+            metricSystemValue: metricSystemValue,
+            themeValue: themeValue,
+            dateFormatValue: dateFormatValue,
+            languageValue: languageValue,
+            postcardLocationValue: postcardLocationValue,
+            notificationRangeValue: notificationRangeValue,
+          ),
+        ),
+      );
+    }
   }
 }
