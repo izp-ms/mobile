@@ -124,39 +124,7 @@ class _CollectPostcardListPageState extends State<CollectPostcardListPage> {
                       if (isRunning) ...[
                         _pageContent(),
                       ] else ...[
-                        Expanded(
-                          child: ConstrainedBox(
-                            constraints: BoxConstraints(maxWidth: 320),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const Icon(
-                                  Icons.location_on_outlined,
-                                  size: 100,
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 12.0),
-                                  child: Text(
-                                    "You have to enable location in settings",
-                                    style: GoogleFonts.rubik(
-                                      fontSize: 20,
-                                    ),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 12.0),
-                                  child: SubmitButton(
-                                    buttonText: "Go to settings",
-                                    onButtonPressed: () {
-                                      _goToSettings();
-                                    },
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        )
+                        _noPostcardsContent()
                       ]
                     ],
                   ),
@@ -165,6 +133,42 @@ class _CollectPostcardListPageState extends State<CollectPostcardListPage> {
             );
           }
         },
+      ),
+    );
+  }
+
+  Expanded _noPostcardsContent() {
+    return Expanded(
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 320),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(
+              Icons.location_on_outlined,
+              size: 100,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 12.0),
+              child: Text(
+                "You have to enable location in settings",
+                style: GoogleFonts.rubik(
+                  fontSize: 20,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 12.0),
+              child: SubmitButton(
+                buttonText: "Go to settings",
+                onButtonPressed: () {
+                  _goToSettings();
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
