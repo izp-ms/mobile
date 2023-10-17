@@ -9,13 +9,15 @@ import 'package:mobile/services/secure_storage_service.dart';
 
 class PostcardService {
   final String _baseUrl = ApiConstants.baseUrl;
+  static const FETCH_LIMIT = 10;
 
-  Future<dynamic> getPostcardData() async {
+  Future<PostcardsDataResponse> getPostcardData(int pageNumber) async {
     final token = await SecureStorageService.read(key: 'token');
     Map<String, dynamic> decodedToken = JwtDecoder.decode(token!);
     String userId = decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'];
 
-    final url = '$_baseUrl/PostcardCollection?userId=$userId';
+    //final url = '$_baseUrl/PostcardCollection?userId=$userId';
+    final url = '$_baseUrl/PostcardData?pageNumber=$pageNumber&pageSize=$FETCH_LIMIT';
     final uri = Uri.parse(url);
 
     final client = http.Client();
@@ -29,8 +31,8 @@ class PostcardService {
 
     if (response.ok) {
       final responseJson = json.decode(response.body);
-      final postcardDetail = PostcardsDataResponse.fromJson(responseJson);
-      return postcardDetail;
+      final postcardDataCollection = PostcardsDataResponse.fromJson(responseJson);
+      return postcardDataCollection;
     } else {
       final errorJson = json.decode(response.body);
       final errorMessage = ErrorMessageResponse.fromJson(errorJson).message;
