@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mobile/api/response/postcard_data_response.dart';
+import 'package:mobile/api/response/postcards_data_list_response.dart';
 import 'package:mobile/cubit/postcard_cubit/postcard_state.dart';
 import 'package:mobile/services/postcard_service.dart';
 
@@ -13,7 +13,7 @@ class PostcardCubit extends Cubit<PostcardState> {
     if (state is LoadingState) return;
 
     final currentState = state;
-    var oldPostcardsData = PostcardsDataResponse(content: []);
+    var oldPostcardsData = PostcardsDataListResponse(content: []);
     if (currentState is LoadedState) {
       oldPostcardsData = currentState.postcardsData;
     }

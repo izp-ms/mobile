@@ -1,4 +1,4 @@
-import 'package:mobile/api/response/postcard_data_response.dart';
+import 'package:mobile/api/response/postcards_data_list_response.dart';
 
 abstract class PostcardState {}
 
@@ -10,12 +10,12 @@ class ErrorState extends PostcardState {
 }
 
 class LoadingState extends PostcardState {
-  final PostcardsDataResponse oldPostcardsData;
+  final PostcardsDataListResponse oldPostcardsData;
   final bool isFirstFetch;
   LoadingState(this.oldPostcardsData, {this.isFirstFetch=false});
 }
 class LoadedState extends PostcardState {
-  final PostcardsDataResponse postcardsData;
+  final PostcardsDataListResponse postcardsData;
   LoadedState(this.postcardsData);
 }
 

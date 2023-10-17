@@ -1,38 +1,4 @@
 class PostcardsDataResponse {
-  int? pageNumber;
-  int? pageSize;
-  int? totalCount;
-  int? totalPages;
-  List<PostcardsData>? content;
-
-  PostcardsDataResponse({
-    this.pageNumber,
-    this.pageSize,
-    this.totalCount,
-    this.totalPages,
-    required this.content,
-  });
-
-  PostcardsDataResponse.fromJson(Map<String, dynamic> json) {
-    pageNumber = json['pageNumber'];
-    pageSize = json['pageSize'];
-    totalCount = json['totalCount'];
-    totalPages = json['totalPages'];
-    content = (json['content'] as List).map((e) => PostcardsData.fromJson(e)).toList();
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['pageNumber'] = pageNumber;
-    data['pageSize'] = pageSize;
-    data['totalCount'] = totalCount;
-    data['totalPages'] = totalPages;
-    data['content'] = content?.map((e) => e.toJson()).toList();
-    return data;
-  }
-}
-
-class PostcardsData {
   int? id;
   String? imageBase64;
   String? country;
@@ -42,7 +8,7 @@ class PostcardsData {
   String? latitude;
   int? collectRangeInMeters;
 
-  PostcardsData(
+  PostcardsDataResponse(
       {this.id,
         this.imageBase64,
         this.country,
@@ -52,7 +18,7 @@ class PostcardsData {
         this.latitude,
         this.collectRangeInMeters});
 
-  PostcardsData.fromJson(Map<String, dynamic> json) {
+  PostcardsDataResponse.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     imageBase64 = json['imageBase64'];
     country = json['country'];

@@ -5,13 +5,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mobile/api/response/postcard_data_response.dart';
 import 'package:mobile/cubit/postcard_cubit/postcard_cubit.dart';
-import 'package:mobile/helpers/base64Validator.dart';
 import 'package:mobile/pages/postcards_page/user_postcards_collection_page/widgets/postcard_details.dart';
 import 'package:mobile/pages/postcards_page/user_postcards_collection_page/widgets/postcard_shimmer.dart';
 
 class PostcardsGrid extends StatelessWidget {
   final listScrollController = ScrollController();
-  final List<PostcardsData>? postcardsData;
+  final List<PostcardsDataResponse>? postcardsData;
   final Function refreshCallback;
   final BuildContext parentContext;
   final bool isLoadingMore;
@@ -114,7 +113,7 @@ class PostcardsGrid extends StatelessWidget {
 }
 
 
-void _showImageDialog(BuildContext context, PostcardsData? postcard) {
+void _showImageDialog(BuildContext context, PostcardsDataResponse? postcard) {
   double width = MediaQuery.of(context).size.width * 0.9;
   double height = MediaQuery.of(context).size.height * 0.75;
 
