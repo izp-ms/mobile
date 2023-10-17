@@ -9,6 +9,7 @@ class MainPageAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       backgroundColor: Theme.of(context).colorScheme.background,
+      scrolledUnderElevation: 0,
       leading: Builder(
         builder: (BuildContext context) {
           return IconButton(

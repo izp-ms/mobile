@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:mobile/constants/ColorProvider.dart';
 import 'package:mobile/custom_widgets/custom_drawer/custom_drawer.dart';
-import 'package:mobile/custom_widgets/main_page_app_bar.dart';
+import 'package:mobile/custom_widgets/custom_appbars/main_page_app_bar.dart';
 import 'package:mobile/pages/settings_page/settings_page_widgets/content_and_display.dart';
 import 'package:mobile/pages/settings_page/settings_page_widgets/privacy_settings.dart';
 import 'package:mobile/pages/settings_page/settings_page_widgets/units_format.dart';
@@ -16,13 +16,17 @@ class SettingsPage extends StatelessWidget {
     required this.metricSystemValue,
     required this.themeValue,
     required this.dateFormatValue,
-    required this.languageValue
+    required this.languageValue,
+    required this.postcardLocationValue,
+    required this.notificationRangeValue,
   }) : super(key: key);
 
   final bool metricSystemValue;
   final bool themeValue;
   final String dateFormatValue;
   final String languageValue;
+  final bool postcardLocationValue;
+  final double notificationRangeValue;
 
   @override
   Widget build(BuildContext context) {
@@ -36,13 +40,14 @@ class SettingsPage extends StatelessWidget {
             child: Column(
               children: [
                 ContentAndDisplay(
-                    themeValue: themeValue,
-                    languageValue: languageValue
+                  themeValue: themeValue,
+                  languageValue: languageValue,
+                  postcardLocationValue: postcardLocationValue,
+                  notificationRangeValue: notificationRangeValue,
                 ),
                 UnitsFormat(
                     metricSystemValue: metricSystemValue,
-                    dateFormatValue: dateFormatValue
-                ),
+                    dateFormatValue: dateFormatValue),
                 PrivacySettings(),
               ],
             ),
@@ -52,32 +57,33 @@ class SettingsPage extends StatelessWidget {
             child: Column(
               children: [
                 Center(
-                  child: TextIconButton(
-                    text: AppLocalizations.of(context).deleteAccount,
-                    shouldHaveIcon: true,
-                    iconData: Icons.delete_forever,
-                    iconSide: IconSide.left,
-                    onTap: () {
-                      print("Delete account button tapped");
-                    },
-                    fontSize: 15.0,
-                    iconSize: 20.0,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                  )
-                ),
+                    child: TextIconButton(
+                  text: AppLocalizations.of(context).deleteAccount,
+                  shouldHaveIcon: true,
+                  iconData: Icons.delete_forever,
+                  iconSide: IconSide.left,
+                  onTap: () {
+                    print("Delete account button tapped");
+                  },
+                  fontSize: 15.0,
+                  iconSize: 20.0,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                )),
                 const SizedBox(height: 10),
                 Center(
                   child: Text(
                     AppLocalizations.of(context).postcardia.toUpperCase(),
                     style: GoogleFonts.rubik(
-                        fontSize: 18, color: ColorProvider.getColor('inactive')),
+                        fontSize: 18,
+                        color: ColorProvider.getColor('inactive')),
                   ),
                 ),
                 Center(
                   child: Text(
                     AppLocalizations.of(context).version,
                     style: GoogleFonts.rubik(
-                        fontSize: 18, color: ColorProvider.getColor('inactive')),
+                        fontSize: 18,
+                        color: ColorProvider.getColor('inactive')),
                   ),
                 ),
               ],

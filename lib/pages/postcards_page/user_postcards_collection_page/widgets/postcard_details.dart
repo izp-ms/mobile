@@ -16,7 +16,7 @@ class PostcardDetails extends StatelessWidget {
     required this.postcard,
   });
 
-  final PostcardsData? postcard;
+  final PostcardsDataResponse? postcard;
   final double height;
   final double width;
 

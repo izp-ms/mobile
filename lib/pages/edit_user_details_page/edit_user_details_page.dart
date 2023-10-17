@@ -9,6 +9,7 @@ import 'package:mobile/api/response/user_detail_response.dart';
 import 'package:mobile/cubit/user_cubit/user_cubit.dart';
 import 'package:mobile/cubit/user_cubit/user_state.dart';
 import 'package:mobile/custom_widgets/country_picker.dart';
+import 'package:mobile/custom_widgets/custom_appbars/app_bar_with_back_button.dart';
 import 'package:mobile/custom_widgets/custom_date_picker.dart';
 import 'package:mobile/custom_widgets/custom_form_filed/custom_form_field.dart';
 import 'package:mobile/custom_widgets/submit_button.dart';
@@ -35,6 +36,7 @@ class _EditUserDetailsPageState extends State<EditUserDetailsPage> {
   static const double separatorSize = 20;
   static const double constraintSize = 200;
   static const double avatarCircleSize = 100;
+  static const double backgroundHeight = 100;
 
   String? _backgroundImageBase64;
   String? _avatarImageBase64;
@@ -58,15 +60,7 @@ class _EditUserDetailsPageState extends State<EditUserDetailsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.background,
-        leading: IconButton(
-          padding: const EdgeInsets.only(left: 30),
-          iconSize: 30,
-          onPressed: () => Navigator.of(context).pop(),
-          icon: const Icon(Icons.arrow_back),
-        ),
-      ),
+      appBar: const AppBarWithBackButton(),
       body: GestureDetector(
         onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
         child: BlocConsumer<UserCubit, UserState>(
@@ -283,6 +277,7 @@ class _EditUserDetailsPageState extends State<EditUserDetailsPage> {
   }
 
   Row _backgroundImagePicker(BuildContext context) {
+    print(isBase64Valid(_backgroundImageBase64));
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -302,8 +297,12 @@ class _EditUserDetailsPageState extends State<EditUserDetailsPage> {
                   )
                 : ClipRRect(
                     borderRadius: BorderRadius.circular(10),
-                    child: Container(
-                      color: Theme.of(context).colorScheme.onBackground,
+                    child: AspectRatio(
+                      aspectRatio: 2,
+                      child: Container(
+                        height: backgroundHeight,
+                        color: Theme.of(context).colorScheme.onBackground,
+                      ),
                     ),
                   ),
           ),

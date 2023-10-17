@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/helpers/shared_preferences.dart';
-import 'package:mobile/pages/collect_postcard_page/collect_postcard_page.dart';
+import 'package:mobile/pages/collect_postcard_list_page/collect_postcard_list_page.dart';
 import 'package:mobile/pages/login_page/login_page.dart';
 import 'package:mobile/pages/postcards_page/postcards_page.dart';
 import 'package:mobile/pages/profile_page/profile_page.dart';
@@ -116,10 +116,15 @@ class CustomDrawer extends Drawer {
   }
 
   void onSettingsPress(context) async {
-    bool metricSystemValue = await AppSharedPreferences.getMetricSystemPreference();
+    bool metricSystemValue =
+        await AppSharedPreferences.getMetricSystemPreference();
     bool themeValue = await AppSharedPreferences.getThemePreference();
     String dateFormatValue = await AppSharedPreferences.getDatePreference();
     String languageValue = await AppSharedPreferences.getLanguagePreference();
+    bool postcardLocationValue =
+        await AppSharedPreferences.getLocationPreference();
+    double notificationRangeValue =
+        await AppSharedPreferences.getNotificationRange();
 
     Navigator.pushReplacement(
       context,
@@ -129,16 +134,22 @@ class CustomDrawer extends Drawer {
           themeValue: themeValue,
           dateFormatValue: dateFormatValue,
           languageValue: languageValue,
+          postcardLocationValue: postcardLocationValue,
+          notificationRangeValue: notificationRangeValue,
         ),
       ),
     );
   }
 
-  void onCollectPostcardPress(context) {
+  void onCollectPostcardPress(context) async {
+    bool postcardLocationValue =
+        await AppSharedPreferences.getLocationPreference();
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
-        builder: (context) => const CollectPostcardPage(),
+        builder: (context) => CollectPostcardListPage(
+          postcardLocationValue: postcardLocationValue,
+        ),
       ),
     );
   }

@@ -46,7 +46,7 @@ class _UserPostcardsCollectionPageState
           return PostcardsListShimmer();
         }
 
-        List<PostcardsData>? postcardsData = [];
+        List<PostcardsDataResponse>? postcardsData = [];
         isLoadingMore = false;
 
         if (state is LoadingState) {
