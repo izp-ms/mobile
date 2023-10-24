@@ -7,21 +7,38 @@ import 'package:mobile/custom_widgets/submit_button.dart';
 import 'package:mobile/helpers/base64Validator.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+void showImageDialog(BuildContext context, PostcardsDataResponse? postcard,
+    {bool obfuscateData = false}) {
+  double width = MediaQuery.of(context).size.width * 0.9;
+  double height = MediaQuery.of(context).size.height * 0.75;
+
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return PostcardDetails(
+          width: width,
+          height: height,
+          postcard: postcard,
+          obfuscateData: obfuscateData);
+    },
+  );
+}
+
 class PostcardDetails extends StatelessWidget {
+  final PostcardsDataResponse? postcard;
+  final bool obfuscateData;
+  final double height;
+  final double width;
 
   PostcardDetails({
     super.key,
     required this.width,
     required this.height,
     required this.postcard,
+    this.obfuscateData = false,
   });
 
-  final PostcardsDataResponse? postcard;
-  final double height;
-  final double width;
-
   late String? postcardImageBase64 = postcard?.imageBase64?.substring(23);
-
 
   @override
   Widget build(BuildContext context) {
@@ -39,11 +56,27 @@ class PostcardDetails extends StatelessWidget {
                   minWidth: double.infinity, // force to take full width
                 ),
                 child: (postcardImageBase64 != null &&
-                    isBase64Valid(postcardImageBase64))
-                    ? Image.memory(base64Decode(postcardImageBase64!),
-                    fit: BoxFit.contain)
-                    : SvgPicture.asset("assets/postcards/Second.svg",
-                    fit: BoxFit.contain),
+                        isBase64Valid(postcardImageBase64))
+                    ? obfuscateData
+                        ? ColorFiltered(
+                            colorFilter: const ColorFilter.mode(
+                                Colors.grey, BlendMode.saturation),
+                            child: Image.memory(
+                                base64Decode(postcardImageBase64!),
+                                fit: BoxFit.contain),
+                          )
+                        : Image.memory(base64Decode(postcardImageBase64!),
+                            fit: BoxFit.contain)
+                    : obfuscateData
+                        ? ColorFiltered(
+                            colorFilter: const ColorFilter.mode(
+                                Colors.grey, BlendMode.saturation),
+                            child: SvgPicture.asset(
+                                "assets/postcards/Second.svg",
+                                fit: BoxFit.contain),
+                          )
+                        : SvgPicture.asset("assets/postcards/Second.svg",
+                            fit: BoxFit.contain),
               ),
             ),
             const SizedBox(height: 10.0),
@@ -73,7 +106,9 @@ class PostcardDetails extends StatelessWidget {
               children: [
                 const Icon(Icons.pin_drop),
                 Text(
-                  "${postcard?.latitude ?? ''}, ${postcard?.longitude ?? ''}",
+                  obfuscateData
+                      ? "??.????, ??.????"
+                      : "${postcard?.latitude ?? ''}, ${postcard?.longitude ?? ''}",
                   textAlign: TextAlign.center,
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 ),

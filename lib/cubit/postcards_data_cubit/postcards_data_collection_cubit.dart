@@ -1,15 +1,15 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile/api/response/postcards_data_list_response.dart';
-import 'package:mobile/cubit/postcard_cubit/postcard_state.dart';
+import 'package:mobile/cubit/postcards_data_cubit/postcards_data_collection_state.dart';
 import 'package:mobile/services/postcard_service.dart';
 
-class PostcardCubit extends Cubit<PostcardState> {
-  PostcardCubit(this._repository) : super(InitState());
+class PostcardsDataCollectionCubit extends Cubit<PostcardsDataCollectionState> {
+  PostcardsDataCollectionCubit(this._repository) : super(InitState());
 
   int currentPage = 1;
   final PostcardService _repository;
 
-  Future<void> getPostcardData() async {
+  Future<void> getPostcardData([bool showAllPostcardsCollection = false]) async {
     if (state is LoadingState) return;
 
     final currentState = state;
@@ -21,7 +21,7 @@ class PostcardCubit extends Cubit<PostcardState> {
     emit(LoadingState(oldPostcardsData, isFirstFetch: currentPage == 1));
 
     try {
-      final newPostcardsData = await _repository.getPostcardData(currentPage);
+      final newPostcardsData = await _repository.getPostcardData(currentPage, showAllPostcardsCollection);
       var postcardsData = (state as LoadingState).oldPostcardsData;
       postcardsData.totalCount = newPostcardsData.totalCount;
       postcardsData.content?.addAll(newPostcardsData.content ?? []);

@@ -57,7 +57,7 @@ class _CustomFormFieldState extends State<CustomFormField> {
 
   bool _isStrongPassword(String password) {
     // At least one upper case letter, one lower case letter, and either one number or one special character, and be at least 8 characters long
-    final RegExp passwordRegex = RegExp(r'^(?=.*[A-Z])(?=.*[a-z])(?=.*[\d@$!%*?&])[A-Za-z\d@$!%*?&]{8,}');
+    final RegExp passwordRegex = RegExp(r'^(?=.*[a-z])(?=.*[\d@$!%*?&])[A-Za-z\d@$!%*?&]{8,}');
     return passwordRegex.hasMatch(password);
   }
 

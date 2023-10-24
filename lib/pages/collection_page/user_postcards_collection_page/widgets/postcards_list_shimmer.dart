@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/pages/postcards_page/user_postcards_collection_page/widgets/postcard_shimmer.dart';
+import 'package:mobile/pages/collection_page/user_postcards_collection_page/widgets/postcard_shimmer.dart';
 
 class PostcardsListShimmer extends StatelessWidget {
   @override
