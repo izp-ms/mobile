@@ -11,7 +11,6 @@ class ThemeProvider extends ChangeNotifier {
   }
 
   set isDark(bool value) {
-    print("piesek");
     _isDark = value;
     AppSharedPreferences.saveThemePreference(value);
     notifyListeners();

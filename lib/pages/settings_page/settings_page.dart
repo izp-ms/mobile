@@ -7,6 +7,8 @@ import 'package:mobile/custom_widgets/custom_appbars/main_page_app_bar.dart';
 import 'package:mobile/pages/settings_page/settings_page_widgets/content_and_display.dart';
 import 'package:mobile/pages/settings_page/settings_page_widgets/privacy_settings.dart';
 import 'package:mobile/pages/settings_page/settings_page_widgets/units_format.dart';
+import 'package:mobile/providers/metric_system_provider.dart';
+import 'package:provider/provider.dart';
 
 import '../../custom_widgets/text_icon_button.dart';
 
@@ -34,62 +36,66 @@ class SettingsPage extends StatelessWidget {
       backgroundColor: Theme.of(context).colorScheme.background,
       appBar: const MainPageAppBar(),
       drawer: CustomDrawer(context),
-      body: ListView(
-        children: [
-          SingleChildScrollView(
-            child: Column(
-              children: [
-                ContentAndDisplay(
-                  themeValue: themeValue,
-                  languageValue: languageValue,
-                  postcardLocationValue: postcardLocationValue,
-                  notificationRangeValue: notificationRangeValue,
-                ),
-                UnitsFormat(
-                    metricSystemValue: metricSystemValue,
-                    dateFormatValue: dateFormatValue),
-                PrivacySettings(),
-              ],
-            ),
-          ),
-          Container(
-            margin: const EdgeInsets.fromLTRB(0, 20, 0, 10),
-            child: Column(
-              children: [
-                Center(
-                    child: TextIconButton(
-                  text: AppLocalizations.of(context).deleteAccount,
-                  shouldHaveIcon: true,
-                  iconData: Icons.delete_forever,
-                  iconSide: IconSide.left,
-                  onTap: () {
-                    print("Delete account button tapped");
-                  },
-                  fontSize: 15.0,
-                  iconSize: 20.0,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                )),
-                const SizedBox(height: 10),
-                Center(
-                  child: Text(
-                    AppLocalizations.of(context).postcardia.toUpperCase(),
-                    style: GoogleFonts.rubik(
-                        fontSize: 18,
-                        color: ColorProvider.getColor('inactive')),
+      body: ChangeNotifierProvider(
+        create: (_) => MetricSystemProvider(),
+        child: ListView(
+          children: [
+            SingleChildScrollView(
+              child: Column(
+                children: [
+                  ContentAndDisplay(
+                    themeValue: themeValue,
+                    languageValue: languageValue,
+                    postcardLocationValue: postcardLocationValue,
+                    notificationRangeValue: notificationRangeValue,
+                    useMetricSystem: metricSystemValue,
                   ),
-                ),
-                Center(
-                  child: Text(
-                    AppLocalizations.of(context).version,
-                    style: GoogleFonts.rubik(
-                        fontSize: 18,
-                        color: ColorProvider.getColor('inactive')),
-                  ),
-                ),
-              ],
+                  UnitsFormat(
+                      metricSystemValue: metricSystemValue,
+                      dateFormatValue: dateFormatValue),
+                  PrivacySettings(),
+                ],
+              ),
             ),
-          ),
-        ],
+            Container(
+              margin: const EdgeInsets.fromLTRB(0, 20, 0, 10),
+              child: Column(
+                children: [
+                  Center(
+                      child: TextIconButton(
+                    text: AppLocalizations.of(context).deleteAccount,
+                    shouldHaveIcon: true,
+                    iconData: Icons.delete_forever,
+                    iconSide: IconSide.left,
+                    onTap: () {
+                      print("Delete account button tapped");
+                    },
+                    fontSize: 15.0,
+                    iconSize: 20.0,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                  )),
+                  const SizedBox(height: 10),
+                  Center(
+                    child: Text(
+                      AppLocalizations.of(context).postcardia.toUpperCase(),
+                      style: GoogleFonts.rubik(
+                          fontSize: 18,
+                          color: ColorProvider.getColor('inactive')),
+                    ),
+                  ),
+                  Center(
+                    child: Text(
+                      AppLocalizations.of(context).version,
+                      style: GoogleFonts.rubik(
+                          fontSize: 18,
+                          color: ColorProvider.getColor('inactive')),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
