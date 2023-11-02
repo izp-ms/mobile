@@ -32,7 +32,7 @@
   "appLanguage": "App language",
   "notifications": "Notifications",
   "choseDateFormat": "Chose date format",
-  "useMetricSystem": "Use Metric System",
+  "useImperialSystem": "Use Imperial System",
   "termsAndPolicies": "Terms and Policies",
   "privacy": "Privacy",
   "pickPhoto": "Pick photo",
