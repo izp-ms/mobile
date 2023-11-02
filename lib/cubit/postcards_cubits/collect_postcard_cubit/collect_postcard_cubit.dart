@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile/api/request/coordinates_request.dart';
-import 'package:mobile/cubit/collect_postcard_cubit/collect_postcard_state.dart';
+import 'package:mobile/cubit/postcards_cubits/collect_postcard_cubit/collect_postcard_state.dart';
 import 'package:mobile/services/collect_postcard_service.dart';
 
 class CollectPostcardCubit extends Cubit<CollectPostcardState> {

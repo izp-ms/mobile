@@ -3,11 +3,12 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mobile/api/response/postcard_data_response.dart';
+import 'package:mobile/api/response/postcard_response.dart';
 import 'package:mobile/custom_widgets/submit_button.dart';
 import 'package:mobile/helpers/base64Validator.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-void showImageDialog(BuildContext context, PostcardsDataResponse? postcard,
+void showPostcardDialog(BuildContext context, PostcardsResponse? postcard,
     {bool obfuscateData = false}) {
   double width = MediaQuery.of(context).size.width * 0.9;
   double height = MediaQuery.of(context).size.height * 0.75;
@@ -25,7 +26,7 @@ void showImageDialog(BuildContext context, PostcardsDataResponse? postcard,
 }
 
 class PostcardDetails extends StatelessWidget {
-  final PostcardsDataResponse? postcard;
+  final PostcardsResponse? postcard;
   final bool obfuscateData;
   final double height;
   final double width;
@@ -79,7 +80,20 @@ class PostcardDetails extends StatelessWidget {
                             fit: BoxFit.contain),
               ),
             ),
-            const SizedBox(height: 10.0),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  obfuscateData
+                      ? "????????????"
+                      : "${postcard?.postcardDataTitle ?? ''}",
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(fontWeight: FontWeight.w300),
+                ),
+              ],
+            ),
+            const SizedBox(height: 15.0),
+            if (postcard!.isSent)
             Text(
               postcard?.title ?? '',
               textAlign: TextAlign.center,
@@ -88,37 +102,37 @@ class PostcardDetails extends StatelessWidget {
                 fontSize: 20.0, // Adjust the size as per your requirement
               ),
             ),
-            const SizedBox(height: 10.0),
+            const SizedBox(height: 5.0),
+            if (postcard!.isSent)
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(Icons.map_outlined),
-                Text(
-                  "${postcard?.country ?? ''}, ${postcard?.city ?? ''}",
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(fontWeight: FontWeight.bold),
+                Flexible(
+                  child: Text(
+                    "${postcard?.content ?? ''}",
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
                 ),
               ],
             ),
-            const SizedBox(height: 10.0),
+            const SizedBox(height: 15.0),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(Icons.pin_drop),
-                Text(
-                  obfuscateData
-                      ? "??.????, ??.????"
-                      : "${postcard?.latitude ?? ''}, ${postcard?.longitude ?? ''}",
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(fontWeight: FontWeight.bold),
+                SubmitButton(
+                  buttonText: AppLocalizations.of(context).close,
+                  height: 40,
+                  onButtonPressed: () => {Navigator.of(context).pop()},
                 ),
+                if (!postcard!.isSent) const SizedBox(width: 10.0),
+                if (!postcard!.isSent)
+                  SubmitButton(
+                    buttonText: AppLocalizations.of(context).send,
+                    height: 40,
+                    onButtonPressed: () => {Navigator.of(context).pop()},
+                  )
               ],
-            ),
-            const SizedBox(height: 10.0),
-            SubmitButton(
-              buttonText: AppLocalizations.of(context).close,
-              height: 40,
-              onButtonPressed: () => {Navigator.of(context).pop()},
             ),
           ],
         ),

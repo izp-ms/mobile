@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile/api/response/postcard_data_response.dart';
-import 'package:mobile/cubit/postcards_data_cubit/postcards_data_collection_cubit.dart';
-import 'package:mobile/cubit/postcards_data_cubit/postcards_data_collection_state.dart';
+import 'package:mobile/cubit/postcards_cubits/postcards_data_cubit/postcards_data_collection_cubit.dart';
+import 'package:mobile/cubit/postcards_cubits/postcards_data_cubit/postcards_data_collection_state.dart';
 import 'package:mobile/helpers/show_error_snack_bar.dart';
-import 'package:mobile/pages/collection_page/user_postcards_collection_page/widgets/postcard_details.dart';
-import 'package:mobile/pages/collection_page/user_postcards_collection_page/widgets/postcards_grid.dart';
+import 'package:mobile/pages/collection_page/user_postcards_collection_page/widgets/postcard_data_details.dart';
+import 'package:mobile/pages/collection_page/user_postcards_collection_page/widgets/postcards_data_grid.dart';
 import 'package:mobile/pages/collection_page/user_postcards_collection_page/widgets/postcards_list_shimmer.dart';
 
 class AllPostcardsCollectionPage extends StatefulWidget {
@@ -24,13 +24,13 @@ class _AllPostcardsCollectionPageState extends State<AllPostcardsCollectionPage>
   @override
   void initState() {
     super.initState();
-    context.read<PostcardsDataCollectionCubit>().clearPostcardData();
+    context.read<PostcardsDataCollectionCubit>().clearUserPostcardsDataCollection();
     context.read<PostcardsDataCollectionCubit>().currentPage = 1;
     context.read<PostcardsDataCollectionCubit>().getPostcardData(true);
   }
 
   Future _refresh() async {
-    context.read<PostcardsDataCollectionCubit>().clearPostcardData();
+    context.read<PostcardsDataCollectionCubit>().clearUserPostcardsDataCollection();
     context.read<PostcardsDataCollectionCubit>().currentPage = 1;
     context.read<PostcardsDataCollectionCubit>().getPostcardData(true);
   }
@@ -76,7 +76,7 @@ class _AllPostcardsCollectionPageState extends State<AllPostcardsCollectionPage>
           postcardsData = state.postcardsData.content;
         }
 
-        return PostcardsGrid(
+        return PostcardsDataGrid(
           listScrollController: listScrollController,
           postcardsData: postcardsData,
           refreshCallback: _refresh,

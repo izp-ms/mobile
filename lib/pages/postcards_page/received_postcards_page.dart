@@ -1,49 +1,49 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mobile/api/response/postcard_data_response.dart';
-import 'package:mobile/cubit/postcards_cubits/postcards_data_collection_cubit/postcards_data_cubit.dart';
-import 'package:mobile/cubit/postcards_cubits/postcards_data_collection_cubit/postcards_data_state.dart';
+import 'package:mobile/api/response/postcard_response.dart';
+import 'package:mobile/cubit/postcards_cubits/received_postcards_cubit/received_postcards_cubit.dart';
+import 'package:mobile/cubit/postcards_cubits/received_postcards_cubit/received_postcards_state.dart';
 import 'package:mobile/helpers/show_error_snack_bar.dart';
-import 'package:mobile/pages/collection_page/user_postcards_collection_page/widgets/postcard_data_details.dart';
-import 'package:mobile/pages/collection_page/user_postcards_collection_page/widgets/postcards_data_grid.dart';
 import 'package:mobile/pages/collection_page/user_postcards_collection_page/widgets/postcards_list_shimmer.dart';
+import 'package:mobile/pages/postcards_page/widgets/postcard_details.dart';
+import 'package:mobile/pages/postcards_page/widgets/postcards_grid.dart';
 
-class UserPostcardsCollectionPage extends StatefulWidget {
+class ReceivedPostcardsPage extends StatefulWidget {
 
-  const UserPostcardsCollectionPage({Key? key})
+  const ReceivedPostcardsPage({Key? key})
       : super(key: key);
 
   @override
-  State<UserPostcardsCollectionPage> createState() =>
-      _UserPostcardsCollectionPageState();
+  State<ReceivedPostcardsPage> createState() =>
+      _ReceivedPostcardsPageState();
 }
 
-class _UserPostcardsCollectionPageState extends State<UserPostcardsCollectionPage> with AutomaticKeepAliveClientMixin {
+class _ReceivedPostcardsPageState extends State<ReceivedPostcardsPage> with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
 
   @override
   void initState() {
     super.initState();
-    context.read<PostcardsDataCubit>().clearUserPostcardsData();
-    context.read<PostcardsDataCubit>().currentPage = 1;
-    context.read<PostcardsDataCubit>().getPostcardData(false);
+    context.read<ReceivedPostcardsCubit>().clearReceivedPostcards();
+    context.read<ReceivedPostcardsCubit>().currentPage = 1;
+    context.read<ReceivedPostcardsCubit>().getPostcards(true);
   }
 
   Future _refresh() async {
-    context.read<PostcardsDataCubit>().clearUserPostcardsData();
-    context.read<PostcardsDataCubit>().currentPage = 1;
-    context.read<PostcardsDataCubit>().getPostcardData(false);
+    context.read<ReceivedPostcardsCubit>().clearReceivedPostcards();
+    context.read<ReceivedPostcardsCubit>().currentPage = 1;
+    context.read<ReceivedPostcardsCubit>().getPostcards(true);
   }
 
   bool isLoadingMore = false;
   final listScrollController = ScrollController();
 
-  void setupScrollController(bool showAllPostcardsCollection) {
+  void setupScrollController(bool isSent) {
     listScrollController.addListener(() {
       if (listScrollController.position.atEdge) {
         if (listScrollController.position.pixels != 0) {
-          BlocProvider.of<PostcardsDataCubit>(context).getPostcardData(showAllPostcardsCollection);
+          BlocProvider.of<ReceivedPostcardsCubit>(context).getPostcards(isSent);
         }
       }
     });
@@ -53,7 +53,7 @@ class _UserPostcardsCollectionPageState extends State<UserPostcardsCollectionPag
   Widget build(BuildContext context) {
     super.build(context);
     setupScrollController(false);
-    return BlocConsumer<PostcardsDataCubit, PostcardsDataState>(
+    return BlocConsumer<ReceivedPostcardsCubit, ReceivedPostcardsState>(
       listener: (context, state) {
         if (state is ErrorState) {
           showErrorSnackBar(context, state.errorMessage);
@@ -64,7 +64,7 @@ class _UserPostcardsCollectionPageState extends State<UserPostcardsCollectionPag
           return PostcardsListShimmer();
         }
 
-        List<PostcardsDataResponse>? postcardsData = [];
+        List<PostcardsResponse>? postcardsData = [];
         isLoadingMore = false;
 
         if (state is LoadingState) {
@@ -77,14 +77,14 @@ class _UserPostcardsCollectionPageState extends State<UserPostcardsCollectionPag
           postcardsData = state.postcardsData.content;
         }
 
-        return PostcardsDataGrid(
+        return PostcardsGrid(
           listScrollController: listScrollController,
           postcardsData: postcardsData,
           refreshCallback: _refresh,
           parentContext: context,
           isLoadingMore: isLoadingMore,
           postcardPopup: (postcard) {
-            showImageDialog(context, postcard!);
+            showPostcardDialog(context, postcard!);
           },
         );
       },

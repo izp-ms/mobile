@@ -44,5 +44,6 @@
   "enterValue": "Please enter some value",
   "enterValidEmail": "Enter a valid email",
   "provideStrongPassword": "Provide strong password",
-  "close": "Close"
+  "close": "Close",
+  "send": "Send"
 }

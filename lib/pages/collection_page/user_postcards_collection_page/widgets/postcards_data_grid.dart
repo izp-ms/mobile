@@ -7,7 +7,7 @@ import 'package:mobile/api/response/postcard_data_response.dart';
 import 'package:mobile/pages/collection_page/user_postcards_collection_page/widgets/postcard_shimmer.dart';
 import '../../../../helpers/base64Validator.dart';
 
-class PostcardsGrid extends StatelessWidget {
+class PostcardsDataGrid extends StatelessWidget {
   final ScrollController listScrollController;
   final List<PostcardsDataResponse>? postcardsData;
   final Function refreshCallback;
@@ -16,7 +16,7 @@ class PostcardsGrid extends StatelessWidget {
   final void Function(PostcardsDataResponse postcard)? postcardPopup;
   final bool obfuscateData;
 
-  PostcardsGrid({
+  PostcardsDataGrid({
     super.key,
     required this.listScrollController,
     required this.postcardsData,
@@ -68,14 +68,14 @@ class PostcardsGrid extends StatelessWidget {
                                 colorFilter: const ColorFilter.mode(
                                     Colors.grey, BlendMode.saturation),
                                 child: CachedMemoryImage(
-                                  uniqueKey: postcard!.id.toString(),
+                                  uniqueKey: postcard!.title.toString(),
                                   errorWidget: const Text('Error'),
                                   bytes: base64Decode(postcardImageBase64!),
                                   fit: BoxFit.contain,
                                 ),
                               )
                             : CachedMemoryImage(
-                                uniqueKey: postcard!.id.toString(),
+                                uniqueKey: postcard!.title.toString(),
                                 errorWidget: const Text('Error'),
                                 bytes: base64Decode(postcardImageBase64!),
                                 fit: BoxFit.contain,
