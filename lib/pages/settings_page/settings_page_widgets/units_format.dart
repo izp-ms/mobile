@@ -92,7 +92,7 @@ class _UnitsFormatState extends State<UnitsFormat> {
                         size: 25,
                       ),
                       Text(
-                        AppLocalizations.of(context).useMetricSystem,
+                        AppLocalizations.of(context).useImperialSystem,
                         style: GoogleFonts.rubik(
                           fontSize: 18,
                         ),
