@@ -11,11 +11,13 @@ import 'package:mobile/cubit/user_cubit/user_cubit.dart';
 import 'package:mobile/pages/login_page/login_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:mobile/pages/postcards_page/postcards_page.dart';
+import 'package:mobile/providers/theme_provider.dart';
 import 'package:mobile/services/auth_service.dart';
 import 'package:mobile/services/collect_postcard_service.dart';
 import 'package:mobile/services/postcard_service.dart';
 import 'package:mobile/services/secure_storage_service.dart';
 import 'package:mobile/services/user_service.dart';
+import 'package:provider/provider.dart';
 
 class MyHttpOverrides extends HttpOverrides {
   @override
@@ -35,9 +37,10 @@ Future<void> main() async {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key, required this.token});
+  MyApp({super.key, required this.token});
 
   final String? token;
+  final ThemeProvider themeNotifier = ThemeProvider();
 
   @override
   Widget build(BuildContext context) {
@@ -48,81 +51,92 @@ class MyApp extends StatelessWidget {
       }
     }
 
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider<AuthCubit>(
-          create: (context) => AuthCubit(AuthService()),
-        ),
-        BlocProvider<UserCubit>(
-          create: (context) => UserCubit(UserService()),
-        ),
-        BlocProvider<CollectPostcardCubit>(
-          create: (context) => CollectPostcardCubit(CollectPostcardService()),
-        ),
-        BlocProvider<PostcardCubit>(
-          create: (context) => PostcardCubit(PostcardService()),
-        )
-      ],
-      child: MaterialApp(
-        title: 'postcardia',
-        localizationsDelegates: const [
-          AppLocalizations.delegate,
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
-        supportedLocales: const [
-          Locale('en'),
-        ],
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          useMaterial3: true,
-          colorScheme: ColorScheme(
-            brightness: Brightness.light,
-            primary: ColorProvider.getColor('primary', theme: 'light'),
-            onPrimary: Colors.black,
-            secondary: ColorProvider.getColor('secondary', theme: 'light'),
-            onSecondary: Colors.black,
-            primaryContainer: Colors.black,
-            secondaryContainer:
-                ColorProvider.getColor('primary', theme: 'light'),
-            onSecondaryContainer:
-                ColorProvider.getColor('onSecondaryContainer', theme: 'light'),
-            error: Colors.red,
-            onError: Colors.white,
-            background: ColorProvider.getColor('background', theme: 'light'),
-            onBackground:
-                ColorProvider.getColor('onBackground', theme: 'light'),
-            surface: ColorProvider.getColor('surface', theme: 'light'),
-            onSurface:
-                ColorProvider.getColor('onSecondaryContainer', theme: 'light'),
+    return ChangeNotifierProvider(
+      create: (_) => themeNotifier,
+      child: Consumer<ThemeProvider>(
+          builder: (context, ThemeProvider themeNotifier, child) {
+        return MultiBlocProvider(
+          providers: [
+            BlocProvider<AuthCubit>(
+              create: (context) => AuthCubit(AuthService()),
+            ),
+            BlocProvider<UserCubit>(
+              create: (context) => UserCubit(UserService()),
+            ),
+            BlocProvider<CollectPostcardCubit>(
+              create: (context) =>
+                  CollectPostcardCubit(CollectPostcardService()),
+            ),
+            BlocProvider<PostcardCubit>(
+              create: (context) => PostcardCubit(PostcardService()),
+            )
+          ],
+          child: MaterialApp(
+            title: 'postcardia',
+            localizationsDelegates: const [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: const [
+              Locale('en'),
+            ],
+            debugShowCheckedModeBanner: false,
+            theme: ThemeData(
+              useMaterial3: true,
+              colorScheme: ColorScheme(
+                brightness: Brightness.light,
+                primary: ColorProvider.getColor('primary', theme: 'light'),
+                onPrimary: Colors.black,
+                secondary: ColorProvider.getColor('secondary', theme: 'light'),
+                onSecondary: Colors.black,
+                primaryContainer: Colors.black,
+                secondaryContainer:
+                    ColorProvider.getColor('primary', theme: 'light'),
+                onSecondaryContainer: ColorProvider.getColor(
+                    'onSecondaryContainer',
+                    theme: 'light'),
+                error: Colors.red,
+                onError: Colors.white,
+                background:
+                    ColorProvider.getColor('background', theme: 'light'),
+                onBackground:
+                    ColorProvider.getColor('onBackground', theme: 'light'),
+                surface: ColorProvider.getColor('surface', theme: 'light'),
+                onSurface: ColorProvider.getColor('onSecondaryContainer',
+                    theme: 'light'),
+              ),
+            ),
+            darkTheme: ThemeData(
+              useMaterial3: true,
+              colorScheme: ColorScheme(
+                brightness: Brightness.dark,
+                primary: ColorProvider.getColor('primary', theme: 'dark'),
+                onPrimary: Colors.white,
+                secondary: ColorProvider.getColor('secondary', theme: 'dark'),
+                onSecondary: Colors.white,
+                primaryContainer:
+                    ColorProvider.getColor('secondary', theme: 'dark'),
+                secondaryContainer:
+                    ColorProvider.getColor('secondary', theme: 'dark'),
+                onSecondaryContainer: ColorProvider.getColor(
+                    'onSecondaryContainer',
+                    theme: 'dark'),
+                error: Colors.red,
+                onError: Colors.white,
+                background: ColorProvider.getColor('background', theme: 'dark'),
+                onBackground:
+                    ColorProvider.getColor('onBackground', theme: 'dark'),
+                surface: ColorProvider.getColor('surface', theme: 'dark'),
+                onSurface: Colors.white,
+              ),
+            ),
+            themeMode: themeNotifier.isDark ? ThemeMode.dark : ThemeMode.light,
+            home: isAuthenticated ? const PostcardsPage() : const LoginPage(),
           ),
-        ),
-        darkTheme: ThemeData(
-          useMaterial3: true,
-          colorScheme: ColorScheme(
-            brightness: Brightness.dark,
-            primary: ColorProvider.getColor('primary', theme: 'dark'),
-            onPrimary: Colors.white,
-            secondary: ColorProvider.getColor('secondary', theme: 'dark'),
-            onSecondary: Colors.white,
-            primaryContainer:
-                ColorProvider.getColor('secondary', theme: 'dark'),
-            secondaryContainer:
-                ColorProvider.getColor('secondary', theme: 'dark'),
-            onSecondaryContainer:
-                ColorProvider.getColor('onSecondaryContainer', theme: 'dark'),
-            error: Colors.red,
-            onError: Colors.white,
-            background: ColorProvider.getColor('background', theme: 'dark'),
-            onBackground: ColorProvider.getColor('onBackground', theme: 'dark'),
-            surface: ColorProvider.getColor('surface', theme: 'dark'),
-            onSurface: Colors.white,
-          ),
-        ),
-        themeMode: ThemeMode.system,
-        home: isAuthenticated ? const PostcardsPage() : const LoginPage(),
-      ),
+        );
+      }),
     );
   }
 }

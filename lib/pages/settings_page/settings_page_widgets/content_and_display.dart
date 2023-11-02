@@ -11,9 +11,11 @@ import 'package:mobile/custom_widgets/custom_slider.dart';
 import 'package:mobile/custom_widgets/settings_switch.dart';
 import 'package:mobile/helpers/shared_preferences.dart';
 import 'package:flutter/foundation.dart';
+import 'package:mobile/providers/theme_provider.dart';
 import 'package:mobile/services/location_service/file_manager.dart';
 import 'package:mobile/services/location_service/location_callback_handler.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:provider/provider.dart';
 
 class ContentAndDisplay extends StatefulWidget {
   const ContentAndDisplay({
@@ -79,14 +81,19 @@ class _ContentAndDisplayState extends State<ContentAndDisplay> {
                       fontSize: 18,
                     ),
                   ),
-                  SwitchWidget(
-                    value: switchThemeValue,
-                    onChanged: (bool themeValue) {
-                      setState(() {
-                        switchThemeValue = themeValue;
-                      });
-                      AppSharedPreferences.saveThemePreference(themeValue);
-                    },
+                  Consumer<ThemeProvider>(
+                  builder: (context, ThemeProvider themeNotifier, child) {
+                    return SwitchWidget(
+                      value: switchThemeValue,
+                      onChanged: (bool themeValue) {
+                        setState(() {
+                          switchThemeValue = themeValue;
+                          themeNotifier.isDark = themeValue;
+                        });
+                        AppSharedPreferences.saveThemePreference(themeValue);
+                      },
+                    );
+                  }
                   )
                 ],
               ),
