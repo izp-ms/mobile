@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:mobile/api/request/login_request.dart';
 import 'package:mobile/cubit/auth_cubit/auth_cubit.dart';
 import 'package:mobile/cubit/auth_cubit/auth_state.dart';
@@ -8,9 +9,11 @@ import 'package:mobile/custom_widgets/custom_form_filed/custom_form_field.dart';
 import 'package:mobile/custom_widgets/submit_button.dart';
 import 'package:mobile/custom_widgets/switch_page_link.dart';
 import 'package:mobile/helpers/show_error_snack_bar.dart';
+import 'package:mobile/pages/admin_postcard_page/admin_postcard_management_page.dart';
 import 'package:mobile/pages/postcards_page/postcards_page.dart';
 import 'package:mobile/pages/register_page/register_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:mobile/services/secure_storage_service.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({
@@ -129,11 +132,31 @@ class _LoginFormState extends State<LoginForm> {
     }
   }
 
-  void _navigateToPostcardsPage(BuildContext context) {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => const PostcardsPage()),
-    );
+  Future<void> _navigateToPostcardsPage(BuildContext context) async {
+    final token = await SecureStorageService.read(key: 'token');
+    Map<String, dynamic> decodedToken = JwtDecoder.decode(token!);
+
+    if (decodedToken.containsKey(
+            'http://schemas.microsoft.com/ws/2008/06/identity/claims/role') &&
+        decodedToken[
+                'http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] ==
+            'ADMIN') {
+      if (context.mounted) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const AdminPostcardManagementPage(),
+          ),
+        );
+      }
+    } else {
+      if (context.mounted) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const PostcardsPage()),
+        );
+      }
+    }
   }
 
   void onSignUpLinkPress(BuildContext context) {
