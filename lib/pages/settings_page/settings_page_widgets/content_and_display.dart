@@ -11,9 +11,12 @@ import 'package:mobile/custom_widgets/custom_slider.dart';
 import 'package:mobile/custom_widgets/settings_switch.dart';
 import 'package:mobile/helpers/shared_preferences.dart';
 import 'package:flutter/foundation.dart';
+import 'package:mobile/providers/metric_system_provider.dart';
+import 'package:mobile/providers/theme_provider.dart';
 import 'package:mobile/services/location_service/file_manager.dart';
 import 'package:mobile/services/location_service/location_callback_handler.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:provider/provider.dart';
 
 class ContentAndDisplay extends StatefulWidget {
   const ContentAndDisplay({
@@ -22,12 +25,14 @@ class ContentAndDisplay extends StatefulWidget {
     required this.languageValue,
     required this.postcardLocationValue,
     required this.notificationRangeValue,
+    required this.useMetricSystem,
   }) : super(key: key);
 
   final String languageValue;
   final bool themeValue;
   final bool postcardLocationValue;
   final double notificationRangeValue;
+  final bool useMetricSystem;
 
   @override
   State<ContentAndDisplay> createState() => _ContentAndDisplayState();
@@ -37,12 +42,14 @@ class _ContentAndDisplayState extends State<ContentAndDisplay> {
   bool switchThemeValue = false;
   bool postcardLocationValue = false;
   double notificationRangeValue = 1000;
+  bool useMetricSystem = false;
 
   @override
   void initState() {
     super.initState();
     switchThemeValue = widget.themeValue;
     postcardLocationValue = widget.postcardLocationValue;
+    useMetricSystem = widget.useMetricSystem;
     notificationRangeValue = widget.notificationRangeValue;
   }
 
@@ -79,15 +86,19 @@ class _ContentAndDisplayState extends State<ContentAndDisplay> {
                       fontSize: 18,
                     ),
                   ),
-                  SwitchWidget(
-                    value: switchThemeValue,
-                    onChanged: (bool themeValue) {
-                      setState(() {
-                        switchThemeValue = themeValue;
-                      });
-                      AppSharedPreferences.saveThemePreference(themeValue);
-                    },
-                  )
+                  Consumer<ThemeProvider>(
+                      builder: (context, ThemeProvider themeNotifier, child) {
+                    return SwitchWidget(
+                      value: switchThemeValue,
+                      onChanged: (bool themeValue) {
+                        setState(() {
+                          switchThemeValue = themeValue;
+                          themeNotifier.isDark = themeValue;
+                        });
+                        AppSharedPreferences.saveThemePreference(themeValue);
+                      },
+                    );
+                  })
                 ],
               ),
               Row(
@@ -153,28 +164,31 @@ class _ContentAndDisplayState extends State<ContentAndDisplay> {
                 ),
               ),
               const SizedBox(height: 15),
-              Column(
-                children: [
-                  Row(children: [
-                    Text(
-                      "Notification range: ${notificationRangeValue.toInt()}m",
-                      style: GoogleFonts.rubik(
-                        fontSize: 18,
+              Consumer<MetricSystemProvider>(builder:
+                  (context, MetricSystemProvider metricNotifier, child) {
+                return Column(
+                  children: [
+                    Row(children: [
+                      Text(
+                        "Notification range: ${metricNotifier.isMetric ? (notificationRangeValue * 3.281).toInt() : notificationRangeValue.toInt()}${metricNotifier.isMetric ? "ft" : "m"}",
+                        style: GoogleFonts.rubik(
+                          fontSize: 18,
+                        ),
+                      ),
+                    ]),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 12.0),
+                      child: CustomSlider(
+                        notificationRangeValue: notificationRangeValue,
+                        onValueChange: onSliderValueChange,
+                        divisions: 18,
+                        minimum: 500,
+                        maximum: 5000,
                       ),
                     ),
-                  ]),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 12.0),
-                    child: CustomSlider(
-                      notificationRangeValue: notificationRangeValue,
-                      onValueChange: onSliderValueChange,
-                      divisions: 18,
-                      minimum: 500,
-                      maximum: 5000,
-                    ),
-                  ),
-                ],
-              )
+                  ],
+                );
+              })
             ],
           ),
         ),

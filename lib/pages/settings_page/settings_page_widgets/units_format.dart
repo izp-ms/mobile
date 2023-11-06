@@ -4,6 +4,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:mobile/custom_widgets/settings_switch.dart';
 import 'package:mobile/pages/settings_page/settings_page_widgets/components/settings_toggle_button.dart';
 import 'package:mobile/helpers/shared_preferences.dart';
+import 'package:mobile/providers/metric_system_provider.dart';
+import 'package:provider/provider.dart';
 
 class UnitsFormat extends StatefulWidget {
   const UnitsFormat({
@@ -27,7 +29,8 @@ class _UnitsFormatState extends State<UnitsFormat> {
   void initState() {
     super.initState();
     useMetricSystemValue = widget.metricSystemValue;
-    dateFormatToggleButtonIndex = widget.dateFormatValue == 'DD.MM.YYYY' ? 0 : 1;
+    dateFormatToggleButtonIndex =
+        widget.dateFormatValue == 'DD.MM.YYYY' ? 0 : 1;
   }
 
   @override
@@ -73,7 +76,8 @@ class _UnitsFormatState extends State<UnitsFormat> {
               SettingsToggleButtons(
                 initialSelectedIndex: dateFormatToggleButtonIndex,
                 onSelected: (int index) {
-                  AppSharedPreferences.saveDatePreference(index == 0 ? 'DD.MM.YYYY' : 'MM.DD.YYYY');
+                  AppSharedPreferences.saveDatePreference(
+                      index == 0 ? 'DD.MM.YYYY' : 'MM.DD.YYYY');
                 },
               ),
               const SizedBox(height: 5),
@@ -88,22 +92,26 @@ class _UnitsFormatState extends State<UnitsFormat> {
                         size: 25,
                       ),
                       Text(
-                        AppLocalizations.of(context).useMetricSystem,
+                        AppLocalizations.of(context).useImperialSystem,
                         style: GoogleFonts.rubik(
                           fontSize: 18,
                         ),
                       ),
                     ],
                   ),
-                  SwitchWidget(
-                    value: useMetricSystemValue,
-                    onChanged: (bool value) {
-                      setState(() {
-                        useMetricSystemValue = value;
-                      });
-                      AppSharedPreferences.saveMetricSystemPreference(value);
-                    },
-                  ),
+                  Consumer<MetricSystemProvider>(builder:
+                      (context, MetricSystemProvider metricNotifier, child) {
+                    return SwitchWidget(
+                      value: useMetricSystemValue,
+                      onChanged: (bool value) {
+                        setState(() {
+                          useMetricSystemValue = value;
+                          metricNotifier.isMetric = value;
+                        });
+                        AppSharedPreferences.saveMetricSystemPreference(value);
+                      },
+                    );
+                  }),
                 ],
               ),
             ],

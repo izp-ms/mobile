@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:mobile/pages/settings_page/settings_page_widgets/components/settings_dialog.dart';
 
 class PrivacySettings extends StatelessWidget {
   const PrivacySettings({
@@ -32,12 +33,18 @@ class PrivacySettings extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               GestureDetector(
-                onTap: () => {print("Nawigacja do terms and policies")},
+                onTap: () => showDialog<String>(
+                  context: context,
+                  builder: (BuildContext context) => SettingsDialog(
+                    dialogTitle: AppLocalizations.of(context).termsOfService,
+                    dialogContent: AppLocalizations.of(context).termsOfServiceContent,
+                  ),
+                ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      AppLocalizations.of(context).termsAndPolicies,
+                      AppLocalizations.of(context).termsOfService,
                       style: GoogleFonts.rubik(
                         fontSize: 18,
                       ),
@@ -53,7 +60,13 @@ class PrivacySettings extends StatelessWidget {
               ),
               const SizedBox(height: 15),
               GestureDetector(
-                onTap: () => {print("Nawigacja do privacy")},
+                onTap: () => showDialog<String>(
+                  context: context,
+                  builder: (BuildContext context) => SettingsDialog(
+                    dialogTitle: AppLocalizations.of(context).privacy,
+                    dialogContent: AppLocalizations.of(context).privacyContent,
+                  ),
+                ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -79,3 +92,5 @@ class PrivacySettings extends StatelessWidget {
     );
   }
 }
+
+

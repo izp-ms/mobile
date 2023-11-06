@@ -61,6 +61,7 @@ dependencies:
   shared_preferences:
   app_settings: ^5.1.1
   dotted_border:
+  provider:
 
 dev_dependencies:
   flutter_test:
