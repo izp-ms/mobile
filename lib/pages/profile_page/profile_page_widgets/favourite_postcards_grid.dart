@@ -81,8 +81,8 @@ class FavouritePostcardsGrid extends StatelessWidget {
           }
         },
         shrinkWrap: true,
-        physics: NeverScrollableScrollPhysics(),
-      ),
+      physics: NeverScrollableScrollPhysics(),
+    ),
     );
   }
 }

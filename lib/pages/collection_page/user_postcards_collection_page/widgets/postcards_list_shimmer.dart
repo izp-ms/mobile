@@ -5,29 +5,46 @@ class PostcardsListShimmer extends StatelessWidget {
   final int itemCount;
   final int crossAxisCount;
   final bool showDescription;
+  final String title;
 
   PostcardsListShimmer({
     required this.itemCount,
     required this.crossAxisCount,
     required this.showDescription,
+    this.title = "",
   });
 
   @override
   Widget build(BuildContext context) {
-    return GridView.builder(
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: crossAxisCount,
-        childAspectRatio: 0.7,
-      ),
-      itemCount: itemCount,
-      itemBuilder: (context, index) {
-        return Padding(
-          padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-          child: PostcardShimmer(showDescriptionShimmer: showDescription),
-        );
-      },
-      shrinkWrap: true,
-      physics: NeverScrollableScrollPhysics(), // Disable scrolling
+    return Column(
+      children: [
+        // Add a title widget here
+        if(title != "")
+        Text(
+          title,
+          style: TextStyle(
+            fontSize: 25, // Customize the font size as needed
+            fontWeight: FontWeight.bold, // Customize the font weight as needed
+          ),
+        ),
+        Flexible(
+          child: GridView.builder(
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: crossAxisCount,
+              childAspectRatio: 0.7,
+            ),
+            itemCount: itemCount,
+            itemBuilder: (context, index) {
+              return Padding(
+                padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                child: PostcardShimmer(showDescriptionShimmer: showDescription),
+              );
+            },
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(), // Disable scrolling
+          ),
+        ),
+      ],
     );
   }
 }

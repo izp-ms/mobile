@@ -15,6 +15,7 @@ class PostcardsDataGrid extends StatelessWidget {
   final bool isLoadingMore;
   final void Function(PostcardsDataResponse postcard)? postcardPopup;
   final bool obfuscateData;
+  final String title;
 
   PostcardsDataGrid({
     super.key,
@@ -25,7 +26,8 @@ class PostcardsDataGrid extends StatelessWidget {
     required this.isLoadingMore,
     required this.postcardPopup,
     this.obfuscateData = false,
-  }) {}
+    this.title = ""
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -39,32 +41,45 @@ class PostcardsDataGrid extends StatelessWidget {
         refreshCallback.call();
       },
       color: Theme.of(context).colorScheme.secondaryContainer,
-      child: GridView.builder(
+      child: CustomScrollView(
         controller: listScrollController,
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 3,
-          childAspectRatio: 0.7,
-        ),
-        itemCount: itemCount,
-        itemBuilder: (context, index) {
-          if (index < (postcardsData?.length ?? 0)) {
-            final postcard = postcardsData?[index];
-            final postcardImageBase64 = postcard?.imageBase64?.substring(23);
-            return GestureDetector(
-              onTap: () => postcardPopup?.call(
-                postcard!,
+        slivers: <Widget>[
+          SliverList(
+            delegate: SliverChildListDelegate([
+              if(title != "")
+              Center(
+                child: Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: 25, // Customize the font size as needed
+                    fontWeight: FontWeight.bold, // Customize the font weight as needed
+                  ),
+                ),
               ),
-              child: Column(
-                children: <Widget>[
-                  if (postcardImageBase64 != null &&
-                      isBase64Valid(postcardImageBase64))
-                    //if (postcardImageBase64 != null)
-                    AspectRatio(
-                      aspectRatio: 1, // 1:1 square
-                      child: Container(
-                        padding: const EdgeInsets.all(10),
-                        child: obfuscateData
-                            ? ColorFiltered(
+            ]),
+          ),
+          SliverGrid(
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 3,
+              childAspectRatio: 0.7,
+            ),
+            delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                if (index < (postcardsData?.length ?? 0)) {
+                  final postcard = postcardsData?[index];
+                  final postcardImageBase64 = postcard?.imageBase64?.substring(23);
+                  return GestureDetector(
+                    onTap: () => postcardPopup?.call(postcard!),
+                    child: Column(
+                      children: <Widget>[
+                        if (postcardImageBase64 != null &&
+                            isBase64Valid(postcardImageBase64))
+                          AspectRatio(
+                            aspectRatio: 1, // 1:1 square
+                            child: Container(
+                              padding: const EdgeInsets.all(10),
+                              child: obfuscateData
+                                  ? ColorFiltered(
                                 colorFilter: const ColorFilter.mode(
                                     Colors.grey, BlendMode.saturation),
                                 child: CachedMemoryImage(
@@ -74,19 +89,19 @@ class PostcardsDataGrid extends StatelessWidget {
                                   fit: BoxFit.contain,
                                 ),
                               )
-                            : CachedMemoryImage(
+                                  : CachedMemoryImage(
                                 uniqueKey: postcard!.title.toString(),
                                 errorWidget: const Text('Error'),
                                 bytes: base64Decode(postcardImageBase64!),
                                 fit: BoxFit.contain,
                               ),
-                      ),
-                    )
-                  else
-                    AspectRatio(
-                      aspectRatio: 1, // 1:1 square
-                      child: obfuscateData
-                          ? ColorFiltered(
+                            ),
+                          )
+                        else
+                          AspectRatio(
+                            aspectRatio: 1, // 1:1 square
+                            child: obfuscateData
+                                ? ColorFiltered(
                               colorFilter: const ColorFilter.mode(
                                   Colors.grey, BlendMode.saturation),
                               child: Container(
@@ -96,35 +111,39 @@ class PostcardsDataGrid extends StatelessWidget {
                                     fit: BoxFit.contain),
                               ),
                             )
-                          : Container(
+                                : Container(
                               padding: const EdgeInsets.all(10),
                               child: SvgPicture.asset(
                                   "assets/postcards/First.svg",
                                   fit: BoxFit.contain),
                             ),
+                          ),
+                        Flexible(
+                          child: Text(
+                            postcard?.title ?? '',
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        Flexible(
+                          child: Text(
+                            "${postcard?.country ?? ''}, ${postcard?.city ?? ''}",
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
                     ),
-                  Flexible(
-                    child: Text(
-                      postcard?.title ?? '',
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                  Flexible(
-                    child: Text(
-                      "${postcard?.country ?? ''}, ${postcard?.city ?? ''}",
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                ],
-              ),
-            );
-          } else {
-            return Padding(
-              padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-              child: PostcardShimmer(),
-            );
-          }
-        },
+                  );
+                } else {
+                  return Padding(
+                    padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                    child: PostcardShimmer(),
+                  );
+                }
+              },
+              childCount: itemCount,
+            ),
+          ),
+        ],
       ),
     );
   }

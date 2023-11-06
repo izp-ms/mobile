@@ -24,9 +24,15 @@ class CollectionPageAppBar extends StatelessWidget implements PreferredSizeWidge
         },
       ),
       bottom: TabBar(
+        indicatorSize: TabBarIndicatorSize.label, // Set indicatorSize to label
+        indicatorWeight: 2.0, // Adjust the indicatorWeight as needed
         tabs: [
-          Tab(icon: Icon(Icons.collections, color: Theme.of(context).colorScheme.secondary)),
-          Tab(icon: Icon(Icons.collections_bookmark, color: Theme.of(context).colorScheme.secondary,)),
+          Tab(
+            icon: Icon(Icons.collections, color: Theme.of(context).colorScheme.secondary),
+          ),
+          Tab(
+            icon: Icon(Icons.collections_bookmark, color: Theme.of(context).colorScheme.secondary),
+          ),
         ],
       ),
     );

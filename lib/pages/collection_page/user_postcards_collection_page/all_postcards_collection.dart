@@ -3,10 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile/api/response/postcard_data_response.dart';
 import 'package:mobile/cubit/postcards_cubits/postcards_data_cubit/postcards_data_collection_cubit.dart';
 import 'package:mobile/cubit/postcards_cubits/postcards_data_cubit/postcards_data_collection_state.dart';
+import 'package:mobile/custom_widgets/custom_form_filed/custom_form_field.dart';
 import 'package:mobile/helpers/show_error_snack_bar.dart';
 import 'package:mobile/pages/collection_page/user_postcards_collection_page/widgets/postcard_data_details.dart';
 import 'package:mobile/pages/collection_page/user_postcards_collection_page/widgets/postcards_data_grid.dart';
 import 'package:mobile/pages/collection_page/user_postcards_collection_page/widgets/postcards_list_shimmer.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AllPostcardsCollectionPage extends StatefulWidget {
   const AllPostcardsCollectionPage({Key? key})
@@ -24,14 +26,20 @@ class _AllPostcardsCollectionPageState extends State<AllPostcardsCollectionPage>
   @override
   void initState() {
     super.initState();
-    context.read<PostcardsDataCollectionCubit>().clearUserPostcardsDataCollection();
-    context.read<PostcardsDataCollectionCubit>().currentPage = 1;
+    context.read<PostcardsDataCollectionCubit>()
+        .clearUserPostcardsDataCollection();
+    context
+        .read<PostcardsDataCollectionCubit>()
+        .currentPage = 1;
     context.read<PostcardsDataCollectionCubit>().getPostcardData(true);
   }
 
   Future _refresh() async {
-    context.read<PostcardsDataCollectionCubit>().clearUserPostcardsDataCollection();
-    context.read<PostcardsDataCollectionCubit>().currentPage = 1;
+    context.read<PostcardsDataCollectionCubit>()
+        .clearUserPostcardsDataCollection();
+    context
+        .read<PostcardsDataCollectionCubit>()
+        .currentPage = 1;
     context.read<PostcardsDataCollectionCubit>().getPostcardData(true);
   }
 
@@ -42,7 +50,8 @@ class _AllPostcardsCollectionPageState extends State<AllPostcardsCollectionPage>
     listScrollController.addListener(() {
       if (listScrollController.position.atEdge) {
         if (listScrollController.position.pixels != 0) {
-          BlocProvider.of<PostcardsDataCollectionCubit>(context).getPostcardData(showAllPostcardsCollection);
+          BlocProvider.of<PostcardsDataCollectionCubit>(context)
+              .getPostcardData(showAllPostcardsCollection);
         }
       }
     });
@@ -52,43 +61,80 @@ class _AllPostcardsCollectionPageState extends State<AllPostcardsCollectionPage>
   Widget build(BuildContext context) {
     super.build(context);
     setupScrollController(true);
-    return BlocConsumer<PostcardsDataCollectionCubit, PostcardsDataCollectionState>(
-      listener: (context, state) {
-        if (state is ErrorState) {
-          showErrorSnackBar(context, state.errorMessage);
-        }
-      },
-      builder: (context, state) {
-        if (state is LoadingState && state.isFirstFetch) {
-          return PostcardsListShimmer(itemCount: 12, crossAxisCount: 3 ,showDescription: true,);
-        }
+    return Column(
+      children: [
+        SizedBox(height: 15,),
 
-        List<PostcardsDataResponse>? postcardsData = [];
-        isLoadingMore = false;
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            SizedBox(width: 15,),
+            Expanded(
+              child: CustomFormField(
+                onSaved: (newValue) {
+                  if (newValue == null) return;
+                  print("TEST");
+                },
+                hintText: "Search something",
+                inputIcon: Icons.search,
+                autovalidateMode: AutovalidateMode.disabled,
+              ),
+            ),
+            SizedBox(width: 15,),
+            Icon(Icons.sort, color: Theme.of(context).colorScheme.secondary,),
+            SizedBox(width: 15,),
+            Icon(Icons.sort_by_alpha, color: Theme.of(context).colorScheme.secondary,),
+            SizedBox(width: 15,),
+          ],
+        ),
 
-        if (state is LoadingState) {
-          postcardsData = state.oldPostcardsData.content;
-          if (postcardsData!.length <
-              (state.oldPostcardsData.totalCount ?? 0)) {
-            isLoadingMore = true;
-          }
-        } else if (state is LoadedState) {
-          postcardsData = state.postcardsData.content;
-        }
+        SizedBox(height: 15,),
 
-        return PostcardsDataGrid(
-          listScrollController: listScrollController,
-          postcardsData: postcardsData,
-          refreshCallback: _refresh,
-          parentContext: context,
-          isLoadingMore: isLoadingMore,
-          postcardPopup: (postcard) {
-            showImageDialog(context, postcard!, obfuscateData: true);
+        BlocConsumer<PostcardsDataCollectionCubit, PostcardsDataCollectionState>(
+          listener: (context, state) {
+            if (state is ErrorState) {
+              showErrorSnackBar(context, state.errorMessage);
+            }
           },
-          obfuscateData: true,
-        );
-      },
+          builder: (context, state) {
+            if (state is LoadingState && state.isFirstFetch) {
+              return Flexible(
+                child: PostcardsListShimmer(
+                    itemCount: 12, crossAxisCount: 3, showDescription: true, title: "All postcards",),
+              );
+            }
+
+            List<PostcardsDataResponse>? postcardsData = [];
+            isLoadingMore = false;
+
+            if (state is LoadingState) {
+              postcardsData = state.oldPostcardsData.content;
+              if (postcardsData!.length <
+                  (state.oldPostcardsData.totalCount ?? 0)) {
+                isLoadingMore = true;
+              }
+            } else if (state is LoadedState) {
+              postcardsData = state.postcardsData.content;
+            }
+
+
+            return Flexible(
+              child: PostcardsDataGrid(
+                listScrollController: listScrollController,
+                postcardsData: postcardsData,
+                refreshCallback: _refresh,
+                parentContext: context,
+                isLoadingMore: isLoadingMore,
+                postcardPopup: (postcard) {
+                  showImageDialog(context, postcard!, obfuscateData: true);
+                },
+                obfuscateData: true,
+                title: "All postcards",
+              ),
+            );
+          },
+        ),
+      ],
     );
   }
 }
-
