@@ -61,7 +61,7 @@ class _UserPostcardsCollectionPageState extends State<UserPostcardsCollectionPag
       },
       builder: (context, state) {
         if (state is LoadingState && state.isFirstFetch) {
-          return PostcardsListShimmer();
+          return PostcardsListShimmer(itemCount: 12, crossAxisCount: 3 ,showDescription: true,);
         }
 
         List<PostcardsDataResponse>? postcardsData = [];

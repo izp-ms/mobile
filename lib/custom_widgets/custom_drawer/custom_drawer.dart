@@ -121,7 +121,7 @@ class CustomDrawer extends Drawer {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
-        builder: (context) => const PostcardsPage(),
+        builder: (context) => PostcardsPage(),
       ),
     );
   }

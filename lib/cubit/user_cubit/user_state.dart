@@ -1,3 +1,4 @@
+import 'package:mobile/api/response/postcards_list_response.dart';
 import 'package:mobile/api/response/user_detail_response.dart';
 
 abstract class UserState {}
@@ -14,5 +15,6 @@ class ErrorState extends UserState {
 class LoadedState extends UserState {
   final UserDetailResponse userDetail;
   final String nickName;
-  LoadedState(this.userDetail, this.nickName);
+  final PostcardsListResponse favouritePostcards;
+  LoadedState(this.userDetail, this.nickName, this.favouritePostcards);
 }

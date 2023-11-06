@@ -7,7 +7,11 @@ import 'package:mobile/cubit/user_cubit/user_state.dart';
 import 'package:mobile/custom_widgets/custom_drawer/custom_drawer.dart';
 import 'package:mobile/custom_widgets/custom_appbars/main_page_app_bar.dart';
 import 'package:mobile/helpers/show_error_snack_bar.dart';
+import 'package:mobile/pages/collection_page/user_postcards_collection_page/widgets/postcard_shimmer.dart';
+import 'package:mobile/pages/collection_page/user_postcards_collection_page/widgets/postcards_list_shimmer.dart';
 import 'package:mobile/pages/edit_user_details_page/edit_user_details_page.dart';
+import 'package:mobile/pages/postcards_page/widgets/postcard_details.dart';
+import 'package:mobile/pages/profile_page/profile_page_widgets/favourite_postcards_grid.dart';
 import 'package:mobile/pages/profile_page/profile_page_widgets/personal_info_section/personal_info_section.dart';
 import 'package:mobile/pages/profile_page/profile_page_widgets/profile_pictures_stack/profile_pictures_stack.dart';
 import 'package:mobile/pages/profile_page/profile_page_widgets/statistics_section/statistics_section.dart';
@@ -126,61 +130,69 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
                 Container(
                   padding: const EdgeInsets.all(30),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  child: Column(
                     children: [
-                      Text(
-                        AppLocalizations.of(context).favouritePostcards,
-                        style: GoogleFonts.rubik(
-                          fontSize: 18,
-                        ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            AppLocalizations.of(context).favouritePostcards,
+                            style: GoogleFonts.rubik(
+                              fontSize: 18,
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              if (state is LoadedState) {
+                                final favouritePostcards =
+                                    state.favouritePostcards;
+                                final content = favouritePostcards.content;
+                                if (content != null && content.isNotEmpty) {
+                                  for (var postcard in content) {
+                                    print(postcard.toString());
+                                  }
+                                } else {
+                                  print("Favorite postcards content is empty.");
+                                }
+                              }
+                            },
+                            child: Row(
+                              children: [
+                                const Icon(
+                                  Icons.mode_edit_outlined,
+                                  size: 15,
+                                ),
+                                const SizedBox(
+                                  width: 3,
+                                ),
+                                Text(
+                                  AppLocalizations.of(context).editFavourite,
+                                  style: GoogleFonts.rubik(
+                                    fontSize: 10,
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
-                      GestureDetector(
-                        onTap: () => {
-                          print("Navigacja do modala do edytowania pocztówek")
-                        },
-                        child: Row(
-                          children: [
-                            const Icon(
-                              Icons.mode_edit_outlined,
-                              size: 15,
-                            ),
-                            const SizedBox(
-                              width: 3,
-                            ),
-                            Text(
-                              AppLocalizations.of(context).editFavourite,
-                              style: GoogleFonts.rubik(
-                                fontSize: 10,
-                              ),
-                            )
-                          ],
-                        ),
-                      )
                     ],
                   ),
                 ),
-                GridView.builder(
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                if (state is LoadedState)
+                  FavouritePostcardsGrid(
+                      postcardsData: state.favouritePostcards.content,
+                      refreshCallback: _refresh,
+                      parentContext: context,
+                      postcardPopup: (postcard) {
+                        showPostcardDialog(context, postcard!);
+                      },)
+                else
+                  PostcardsListShimmer(
+                    itemCount: 6,
                     crossAxisCount: 3,
-                    crossAxisSpacing: 32,
-                    mainAxisSpacing: 20,
-                    childAspectRatio: 3 / 4,
-                  ),
-                  padding: const EdgeInsets.symmetric(horizontal: 30),
-                  physics: const NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: 9,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Container(
-                      color: Colors.white,
-                      child: Padding(
-                        padding: const EdgeInsets.all(7),
-                        child: SvgPicture.asset('assets/postcards/First.svg'),
-                      ),
-                    );
-                  },
-                ),
+                    showDescription: false,
+                  )
               ],
             ),
           );

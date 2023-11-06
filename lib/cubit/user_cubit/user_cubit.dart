@@ -2,18 +2,21 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:mobile/api/request/user_detail_request.dart';
 import 'package:mobile/cubit/user_cubit/user_state.dart';
+import 'package:mobile/services/postcard_service.dart';
 import 'package:mobile/services/secure_storage_service.dart';
 import 'package:mobile/services/user_service.dart';
 
 class UserCubit extends Cubit<UserState> {
   final UserService _repository;
+  final PostcardService _favouritePostcardsRepository;
 
-  UserCubit(this._repository) : super(InitState());
+  UserCubit(this._repository, this._favouritePostcardsRepository) : super(InitState());
 
   Future<void> getUserDetail() async {
     emit(LoadingState());
     try {
       final response = await _repository.getUserDetail();
+      final favouritePostacrdsResponse = await _favouritePostcardsRepository.getFavouritePostcards();
 
       String nickName = "";
 
@@ -24,7 +27,7 @@ class UserCubit extends Cubit<UserState> {
             "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"];
       }
 
-      emit(LoadedState(response, nickName));
+      emit(LoadedState(response, nickName, favouritePostacrdsResponse));
     } catch (e) {
       emit(
         ErrorState(e.toString()),

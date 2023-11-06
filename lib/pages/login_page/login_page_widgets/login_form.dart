@@ -132,7 +132,7 @@ class _LoginFormState extends State<LoginForm> {
   void _navigateToPostcardsPage(BuildContext context) {
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => const PostcardsPage()),
+      MaterialPageRoute(builder: (context) => PostcardsPage()),
     );
   }
 

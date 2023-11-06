@@ -61,7 +61,7 @@ class _UnsentPostcardsPageState extends State<UnsentPostcardsPage> with Automati
       },
       builder: (context, state) {
         if (state is LoadingState && state.isFirstFetch) {
-          return PostcardsListShimmer();
+          return PostcardsListShimmer(itemCount: 12, crossAxisCount: 3 ,showDescription: true,);
         }
 
         List<PostcardsResponse>? postcardsData = [];

@@ -13,4 +13,11 @@ class PostcardsListResponse {
     userId = json['userId'];
     content = json['postcardDataIds'].toList();
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'userId': userId,
+      'postcardDataIds': content,
+    };
+  }
 }

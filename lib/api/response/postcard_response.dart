@@ -32,6 +32,11 @@ class PostcardsResponse {
         this.latitude,
         this.collectRangeInMeters,});
 
+  @override
+  String toString() {
+    return 'PostcardsResponse(id: $id, title: $title, content: $content';
+  }
+
   PostcardsResponse.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     title = json['title'];

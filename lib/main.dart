@@ -6,7 +6,6 @@ import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:mobile/constants/ColorProvider.dart';
 import 'package:mobile/cubit/auth_cubit/auth_cubit.dart';
 import 'package:mobile/cubit/postcards_cubits/collect_postcard_cubit/collect_postcard_cubit.dart';
-import 'package:mobile/cubit/postcards_cubits/favourite_postcards_cubit/favourite_postcards_cubit.dart';
 import 'package:mobile/cubit/postcards_cubits/postcards_collection_cubit/postcards_collection_cubit.dart';
 import 'package:mobile/cubit/postcards_cubits/postcards_data_cubit/postcards_data_collection_cubit.dart';
 import 'package:mobile/cubit/postcards_cubits/postcards_data_collection_cubit/postcards_data_cubit.dart';
@@ -66,7 +65,7 @@ class MyApp extends StatelessWidget {
               create: (context) => AuthCubit(AuthService()),
             ),
             BlocProvider<UserCubit>(
-              create: (context) => UserCubit(UserService()),
+              create: (context) => UserCubit(UserService(), PostcardService()),
             ),
             BlocProvider<CollectPostcardCubit>(
               create: (context) => CollectPostcardCubit(CollectPostcardService()),
@@ -82,9 +81,6 @@ class MyApp extends StatelessWidget {
             ),
             BlocProvider<ReceivedPostcardsCubit>(
               create: (context) => ReceivedPostcardsCubit(PostcardService()),
-            ),
-            BlocProvider<FavouritePostcardsCubit>(
-              create: (context) => FavouritePostcardsCubit(PostcardService()),
             ),
             BlocProvider<PostcardsCollectionCubit>(
               create: (context) => PostcardsCollectionCubit(PostcardService()),
