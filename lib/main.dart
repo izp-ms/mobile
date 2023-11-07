@@ -61,7 +61,7 @@ class MyApp extends StatelessWidget {
             decodedToken[
                     'http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] ==
                 'ADMIN') {
-          isAdmin = true;
+          isAdmin = false;
         }
         isAuthenticated = true;
       }

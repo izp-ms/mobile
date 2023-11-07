@@ -64,7 +64,7 @@ class _AllPostcardsCollectionPageState extends State<AllPostcardsCollectionPage>
       if (listScrollController.position.atEdge) {
         if (listScrollController.position.pixels != 0) {
           BlocProvider.of<PostcardsDataCollectionCubit>(context)
-              .getPostcardData(showAllPostcardsCollection);
+              .getPostcardData(showAllPostcardsCollection, search, city, country, dateFrom, dateTo, orderBy);
         }
       }
     });
