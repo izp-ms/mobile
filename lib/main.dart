@@ -12,6 +12,7 @@ import 'package:mobile/cubit/postcards_cubits/postcards_data_collection_cubit/po
 import 'package:mobile/cubit/postcards_cubits/received_postcards_cubit/received_postcards_cubit.dart';
 import 'package:mobile/cubit/postcards_cubits/unsent_postcards_cubit/unsent_postcards_cubit.dart';
 import 'package:mobile/cubit/user_cubit/user_cubit.dart';
+import 'package:mobile/pages/admin_postcard_page/admin_postcard_management_page.dart';
 import 'package:mobile/pages/login_page/login_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:mobile/pages/postcards_page/postcards_page.dart';
@@ -49,8 +50,19 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool isAuthenticated = false;
+    bool isAdmin = false;
+
     if (token != null) {
+      Map<String, dynamic> decodedToken = JwtDecoder.decode(token!);
+
       if (!JwtDecoder.isExpired(token!)) {
+        if (decodedToken.containsKey(
+                'http://schemas.microsoft.com/ws/2008/06/identity/claims/role') &&
+            decodedToken[
+                    'http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] ==
+                'ADMIN') {
+          isAdmin = true;
+        }
         isAuthenticated = true;
       }
     }
@@ -148,7 +160,11 @@ class MyApp extends StatelessWidget {
               ),
             ),
             themeMode: themeNotifier.isDark ? ThemeMode.dark : ThemeMode.light,
-            home: isAuthenticated ? const PostcardsPage() : const LoginPage(),
+            home: isAuthenticated
+                ? isAdmin
+                    ? const AdminPostcardManagementPage()
+                    : const PostcardsPage()
+                : const LoginPage(),
           ),
         );
       }),
