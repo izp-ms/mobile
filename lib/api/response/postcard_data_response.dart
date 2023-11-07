@@ -1,3 +1,5 @@
+import 'package:mobile/helpers/date_extractor.dart';
+
 class PostcardsDataResponse {
   int? id;
   String? imageBase64;
@@ -7,6 +9,7 @@ class PostcardsDataResponse {
   String? longitude;
   String? latitude;
   int? collectRangeInMeters;
+  String? createdAt;
 
   PostcardsDataResponse(
       {this.id,
@@ -16,7 +19,9 @@ class PostcardsDataResponse {
         this.title,
         this.longitude,
         this.latitude,
-        this.collectRangeInMeters});
+        this.collectRangeInMeters,
+        this.createdAt
+      });
 
   PostcardsDataResponse.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -27,6 +32,7 @@ class PostcardsDataResponse {
     longitude = json['longitude'];
     latitude = json['latitude'];
     collectRangeInMeters = json['collectRangeInMeters'];
+    createdAt = dateExtractor(json['createdAt']);
   }
 
   Map<String, dynamic> toJson() {
@@ -39,6 +45,7 @@ class PostcardsDataResponse {
     data['longitude'] = longitude;
     data['latitude'] = latitude;
     data['collectRangeInMeters'] = collectRangeInMeters;
+    data['createdAt'] = dateExtractor(createdAt);
     return data;
   }
 }

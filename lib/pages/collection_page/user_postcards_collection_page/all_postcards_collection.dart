@@ -3,8 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile/api/response/postcard_data_response.dart';
 import 'package:mobile/cubit/postcards_cubits/postcards_data_cubit/postcards_data_collection_cubit.dart';
 import 'package:mobile/cubit/postcards_cubits/postcards_data_cubit/postcards_data_collection_state.dart';
+import 'package:mobile/custom_widgets/CustomRadioBox.dart';
 import 'package:mobile/custom_widgets/custom_form_filed/custom_form_field.dart';
+import 'package:mobile/custom_widgets/custom_form_filed/styled.dart';
 import 'package:mobile/helpers/show_error_snack_bar.dart';
+import 'package:mobile/pages/collection_page/user_postcards_collection_page/widgets/FilterDialog.dart';
+import 'package:mobile/pages/collection_page/user_postcards_collection_page/widgets/SortDialog.dart';
 import 'package:mobile/pages/collection_page/user_postcards_collection_page/widgets/postcard_data_details.dart';
 import 'package:mobile/pages/collection_page/user_postcards_collection_page/widgets/postcards_data_grid.dart';
 import 'package:mobile/pages/collection_page/user_postcards_collection_page/widgets/postcards_list_shimmer.dart';
@@ -31,16 +35,25 @@ class _AllPostcardsCollectionPageState extends State<AllPostcardsCollectionPage>
     context
         .read<PostcardsDataCollectionCubit>()
         .currentPage = 1;
-    context.read<PostcardsDataCollectionCubit>().getPostcardData(true);
+    context.read<PostcardsDataCollectionCubit>().getPostcardData(true, search, city, country, dateFrom, dateTo, orderBy);
   }
 
   Future _refresh() async {
+    FocusScope.of(context).unfocus();
     context.read<PostcardsDataCollectionCubit>()
         .clearUserPostcardsDataCollection();
     context
         .read<PostcardsDataCollectionCubit>()
         .currentPage = 1;
-    context.read<PostcardsDataCollectionCubit>().getPostcardData(true);
+    context.read<PostcardsDataCollectionCubit>().getPostcardData(true, search, city, country, dateFrom, dateTo, orderBy);
+    print("=============");
+    print(search);
+    print(city);
+    print(country);
+    print(dateFrom);
+    print(dateTo);
+    print(orderBy);
+    print("=============");
   }
 
   bool isLoadingMore = false;
@@ -57,6 +70,56 @@ class _AllPostcardsCollectionPageState extends State<AllPostcardsCollectionPage>
     });
   }
 
+  String search = ""; //Palmiarnia
+  String city = ""; //Gliwice
+  String country = ""; //Poland
+  String dateFrom = ""; //2021-03-15T00:00:00
+  String dateTo = ""; //2021-03-15T00:00:00
+  String orderBy = "date"; //-city
+
+  TextEditingController searchController = TextEditingController();
+
+  void _showSortDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext dialogContext) {
+        return SortDialog(
+          initialOrderBy: orderBy, // Pass the initial sorting option
+          onApply: (selectedOrderBy) {
+            setState(() {
+              orderBy = selectedOrderBy; // Update the orderBy variable
+            });
+            _refresh(); // Refresh the data with the new sorting option
+          },
+        );
+      },
+    );
+  }
+
+  void _showFilterDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext dialogContext) {
+        return FilterDialog(
+          city: city,
+          country: country,
+          dateFrom: dateFrom,
+          dateTo: dateTo,
+          onApply: (newCity, newCountry, newDateFrom, newDateTo) {
+            setState(() {
+              city = newCity;
+              country = newCountry;
+              dateFrom = newDateFrom;
+              dateTo = newDateTo;
+            });
+            _refresh(); // Refresh the data with the new filters
+          },
+        );
+      },
+    );
+  }
+
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -70,20 +133,33 @@ class _AllPostcardsCollectionPageState extends State<AllPostcardsCollectionPage>
           children: [
             SizedBox(width: 15,),
             Expanded(
-              child: CustomFormField(
-                onSaved: (newValue) {
-                  if (newValue == null) return;
-                  print("TEST");
+              child: TextFormField(
+                controller: searchController,
+                onChanged: (value) {
+                  setState(() {
+                    search = value;
+                  });
                 },
-                hintText: "Search something",
-                inputIcon: Icons.search,
-                autovalidateMode: AutovalidateMode.disabled,
+                onEditingComplete: () {
+                  _refresh();
+                },
+                decoration: customTextFieldDecoration(context, "Search something", Icons.search),
               ),
             ),
             SizedBox(width: 15,),
-            Icon(Icons.sort, color: Theme.of(context).colorScheme.secondary,),
+            GestureDetector(
+              onTap: () {
+                _showFilterDialog(context);
+              },
+              child: Icon(Icons.sort, color: Theme.of(context).colorScheme.secondary,),
+            ),
             SizedBox(width: 15,),
-            Icon(Icons.sort_by_alpha, color: Theme.of(context).colorScheme.secondary,),
+            GestureDetector(
+              onTap: () {
+                _showSortDialog(context);
+              },
+              child: Icon(Icons.sort_by_alpha, color: Theme.of(context).colorScheme.secondary,),
+            ),
             SizedBox(width: 15,),
           ],
         ),
@@ -100,7 +176,7 @@ class _AllPostcardsCollectionPageState extends State<AllPostcardsCollectionPage>
             if (state is LoadingState && state.isFirstFetch) {
               return Flexible(
                 child: PostcardsListShimmer(
-                    itemCount: 12, crossAxisCount: 3, showDescription: true, title: "All postcards",),
+                  itemCount: 12, crossAxisCount: 3, showDescription: true, title: "All postcards",),
               );
             }
 

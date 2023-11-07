@@ -277,7 +277,6 @@ class _EditUserDetailsPageState extends State<EditUserDetailsPage> {
   }
 
   Row _backgroundImagePicker(BuildContext context) {
-    print(isBase64Valid(_backgroundImageBase64));
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [

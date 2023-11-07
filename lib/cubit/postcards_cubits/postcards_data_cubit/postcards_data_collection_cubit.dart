@@ -9,7 +9,7 @@ class PostcardsDataCollectionCubit extends Cubit<PostcardsDataCollectionState> {
   int currentPage = 1;
   final PostcardService _repository;
 
-  Future<void> getPostcardData([bool showAllPostcardsCollection = false]) async {
+  Future<void> getPostcardData([bool showAllPostcardsCollection = false, String search = "", String city ="", String country="", String dateFrom="", String dateTo="", String orderBy=""]) async {
     if (state is LoadingState) return;
 
     final currentState = state;
@@ -21,12 +21,14 @@ class PostcardsDataCollectionCubit extends Cubit<PostcardsDataCollectionState> {
     emit(LoadingState(oldPostcardsData, isFirstFetch: currentPage == 1));
 
     try {
-      final newPostcardsData = await _repository.getPostcardData(currentPage, showAllPostcardsCollection);
+      print("CURRENT PAGE");
+      print(currentPage);
+      final newPostcardsData = await _repository.getPostcardData(currentPage, showAllPostcardsCollection, search, city, country, dateFrom, dateTo, orderBy);
       var postcardsData = (state as LoadingState).oldPostcardsData;
       postcardsData.totalCount = newPostcardsData.totalCount;
       postcardsData.content?.addAll(newPostcardsData.content ?? []);
-      currentPage++;
       emit(LoadedState(postcardsData));
+      currentPage++;
     } catch (e) {
       emit(ErrorState(e.toString()));
     }

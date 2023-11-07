@@ -50,5 +50,13 @@ InputDecoration customTextFieldDecoration(context, hintText, inputIcon) {
         width: 1,
       ),
     ),
+    disabledBorder: const OutlineInputBorder(
+      borderRadius: BorderRadius.all(
+        Radius.circular(25),
+      ),
+      borderSide: BorderSide(
+        color: Colors.transparent,
+      ),
+    ),
   );
 }

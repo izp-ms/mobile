@@ -13,15 +13,46 @@ class PostcardService {
   final String _baseUrl = ApiConstants.baseUrl;
   static const FETCH_LIMIT = 12;
 
-  Future<PostcardsDataListResponse> getPostcardData(int pageNumber, bool showAllPostcardsCollection) async {
+  Future<PostcardsDataListResponse> getPostcardData(int pageNumber, bool showAllPostcardsCollection, String search, String city, String country, String dateFrom, String dateTo, String orderBy) async {
     final token = await SecureStorageService.read(key: 'token');
     Map<String, dynamic> decodedToken = JwtDecoder.decode(token!);
     String userId = decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'];
 
     var url = '$_baseUrl/PostcardData?pageNumber=$pageNumber&pageSize=$FETCH_LIMIT';
     if(!showAllPostcardsCollection){
-      url = '$_baseUrl/PostcardData?pageNumber=$pageNumber&pageSize=$FETCH_LIMIT&userId=$userId';
+      url = '$url&userId=$userId';
     }
+    if(search != null && search != ""){
+      url = '$url&Search=$search';
+    }
+
+    if(city != null && city != ""){
+      url = '$url&City=$city';
+    }
+
+    if(country != null && country != ""){
+      url = '$url&Country=$country';
+    }
+
+    if(dateFrom != null && dateFrom != ""){
+      String modifiedDate = dateFrom.replaceAll(":", "%3A");
+      url = '$url&DateFrom=$modifiedDate';
+    }
+
+    if(dateTo != null && dateTo != ""){
+      String modifiedDate = dateTo.replaceAll(":", "%3A");
+      url = '$url&DateTo=$modifiedDate';
+    }
+
+    if(orderBy != null && orderBy != ""){
+      url = '$url&OrderBy=$orderBy';
+    }
+
+    //PostcardData?PageNumber=1&PageSize=12&Search=Palmiarnia&City=Gliwice&Country=Poland&DateFrom=2001-03-15T00%3A00%3A00&DateTo=2024-03-15T00%3A00%3A00&OrderBy=-date'
+
+
+
+
 
     final uri = Uri.parse(url);
 

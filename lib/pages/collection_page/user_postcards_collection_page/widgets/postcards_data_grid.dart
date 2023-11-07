@@ -17,17 +17,16 @@ class PostcardsDataGrid extends StatelessWidget {
   final bool obfuscateData;
   final String title;
 
-  PostcardsDataGrid({
-    super.key,
-    required this.listScrollController,
-    required this.postcardsData,
-    required this.refreshCallback,
-    required this.parentContext,
-    required this.isLoadingMore,
-    required this.postcardPopup,
-    this.obfuscateData = false,
-    this.title = ""
-  });
+  PostcardsDataGrid(
+      {super.key,
+      required this.listScrollController,
+      required this.postcardsData,
+      required this.refreshCallback,
+      required this.parentContext,
+      required this.isLoadingMore,
+      required this.postcardPopup,
+      this.obfuscateData = false,
+      this.title = ""});
 
   @override
   Widget build(BuildContext context) {
@@ -46,16 +45,17 @@ class PostcardsDataGrid extends StatelessWidget {
         slivers: <Widget>[
           SliverList(
             delegate: SliverChildListDelegate([
-              if(title != "")
-              Center(
-                child: Text(
-                  title,
-                  style: TextStyle(
-                    fontSize: 25, // Customize the font size as needed
-                    fontWeight: FontWeight.bold, // Customize the font weight as needed
+              if (title != "")
+                Center(
+                  child: Text(
+                    title,
+                    style: TextStyle(
+                      fontSize: 25, // Customize the font size as needed
+                      fontWeight: FontWeight
+                          .bold, // Customize the font weight as needed
+                    ),
                   ),
                 ),
-              ),
             ]),
           ),
           SliverGrid(
@@ -64,10 +64,11 @@ class PostcardsDataGrid extends StatelessWidget {
               childAspectRatio: 0.7,
             ),
             delegate: SliverChildBuilderDelegate(
-                  (context, index) {
+              (context, index) {
                 if (index < (postcardsData?.length ?? 0)) {
                   final postcard = postcardsData?[index];
-                  final postcardImageBase64 = postcard?.imageBase64?.substring(23);
+                  final postcardImageBase64 =
+                      postcard?.imageBase64?.substring(23);
                   return GestureDetector(
                     onTap: () => postcardPopup?.call(postcard!),
                     child: Column(
@@ -80,21 +81,22 @@ class PostcardsDataGrid extends StatelessWidget {
                               padding: const EdgeInsets.all(10),
                               child: obfuscateData
                                   ? ColorFiltered(
-                                colorFilter: const ColorFilter.mode(
-                                    Colors.grey, BlendMode.saturation),
-                                child: CachedMemoryImage(
-                                  uniqueKey: postcard!.title.toString(),
-                                  errorWidget: const Text('Error'),
-                                  bytes: base64Decode(postcardImageBase64!),
-                                  fit: BoxFit.contain,
-                                ),
-                              )
+                                      colorFilter: const ColorFilter.mode(
+                                          Colors.grey, BlendMode.saturation),
+                                      child: CachedMemoryImage(
+                                        uniqueKey: postcard!.title.toString(),
+                                        errorWidget: const Text('Error'),
+                                        bytes:
+                                            base64Decode(postcardImageBase64!),
+                                        fit: BoxFit.contain,
+                                      ),
+                                    )
                                   : CachedMemoryImage(
-                                uniqueKey: postcard!.title.toString(),
-                                errorWidget: const Text('Error'),
-                                bytes: base64Decode(postcardImageBase64!),
-                                fit: BoxFit.contain,
-                              ),
+                                      uniqueKey: postcard!.title.toString(),
+                                      errorWidget: const Text('Error'),
+                                      bytes: base64Decode(postcardImageBase64!),
+                                      fit: BoxFit.contain,
+                                    ),
                             ),
                           )
                         else
@@ -102,21 +104,21 @@ class PostcardsDataGrid extends StatelessWidget {
                             aspectRatio: 1, // 1:1 square
                             child: obfuscateData
                                 ? ColorFiltered(
-                              colorFilter: const ColorFilter.mode(
-                                  Colors.grey, BlendMode.saturation),
-                              child: Container(
-                                padding: const EdgeInsets.all(10),
-                                child: SvgPicture.asset(
-                                    "assets/postcards/First.svg",
-                                    fit: BoxFit.contain),
-                              ),
-                            )
+                                    colorFilter: const ColorFilter.mode(
+                                        Colors.grey, BlendMode.saturation),
+                                    child: Container(
+                                      padding: const EdgeInsets.all(10),
+                                      child: SvgPicture.asset(
+                                          "assets/postcards/First.svg",
+                                          fit: BoxFit.contain),
+                                    ),
+                                  )
                                 : Container(
-                              padding: const EdgeInsets.all(10),
-                              child: SvgPicture.asset(
-                                  "assets/postcards/First.svg",
-                                  fit: BoxFit.contain),
-                            ),
+                                    padding: const EdgeInsets.all(10),
+                                    child: SvgPicture.asset(
+                                        "assets/postcards/First.svg",
+                                        fit: BoxFit.contain),
+                                  ),
                           ),
                         Flexible(
                           child: Text(
