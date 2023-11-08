@@ -9,11 +9,12 @@ import 'package:mobile/custom_widgets/custom_form_filed/custom_form_field.dart';
 import 'package:mobile/custom_widgets/submit_button.dart';
 import 'package:mobile/custom_widgets/switch_page_link.dart';
 import 'package:mobile/helpers/show_error_snack_bar.dart';
-import 'package:mobile/pages/admin_postcard_page/admin_postcard_management_page.dart';
 import 'package:mobile/pages/postcards_page/postcards_page.dart';
 import 'package:mobile/pages/register_page/register_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:mobile/providers/admin_provider.dart';
 import 'package:mobile/services/secure_storage_service.dart';
+import 'package:provider/provider.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({
@@ -88,11 +89,15 @@ class _LoginFormState extends State<LoginForm> {
                   SizedBox(
                     width: double.infinity,
                     height: 60,
-                    child: SubmitButton(
-                      isLoading: (state is LoadingState),
-                      buttonText: AppLocalizations.of(context).signIn,
-                      onButtonPressed: () => signInActionButton(context),
-                    ),
+                    child: Consumer(
+                        builder: (context, AdminProvider adminProvider, child) {
+                      return SubmitButton(
+                        isLoading: (state is LoadingState),
+                        buttonText: AppLocalizations.of(context).signIn,
+                        onButtonPressed: () =>
+                            signInActionButton(context, adminProvider),
+                      );
+                    }),
                   ),
                   SizedBox(height: gapBetweenTextFields),
                   SwitchPageLink(
@@ -112,7 +117,8 @@ class _LoginFormState extends State<LoginForm> {
     );
   }
 
-  Future<void> signInActionButton(BuildContext context) async {
+  Future<void> signInActionButton(
+      BuildContext context, AdminProvider adminProvider) async {
     if (_formKey.currentState!.validate()) {
       FocusManager.instance.primaryFocus?.unfocus();
       _formKey.currentState!.save();
@@ -129,34 +135,25 @@ class _LoginFormState extends State<LoginForm> {
       } catch (e) {
         showErrorSnackBar(context, "An error occurred: $e");
       }
+
+      final token = await SecureStorageService.read(key: 'token');
+      Map<String, dynamic> decodedToken = JwtDecoder.decode(token!);
+
+      if (decodedToken.containsKey(
+              'http://schemas.microsoft.com/ws/2008/06/identity/claims/role') &&
+          decodedToken[
+                  'http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] ==
+              'ADMIN') {
+        adminProvider.isAdmin = true;
+      }
     }
   }
 
   Future<void> _navigateToPostcardsPage(BuildContext context) async {
-    final token = await SecureStorageService.read(key: 'token');
-    Map<String, dynamic> decodedToken = JwtDecoder.decode(token!);
-
-    if (decodedToken.containsKey(
-            'http://schemas.microsoft.com/ws/2008/06/identity/claims/role') &&
-        decodedToken[
-                'http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] ==
-            'ADMIN') {
-      if (context.mounted) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const AdminPostcardManagementPage(),
-          ),
-        );
-      }
-    } else {
-      if (context.mounted) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => PostcardsPage()),
-        );
-      }
-    }
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => PostcardsPage()),
+    );
   }
 
   void onSignUpLinkPress(BuildContext context) {
