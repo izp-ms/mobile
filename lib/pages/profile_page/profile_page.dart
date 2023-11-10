@@ -1,17 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mobile/cubit/user_cubit/user_cubit.dart';
 import 'package:mobile/cubit/user_cubit/user_state.dart';
 import 'package:mobile/custom_widgets/custom_drawer/custom_drawer.dart';
 import 'package:mobile/custom_widgets/custom_appbars/main_page_app_bar.dart';
 import 'package:mobile/helpers/show_error_snack_bar.dart';
-import 'package:mobile/pages/collection_page/user_postcards_collection_page/widgets/postcard_shimmer.dart';
-import 'package:mobile/pages/collection_page/user_postcards_collection_page/widgets/postcards_list_shimmer.dart';
 import 'package:mobile/pages/edit_user_details_page/edit_user_details_page.dart';
-import 'package:mobile/pages/postcards_page/widgets/postcard_details.dart';
-import 'package:mobile/pages/profile_page/profile_page_widgets/favourite_postcards_grid.dart';
 import 'package:mobile/pages/profile_page/profile_page_widgets/personal_info_section/personal_info_section.dart';
 import 'package:mobile/pages/profile_page/profile_page_widgets/profile_pictures_stack/profile_pictures_stack.dart';
 import 'package:mobile/pages/profile_page/profile_page_widgets/statistics_section/statistics_section.dart';
@@ -128,71 +123,71 @@ class _ProfilePageState extends State<ProfilePage> {
                     ],
                   ),
                 ),
-                Container(
-                  padding: const EdgeInsets.all(30),
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            AppLocalizations.of(context).favouritePostcards,
-                            style: GoogleFonts.rubik(
-                              fontSize: 18,
-                            ),
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              if (state is LoadedState) {
-                                final favouritePostcards =
-                                    state.favouritePostcards;
-                                final content = favouritePostcards.content;
-                                if (content != null && content.isNotEmpty) {
-                                  for (var postcard in content) {
-                                    print(postcard.toString());
-                                  }
-                                } else {
-                                  print("Favorite postcards content is empty.");
-                                }
-                              }
-                            },
-                            child: Row(
-                              children: [
-                                const Icon(
-                                  Icons.mode_edit_outlined,
-                                  size: 15,
-                                ),
-                                const SizedBox(
-                                  width: 3,
-                                ),
-                                Text(
-                                  AppLocalizations.of(context).editFavourite,
-                                  style: GoogleFonts.rubik(
-                                    fontSize: 10,
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                if (state is LoadedState)
-                  FavouritePostcardsGrid(
-                      postcardsData: state.favouritePostcards.content,
-                      refreshCallback: _refresh,
-                      parentContext: context,
-                      postcardPopup: (postcard) {
-                        showPostcardDialog(context, postcard!);
-                      },)
-                else
-                  PostcardsListShimmer(
-                    itemCount: 6,
-                    crossAxisCount: 3,
-                    showDescription: false,
-                  )
+                // Container(
+                //   padding: const EdgeInsets.all(30),
+                //   child: Column(
+                //     children: [
+                //       Row(
+                //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //         children: [
+                //           Text(
+                //             AppLocalizations.of(context).favouritePostcards,
+                //             style: GoogleFonts.rubik(
+                //               fontSize: 18,
+                //             ),
+                //           ),
+                //           GestureDetector(
+                //             onTap: () {
+                //               if (state is LoadedState) {
+                //                 final favouritePostcards =
+                //                     state.favouritePostcards;
+                //                 final content = favouritePostcards.content;
+                //                 if (content != null && content.isNotEmpty) {
+                //                   for (var postcard in content) {
+                //                     print(postcard.toString());
+                //                   }
+                //                 } else {
+                //                   print("Favorite postcards content is empty.");
+                //                 }
+                //               }
+                //             },
+                //             child: Row(
+                //               children: [
+                //                 const Icon(
+                //                   Icons.mode_edit_outlined,
+                //                   size: 15,
+                //                 ),
+                //                 const SizedBox(
+                //                   width: 3,
+                //                 ),
+                //                 Text(
+                //                   AppLocalizations.of(context).editFavourite,
+                //                   style: GoogleFonts.rubik(
+                //                     fontSize: 10,
+                //                   ),
+                //                 )
+                //               ],
+                //             ),
+                //           ),
+                //         ],
+                //       ),
+                //     ],
+                //   ),
+                // ),
+                // if (state is LoadedState)
+                //   FavouritePostcardsGrid(
+                //       postcardsData: state.favouritePostcards.content,
+                //       refreshCallback: _refresh,
+                //       parentContext: context,
+                //       postcardPopup: (postcard) {
+                //         showPostcardDialog(context, postcard!);
+                //       },)
+                // else
+                //   PostcardsListShimmer(
+                //     itemCount: 6,
+                //     crossAxisCount: 3,
+                //     showDescription: false,
+                //   )
               ],
             ),
           );

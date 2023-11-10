@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:mobile/constants/ColorProvider.dart';
+import 'package:mobile/cubit/admin_cubit/admin_cubit.dart';
 import 'package:mobile/cubit/auth_cubit/auth_cubit.dart';
 import 'package:mobile/cubit/postcards_cubits/collect_postcard_cubit/collect_postcard_cubit.dart';
 import 'package:mobile/cubit/postcards_cubits/postcards_collection_cubit/postcards_collection_cubit.dart';
@@ -12,11 +13,12 @@ import 'package:mobile/cubit/postcards_cubits/postcards_data_collection_cubit/po
 import 'package:mobile/cubit/postcards_cubits/received_postcards_cubit/received_postcards_cubit.dart';
 import 'package:mobile/cubit/postcards_cubits/unsent_postcards_cubit/unsent_postcards_cubit.dart';
 import 'package:mobile/cubit/user_cubit/user_cubit.dart';
-import 'package:mobile/pages/admin_postcard_page/admin_postcard_management_page.dart';
 import 'package:mobile/pages/login_page/login_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:mobile/pages/postcards_page/postcards_page.dart';
+import 'package:mobile/providers/admin_provider.dart';
 import 'package:mobile/providers/theme_provider.dart';
+import 'package:mobile/services/admin_service.dart';
 import 'package:mobile/services/auth_service.dart';
 import 'package:mobile/services/collect_postcard_service.dart';
 import 'package:mobile/services/postcard_service.dart';
@@ -46,11 +48,11 @@ class MyApp extends StatelessWidget {
 
   final String? token;
   final ThemeProvider themeNotifier = ThemeProvider();
+  final AdminProvider adminProvider = AdminProvider();
 
   @override
   Widget build(BuildContext context) {
     bool isAuthenticated = false;
-    bool isAdmin = false;
 
     if (token != null) {
       Map<String, dynamic> decodedToken = JwtDecoder.decode(token!);
@@ -61,16 +63,23 @@ class MyApp extends StatelessWidget {
             decodedToken[
                     'http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] ==
                 'ADMIN') {
-          isAdmin = false;
+          adminProvider.isAdmin = true;
         }
         isAuthenticated = true;
       }
     }
 
-    return ChangeNotifierProvider(
-      create: (_) => themeNotifier,
-      child: Consumer<ThemeProvider>(
-          builder: (context, ThemeProvider themeNotifier, child) {
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) => themeNotifier,
+        ),
+        ChangeNotifierProvider(
+          create: (_) => adminProvider,
+        ),
+      ],
+      child: Consumer2(builder: (context, ThemeProvider themeNotifier,
+          AdminProvider adminProvider, child) {
         return MultiBlocProvider(
           providers: [
             BlocProvider<AuthCubit>(
@@ -80,13 +89,15 @@ class MyApp extends StatelessWidget {
               create: (context) => UserCubit(UserService(), PostcardService()),
             ),
             BlocProvider<CollectPostcardCubit>(
-              create: (context) => CollectPostcardCubit(CollectPostcardService()),
+              create: (context) =>
+                  CollectPostcardCubit(CollectPostcardService()),
             ),
             BlocProvider<PostcardsDataCubit>(
               create: (context) => PostcardsDataCubit(PostcardService()),
             ),
             BlocProvider<PostcardsDataCollectionCubit>(
-              create: (context) => PostcardsDataCollectionCubit(PostcardService()),
+              create: (context) =>
+                  PostcardsDataCollectionCubit(PostcardService()),
             ),
             BlocProvider<UnsentPostcardsCubit>(
               create: (context) => UnsentPostcardsCubit(PostcardService()),
@@ -97,6 +108,9 @@ class MyApp extends StatelessWidget {
             BlocProvider<PostcardsCollectionCubit>(
               create: (context) => PostcardsCollectionCubit(PostcardService()),
             ),
+            BlocProvider<AdminCubit>(
+              create: (context) => AdminCubit(AdminService()),
+            )
           ],
           child: MaterialApp(
             title: 'postcardia',
@@ -160,11 +174,7 @@ class MyApp extends StatelessWidget {
               ),
             ),
             themeMode: themeNotifier.isDark ? ThemeMode.dark : ThemeMode.light,
-            home: isAuthenticated
-                ? isAdmin
-                    ? const AdminPostcardManagementPage()
-                    : const PostcardsPage()
-                : const LoginPage(),
+            home: isAuthenticated ? const PostcardsPage() : const LoginPage(),
           ),
         );
       }),
