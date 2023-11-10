@@ -4,8 +4,8 @@ import 'package:cached_memory_image/cached_memory_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mobile/api/response/postcard_data_response.dart';
+import 'package:mobile/helpers/base64Validator.dart';
 import 'package:mobile/pages/collection_page/user_postcards_collection_page/widgets/postcard_shimmer.dart';
-import '../../../../helpers/base64Validator.dart';
 
 class PostcardsDataGrid extends StatelessWidget {
   final ScrollController listScrollController;
@@ -17,7 +17,7 @@ class PostcardsDataGrid extends StatelessWidget {
   final bool obfuscateData;
   final String title;
 
-  PostcardsDataGrid(
+  const PostcardsDataGrid(
       {super.key,
       required this.listScrollController,
       required this.postcardsData,
@@ -49,10 +49,9 @@ class PostcardsDataGrid extends StatelessWidget {
                 Center(
                   child: Text(
                     title,
-                    style: TextStyle(
-                      fontSize: 25, // Customize the font size as needed
-                      fontWeight: FontWeight
-                          .bold, // Customize the font weight as needed
+                    style: const TextStyle(
+                      fontSize: 25,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
@@ -75,33 +74,39 @@ class PostcardsDataGrid extends StatelessWidget {
                       children: <Widget>[
                         if (postcardImageBase64 != null &&
                             isBase64Valid(postcardImageBase64))
-                          AspectRatio(
-                            aspectRatio: 1, // 1:1 square
-                            child: Container(
-                              padding: const EdgeInsets.all(10),
-                              child: obfuscateData
-                                  ? ColorFiltered(
-                                      colorFilter: const ColorFilter.mode(
-                                          Colors.grey, BlendMode.saturation),
-                                      child: CachedMemoryImage(
-                                        uniqueKey: postcard!.title.toString(),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(18, 18, 18, 0),
+                            child: AspectRatio(
+                              aspectRatio: 3 / 4,
+                              child: Container(
+                                padding: const EdgeInsets.all(10),
+                                child: obfuscateData
+                                    ? ColorFiltered(
+                                        colorFilter: const ColorFilter.mode(
+                                            Colors.grey, BlendMode.saturation),
+                                        child: CachedMemoryImage(
+                                          uniqueKey: postcard!.id.toString() +
+                                              postcard.createdAt.toString(),
+                                          errorWidget: const Text('Error'),
+                                          bytes: base64Decode(
+                                              postcardImageBase64!),
+                                          fit: BoxFit.cover,
+                                        ),
+                                      )
+                                    : CachedMemoryImage(
+                                        uniqueKey: postcard!.id.toString() +
+                                            postcard.createdAt.toString(),
                                         errorWidget: const Text('Error'),
                                         bytes:
                                             base64Decode(postcardImageBase64!),
-                                        fit: BoxFit.contain,
+                                        fit: BoxFit.cover,
                                       ),
-                                    )
-                                  : CachedMemoryImage(
-                                      uniqueKey: postcard!.title.toString(),
-                                      errorWidget: const Text('Error'),
-                                      bytes: base64Decode(postcardImageBase64!),
-                                      fit: BoxFit.contain,
-                                    ),
+                              ),
                             ),
                           )
                         else
                           AspectRatio(
-                            aspectRatio: 1, // 1:1 square
+                            aspectRatio: 1,
                             child: obfuscateData
                                 ? ColorFiltered(
                                     colorFilter: const ColorFilter.mode(
