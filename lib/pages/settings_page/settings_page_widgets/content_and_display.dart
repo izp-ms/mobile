@@ -224,6 +224,7 @@ class _ContentAndDisplayState extends State<ContentAndDisplay> {
 
   void _onStop() async {
     await BackgroundLocator.unRegisterLocationUpdate();
+    await AppSharedPreferences.savePostcardsNearbyIdList([]);
     setState(() {
       FileManager.clearLogFile();
     });

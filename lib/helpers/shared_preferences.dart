@@ -61,4 +61,19 @@ class AppSharedPreferences {
     await prefs.reload();
     return prefs.getDouble('notificationRange') ?? 1000;
   }
+
+  static Future<void> savePostcardsNearbyIdList(List<int> postcardIds) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setStringList('postcardsNearbyList', postcardIds.map((id) => id.toString()).toList());
+  }
+
+  static Future<List<int>> getPostcardsNearbyIdList() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String>? postcardIdsAsString = prefs.getStringList('postcardsNearbyList');
+    if (postcardIdsAsString != null) {
+      return postcardIdsAsString.map((id) => int.parse(id)).toList();
+    } else {
+      return [];
+    }
+  }
 }

@@ -8,6 +8,7 @@ import 'package:mobile/pages/settings_page/settings_page_widgets/content_and_dis
 import 'package:mobile/pages/settings_page/settings_page_widgets/privacy_settings.dart';
 import 'package:mobile/pages/settings_page/settings_page_widgets/units_format.dart';
 import 'package:mobile/providers/metric_system_provider.dart';
+import 'package:mobile/services/notification_service.dart';
 import 'package:provider/provider.dart';
 
 import '../../custom_widgets/text_icon_button.dart';
@@ -61,6 +62,19 @@ class SettingsPage extends StatelessWidget {
               margin: const EdgeInsets.fromLTRB(0, 20, 0, 10),
               child: Column(
                 children: [
+                  Center(
+                      child: TextIconButton(
+                        text: "Test noti",
+                        shouldHaveIcon: true,
+                        iconData: Icons.delete_forever,
+                        iconSide: IconSide.left,
+                        onTap: () {
+                          NotificationService().showNotification(title: "Siema", body: "it Works");
+                        },
+                        fontSize: 15.0,
+                        iconSize: 20.0,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                      ),),
                   Center(
                       child: TextIconButton(
                     text: AppLocalizations.of(context).deleteAccount,
