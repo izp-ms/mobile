@@ -12,6 +12,8 @@ class ErrorState extends CollectPostcardState {
   ErrorState(this.errorMessage);
 }
 
+class SuccessState extends CollectPostcardState {}
+
 class LoadedState extends CollectPostcardState {
   final PostCoordinatesResponse postCoordinatesResponse;
 
