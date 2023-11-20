@@ -77,11 +77,43 @@ class PostcardService {
   }
 
 
-  Future<PostcardsListResponse> getPostcards(int pageNumber, bool isSent) async {
+  Future<PostcardsListResponse> getPostcards(int pageNumber, bool isSent, String search, String city, String country, String dateFrom, String dateTo, String orderBy) async {
     final token = await SecureStorageService.read(key: 'token');
     Map<String, dynamic> decodedToken = JwtDecoder.decode(token!);
     String userId = decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'];
-    var url = '$_baseUrl/Postcard?pageNumber=$pageNumber&pageSize=$FETCH_LIMIT&IsSent=$isSent&userId=$userId';
+
+    var url = '$_baseUrl/Postcard?pageNumber=$pageNumber&pageSize=$FETCH_LIMIT';
+    url = '$url&userId=$userId';
+
+    if(!isSent){
+      url = '$url&IsSent=$isSent';
+    }
+    if(search != null && search != ""){
+      url = '$url&Search=$search';
+    }
+
+    if(city != null && city != ""){
+      url = '$url&City=$city';
+    }
+
+    if(country != null && country != ""){
+      url = '$url&Country=$country';
+    }
+
+    if(dateFrom != null && dateFrom != ""){
+      String modifiedDate = dateFrom.replaceAll(":", "%3A");
+      url = '$url&DateFrom=$modifiedDate';
+    }
+
+    if(dateTo != null && dateTo != ""){
+      String modifiedDate = dateTo.replaceAll(":", "%3A");
+      url = '$url&DateTo=$modifiedDate';
+    }
+
+    if(orderBy != null && orderBy != ""){
+      url = '$url&OrderBy=$orderBy';
+    }
+
     final uri = Uri.parse(url);
 
     final client = http.Client();
