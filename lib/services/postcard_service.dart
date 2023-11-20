@@ -83,8 +83,10 @@ class PostcardService {
     String userId = decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'];
 
     var url = '$_baseUrl/Postcard?pageNumber=$pageNumber&pageSize=$FETCH_LIMIT';
+    url = '$url&userId=$userId';
+
     if(!isSent){
-      url = '$url&userId=$userId';
+      url = '$url&IsSent=$isSent';
     }
     if(search != null && search != ""){
       url = '$url&Search=$search';
