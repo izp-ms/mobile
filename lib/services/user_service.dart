@@ -16,7 +16,7 @@ class UserService {
     Map<String, dynamic> decodedToken = JwtDecoder.decode(token!);
     String userId = decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'];
 
-    final url = '$_baseUrl/User?userId=$userId';
+    final url = '$_baseUrl/User/$userId';
     final uri = Uri.parse(url);
 
 

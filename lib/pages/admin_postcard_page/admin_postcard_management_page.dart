@@ -230,7 +230,7 @@ class _AdminPostcardManagementPageState
                           isEditingMode: true,
                         ),
                       ),
-                    );
+                    ).then((value) => _refresh());
                   },
                 ),
               );

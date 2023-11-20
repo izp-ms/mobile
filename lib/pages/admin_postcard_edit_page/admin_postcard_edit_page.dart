@@ -239,6 +239,7 @@ class _AdminPostcardEditPageState extends State<AdminPostcardEditPage> {
   Future<void> savePostcardData(BuildContext context) async {
     if (_imageBase64 == null) {
       showErrorSnackBar(context, "You must provide image.");
+      return;
     }
     if (_formKey.currentState!.validate()) {
       FocusManager.instance.primaryFocus?.unfocus();
@@ -246,7 +247,7 @@ class _AdminPostcardEditPageState extends State<AdminPostcardEditPage> {
 
       final adminCubit = context.read<AdminCubit>();
 
-      if (widget.isEditingMode){
+      if (widget.isEditingMode) {
         final postcardDto = PostcardsDataResponse(
             id: widget.postcard?.id,
             imageBase64: "data:image/jpeg;base64,$_imageBase64",
