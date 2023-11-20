@@ -224,6 +224,7 @@ class _ContentAndDisplayState extends State<ContentAndDisplay> {
 
   void _onStop() async {
     await BackgroundLocator.unRegisterLocationUpdate();
+    await AppSharedPreferences.savePostcardsNearbyIdList([]);
     setState(() {
       FileManager.clearLogFile();
     });
@@ -266,10 +267,10 @@ class _ContentAndDisplayState extends State<ContentAndDisplay> {
         client: LocationClient.google,
         androidNotificationSettings: AndroidNotificationSettings(
           notificationChannelName: 'Location tracking',
-          notificationTitle: 'Start Location Tracking',
-          notificationMsg: 'Track location in background',
+          notificationTitle: 'Location Tracking',
+          notificationMsg: 'Postcardia is now tracking your location',
           notificationBigMsg:
-              'Background location is on to keep the app up-tp-date with your location. This is required for main features to work properly when the app is not running.',
+              'Postcardia is now tracking your location to keep the app up-tp-date with your location. This is required for locating postcards nearby.',
           notificationIconColor: Colors.grey,
           notificationTapCallback: LocationCallbackHandler.notificationCallback,
         ),

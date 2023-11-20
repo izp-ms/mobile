@@ -7,6 +7,8 @@ import 'package:mobile/api/request/coordinates_request.dart';
 import 'package:mobile/api/response/post_coordinates_response.dart';
 import 'package:mobile/helpers/shared_preferences.dart';
 import 'package:mobile/services/collect_postcard_service.dart';
+import 'package:mobile/services/notification_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'file_manager.dart';
 
 class LocationService {
@@ -22,6 +24,7 @@ class LocationService {
   static const String isolateName = 'LocatorIsolate';
 
   int _count = -1;
+  int _cyclesCount = 0;
 
   Future<void> init(Map<dynamic, dynamic> params) async {
     //TODO change logs
@@ -76,6 +79,33 @@ class LocationService {
 
     print(
         "Recived: ${response.postcardsCollected?.length}, and ${response.postcardsNearby?.length}");
+
+    _cyclesCount += 1;
+
+    final List<int> storedPostcardsNearbyIds =
+        await AppSharedPreferences.getPostcardsNearbyIdList();
+
+    List<int> newPostcardIds = (response.postcardsCollected
+            ?.map((postcard) => postcard.id)
+            .whereType<int>()
+            .where((id) => !storedPostcardsNearbyIds.contains(id))
+            .toList()) ??
+        [];
+
+    if (newPostcardIds.isNotEmpty) {
+      NotificationService().showNotification(
+          title: "New Postcard",
+          body: "There are new postcards ready to collect!");
+
+      storedPostcardsNearbyIds.addAll(newPostcardIds);
+      await AppSharedPreferences.savePostcardsNearbyIdList(
+          storedPostcardsNearbyIds);
+    }
+
+    if (_cyclesCount > 360) {
+      _cyclesCount = 0;
+      await AppSharedPreferences.savePostcardsNearbyIdList([]);
+    }
 
     send?.send(response.toJson());
   }

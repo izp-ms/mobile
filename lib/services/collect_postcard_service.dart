@@ -38,4 +38,32 @@ class CollectPostcardService {
       throw errorMessage;
     }
   }
+
+  Future<dynamic> collectPostcards(coordinatesRequest) async {
+    final url = '$_baseUrl/PostcardData/Collect';
+    final uri = Uri.parse(url);
+    final token = await SecureStorageService.read(key: 'token');
+
+    final ioc = HttpClient();
+    ioc.badCertificateCallback = (X509Certificate cert, String host, int port) => true;
+    final client = IOClient(ioc);
+    final response = await client.post(
+      uri,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $token',
+      },
+      body: json.encode(coordinatesRequest.toJson()),
+    );
+
+    if (response.ok) {
+      final responseJson = json.decode(response.body);
+      // final postcards = PostCoordinatesResponse.fromJson(responseJson);
+      return responseJson;
+    } else {
+      final errorJson = json.decode(response.body);
+      final errorMessage = ErrorMessageResponse.fromJson(errorJson).message;
+      throw errorMessage;
+    }
+  }
 }
