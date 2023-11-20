@@ -40,9 +40,11 @@ class FavouritePostcardsGrid extends StatelessWidget {
             final postcard = postcardsData?[index];
             final postcardImageBase64 = postcard?.imageBase64?.substring(23);
             return GestureDetector(
-              onTap: () => postcardPopup?.call(
-                postcard!,
-              ),
+              onTap: () {
+                if (postcard != null) {
+                  postcardPopup?.call(postcard);
+                }
+              },
               child: Column(
                 children: <Widget>[
                   if (postcardImageBase64 != null &&

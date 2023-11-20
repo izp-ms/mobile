@@ -95,16 +95,15 @@ class _FilterDialogState extends State<FilterDialog> {
             Row(
               children: [
                 Expanded(
-                  child: TextFormField(
-                    controller: dateFromController,
-                    enabled: false,
-                    decoration: customTextFieldDecoration(
-                        context, "Date from", null),
+                  child: GestureDetector(
+                    onTap: () => _selectDateFrom(context),
+                    child: TextFormField(
+                      controller: dateFromController,
+                      enabled: false,
+                      decoration: customTextFieldDecoration(
+                          context, "Date from", Icons.date_range),
+                    ),
                   ),
-                ),
-                IconButton(
-                  icon: Icon(Icons.date_range),
-                  onPressed: () => _selectDateFrom(context),
                 ),
               ],
             ),
@@ -114,16 +113,15 @@ class _FilterDialogState extends State<FilterDialog> {
             Row(
               children: [
                 Expanded(
-                  child: TextFormField(
-                    controller: dateToController,
-                    enabled: false,
-                    decoration: customTextFieldDecoration(
-                        context, "Date to", null),
+                  child: GestureDetector(
+                    onTap: () => _selectDateTo(context),
+                    child: TextFormField(
+                      controller: dateToController,
+                      enabled: false,
+                      decoration: customTextFieldDecoration(
+                          context, "Date to", Icons.date_range),
+                    ),
                   ),
-                ),
-                IconButton(
-                  icon: Icon(Icons.date_range),
-                  onPressed: () => _selectDateTo(context),
                 ),
               ],
             ),
@@ -147,6 +145,7 @@ class _FilterDialogState extends State<FilterDialog> {
             countryController.clear();
             dateFromController.clear();
             dateToController.clear();
+            selectedCountry = "";
           },
         ),
         ElevatedButton(

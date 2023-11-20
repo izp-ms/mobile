@@ -20,7 +20,7 @@ void showPostcardDialog(BuildContext context, PostcardsResponse? postcard,
           width: width,
           height: height,
           postcard: postcard,
-          obfuscateData: obfuscateData);
+          obfuscateData: obfuscateData,);
     },
   );
 }
@@ -40,6 +40,7 @@ class PostcardDetails extends StatelessWidget {
   });
 
   late String? postcardImageBase64 = postcard?.imageBase64?.substring(23);
+
 
   @override
   Widget build(BuildContext context) {
