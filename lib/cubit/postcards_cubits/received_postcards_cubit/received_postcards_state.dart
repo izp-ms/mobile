@@ -6,16 +6,20 @@ class InitState extends ReceivedPostcardsState {}
 
 class ErrorState extends ReceivedPostcardsState {
   final String errorMessage;
+
   ErrorState(this.errorMessage);
 }
 
 class LoadingState extends ReceivedPostcardsState {
   final PostcardsListResponse oldPostcardsData;
   final bool isFirstFetch;
-  LoadingState(this.oldPostcardsData, {this.isFirstFetch=false});
-}
-class LoadedState extends ReceivedPostcardsState {
-  final PostcardsListResponse postcardsData;
-  LoadedState(this.postcardsData);
+
+  LoadingState(this.oldPostcardsData, {this.isFirstFetch = false});
 }
 
+class LoadedState extends ReceivedPostcardsState {
+  final PostcardsListResponse postcardsData;
+  final PostcardsListResponse favouritePostcards;
+
+  LoadedState(this.postcardsData, this.favouritePostcards);
+}

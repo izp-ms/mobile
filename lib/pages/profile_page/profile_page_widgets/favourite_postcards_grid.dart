@@ -40,23 +40,28 @@ class FavouritePostcardsGrid extends StatelessWidget {
             final postcard = postcardsData?[index];
             final postcardImageBase64 = postcard?.imageBase64?.substring(23);
             return GestureDetector(
-              onTap: () => postcardPopup?.call(
-                postcard!,
-              ),
+              onTap: () {
+                if (postcard != null) {
+                  postcardPopup?.call(postcard);
+                }
+              },
               child: Column(
                 children: <Widget>[
                   if (postcardImageBase64 != null &&
                       isBase64Valid(postcardImageBase64))
                   //if (postcardImageBase64 != null)
-                    AspectRatio(
-                      aspectRatio: 1, // 1:1 square
-                      child: Container(
-                        padding: const EdgeInsets.all(10),
-                        child: CachedMemoryImage(
-                          uniqueKey: postcard!.id.toString(),
-                          errorWidget: const Text('Error'),
-                          bytes: base64Decode(postcardImageBase64!),
-                          fit: BoxFit.contain,
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(18, 18, 18, 0),
+                      child: AspectRatio(
+                        aspectRatio: 3/4,
+                        child: Container(
+                          padding: const EdgeInsets.all(10),
+                          child: CachedMemoryImage(
+                            uniqueKey: postcard!.id.toString(),
+                            errorWidget: const Text('Error'),
+                            bytes: base64Decode(postcardImageBase64!),
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       ),
                     )
@@ -67,7 +72,7 @@ class FavouritePostcardsGrid extends StatelessWidget {
                         padding: const EdgeInsets.all(10),
                         child: SvgPicture.asset(
                             "assets/postcards/First.svg",
-                            fit: BoxFit.contain),
+                            fit: BoxFit.cover),
                       ),
                     ),
                 ],
