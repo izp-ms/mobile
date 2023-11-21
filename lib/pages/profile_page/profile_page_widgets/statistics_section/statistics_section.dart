@@ -37,7 +37,7 @@ class _StatisticsSectionState extends State<StatisticsSection> {
 Widget _renderUserStats(state, context) {
   if (state is LoadedState) {
     return Padding(
-      padding: const EdgeInsets.only(top: 28),
+      padding: const EdgeInsets.fromLTRB(0, 28,0,12),
       child: Flex(
         direction: Axis.horizontal,
         children: [

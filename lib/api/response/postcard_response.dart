@@ -3,6 +3,7 @@ class PostcardsResponse {
   String? title;
   String? content;
   int? postcardDataId;
+  int? postcardId;
   String? type;
   DateTime? createdAt;
   int? userId;
@@ -20,6 +21,7 @@ class PostcardsResponse {
         this.title,
         this.content,
         this.postcardDataId,
+        this.postcardId,
         this.type,
         this.createdAt,
         this.userId,
@@ -42,6 +44,7 @@ class PostcardsResponse {
     title = json['title'];
     content = json['content'];
     postcardDataId = json['postcardDataId'];
+    postcardId = json["postcardId"];
     type = json['type'];
     createdAt = DateTime.parse(json['createdAt']);
     userId = json['userId'];
@@ -61,6 +64,7 @@ class PostcardsResponse {
     data['title'] = title;
     data['content'] = content;
     data['postcardDataId'] = postcardDataId;
+    data['postcardId'] = postcardId;
     data['type'] = type;
     data['createdAt'] = createdAt;
     data['userId'] = userId;

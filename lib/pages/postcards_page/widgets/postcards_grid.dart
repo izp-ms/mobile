@@ -63,11 +63,11 @@ class PostcardsGrid extends StatelessWidget {
               childAspectRatio: 0.7,
             ),
             delegate: SliverChildBuilderDelegate(
-                  (context, index) {
+              (context, index) {
                 if (index < (postcardsData?.length ?? 0)) {
                   final postcard = postcardsData?[index];
                   final postcardImageBase64 =
-                  postcard?.imageBase64?.substring(23);
+                      postcard?.imageBase64?.substring(23);
                   return GestureDetector(
                     onTap: () => postcardPopup?.call(
                       postcard!,
@@ -76,30 +76,33 @@ class PostcardsGrid extends StatelessWidget {
                       children: <Widget>[
                         if (postcardImageBase64 != null &&
                             isBase64Valid(postcardImageBase64))
-                          AspectRatio(
-                            aspectRatio: 1, // 1:1 square
-                            child: Container(
-                              padding: const EdgeInsets.all(10),
-                              child: obfuscateData
-                                  ? ColorFiltered(
-                                colorFilter: const ColorFilter.mode(
-                                  Colors.grey,
-                                  BlendMode.saturation,
-                                ),
-                                child: CachedMemoryImage(
-                                  uniqueKey:
-                                  postcard!.title.toString(),
-                                  errorWidget: const Text('Error'),
-                                  bytes: base64Decode(postcardImageBase64!),
-                                  fit: BoxFit.contain,
-                                ),
-                              )
-                                  : CachedMemoryImage(
-                                uniqueKey:
-                                postcard!.title.toString(),
-                                errorWidget: const Text('Error'),
-                                bytes: base64Decode(postcardImageBase64!),
-                                fit: BoxFit.contain,
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(18, 18, 18, 0),
+                            child: AspectRatio(
+                              aspectRatio: 3 / 4,
+                              child: Container(
+                                padding: const EdgeInsets.all(10),
+                                child: obfuscateData
+                                    ? ColorFiltered(
+                                        colorFilter: const ColorFilter.mode(
+                                          Colors.grey,
+                                          BlendMode.saturation,
+                                        ),
+                                        child: CachedMemoryImage(
+                                          uniqueKey: postcard!.title.toString(),
+                                          errorWidget: const Text('Error'),
+                                          bytes: base64Decode(
+                                              postcardImageBase64!),
+                                          fit: BoxFit.cover,
+                                        ),
+                                      )
+                                    : CachedMemoryImage(
+                                        uniqueKey: postcard!.title.toString(),
+                                        errorWidget: const Text('Error'),
+                                        bytes:
+                                            base64Decode(postcardImageBase64!),
+                                        fit: BoxFit.cover,
+                                      ),
                               ),
                             ),
                           )
@@ -108,25 +111,25 @@ class PostcardsGrid extends StatelessWidget {
                             aspectRatio: 1, // 1:1 square
                             child: obfuscateData
                                 ? ColorFiltered(
-                              colorFilter: const ColorFilter.mode(
-                                Colors.grey,
-                                BlendMode.saturation,
-                              ),
-                              child: Container(
-                                padding: const EdgeInsets.all(10),
-                                child: SvgPicture.asset(
-                                  "assets/postcards/First.svg",
-                                  fit: BoxFit.contain,
-                                ),
-                              ),
-                            )
+                                    colorFilter: const ColorFilter.mode(
+                                      Colors.grey,
+                                      BlendMode.saturation,
+                                    ),
+                                    child: Container(
+                                      padding: const EdgeInsets.all(10),
+                                      child: SvgPicture.asset(
+                                        "assets/postcards/First.svg",
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  )
                                 : Container(
-                              padding: const EdgeInsets.all(10),
-                              child: SvgPicture.asset(
-                                "assets/postcards/First.svg",
-                                fit: BoxFit.contain,
-                              ),
-                            ),
+                                    padding: const EdgeInsets.all(10),
+                                    child: SvgPicture.asset(
+                                      "assets/postcards/First.svg",
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
                           ),
                         Flexible(
                           child: Text(
@@ -158,4 +161,3 @@ class PostcardsGrid extends StatelessWidget {
     );
   }
 }
-

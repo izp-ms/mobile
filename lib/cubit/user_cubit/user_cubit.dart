@@ -47,4 +47,17 @@ class UserCubit extends Cubit<UserState> {
       );
     }
   }
+
+  Future<void> refreshFavouritePostcards(response) async {
+    final favouritePostacrdsResponse = await _favouritePostcardsRepository.getFavouritePostcards();
+    String nickName = "";
+
+    final token = await SecureStorageService.read(key: 'token') ?? "";
+    if (token != "") {
+      final decodedToken = JwtDecoder.decode(token);
+      nickName = decodedToken[
+      "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"];
+    }
+    emit(LoadedState(response, nickName, favouritePostacrdsResponse));
+  }
 }
