@@ -55,7 +55,18 @@ class FavouritePostcardsGrid extends StatelessWidget {
                       child: AspectRatio(
                         aspectRatio: 3/4,
                         child: Container(
-                          padding: const EdgeInsets.all(10),
+                          padding: const EdgeInsets.all(5),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black12,
+                                spreadRadius: 5,
+                                blurRadius: 7,
+                                offset: Offset(0, 3), // changes position of shadow
+                              ),
+                            ],
+                          ),
                           child: CachedMemoryImage(
                             uniqueKey: postcard!.id.toString(),
                             errorWidget: const Text('Error'),
