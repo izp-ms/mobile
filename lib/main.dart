@@ -8,8 +8,7 @@ import 'package:mobile/cubit/admin_cubit/admin_cubit.dart';
 import 'package:mobile/cubit/auth_cubit/auth_cubit.dart';
 import 'package:mobile/cubit/postcards_cubits/collect_postcard_cubit/collect_postcard_cubit.dart';
 import 'package:mobile/cubit/postcards_cubits/postcards_collection_cubit/postcards_collection_cubit.dart';
-import 'package:mobile/cubit/postcards_cubits/postcards_data_cubit/postcards_data_collection_cubit.dart';
-import 'package:mobile/cubit/postcards_cubits/postcards_data_collection_cubit/postcards_data_cubit.dart';
+import 'package:mobile/cubit/postcards_cubits/postcards_data_cubit/postcards_data_cubit.dart';
 import 'package:mobile/cubit/postcards_cubits/received_postcards_cubit/received_postcards_cubit.dart';
 import 'package:mobile/cubit/postcards_cubits/unsent_postcards_cubit/unsent_postcards_cubit.dart';
 import 'package:mobile/cubit/user_cubit/user_cubit.dart';
@@ -94,10 +93,6 @@ class MyApp extends StatelessWidget {
             ),
             BlocProvider<PostcardsDataCubit>(
               create: (context) => PostcardsDataCubit(PostcardService()),
-            ),
-            BlocProvider<PostcardsDataCollectionCubit>(
-              create: (context) =>
-                  PostcardsDataCollectionCubit(PostcardService()),
             ),
             BlocProvider<UnsentPostcardsCubit>(
               create: (context) => UnsentPostcardsCubit(PostcardService()),

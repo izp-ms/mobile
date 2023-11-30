@@ -1,15 +1,15 @@
 import 'package:mobile/api/response/postcard_response.dart';
 
-class PostcardsListResponse {
+class PostcardsCollectionListResponse {
   int? userId;
-  List<int>? content;
+  List<dynamic>? content;
 
-  PostcardsListResponse({
+  PostcardsCollectionListResponse({
     this.userId,
     required this.content,
   });
 
-  PostcardsListResponse.fromJson(Map<String, dynamic> json) {
+  PostcardsCollectionListResponse.fromJson(Map<String, dynamic> json) {
     userId = json['userId'];
     content = json['postcardDataIds'].toList();
   }
@@ -19,5 +19,12 @@ class PostcardsListResponse {
       'userId': userId,
       'postcardDataIds': content,
     };
+  }
+
+  static PostcardsCollectionListResponse createDefault() {
+    return PostcardsCollectionListResponse(
+      userId: null, // Set default values as needed
+      content: <dynamic>[],
+    );
   }
 }

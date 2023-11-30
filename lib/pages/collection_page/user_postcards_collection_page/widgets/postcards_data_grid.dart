@@ -15,6 +15,7 @@ class PostcardsDataGrid extends StatelessWidget {
   final bool isLoadingMore;
   final void Function(PostcardsDataResponse postcard)? postcardPopup;
   final bool obfuscateData;
+  final List<dynamic>? IdsWithoutObfuscateData;
   final String title;
 
   const PostcardsDataGrid(
@@ -26,6 +27,7 @@ class PostcardsDataGrid extends StatelessWidget {
       required this.isLoadingMore,
       required this.postcardPopup,
       this.obfuscateData = false,
+      this.IdsWithoutObfuscateData = const <int>[],
       this.title = ""});
 
   @override
@@ -80,12 +82,12 @@ class PostcardsDataGrid extends StatelessWidget {
                               aspectRatio: 3 / 4,
                               child: Container(
                                 padding: const EdgeInsets.all(10),
-                                child: obfuscateData
+                                child: obfuscateData && IdsWithoutObfuscateData!.isNotEmpty && !(IdsWithoutObfuscateData!.contains(postcard?.id))
                                     ? ColorFiltered(
                                         colorFilter: const ColorFilter.mode(
                                             Colors.grey, BlendMode.saturation),
                                         child: CachedMemoryImage(
-                                          uniqueKey: postcard!.id.toString() +
+                                          uniqueKey: postcard!.imageBase64.toString() +
                                               postcard.createdAt.toString(),
                                           errorWidget: const Text('Error'),
                                           bytes: base64Decode(
@@ -94,7 +96,7 @@ class PostcardsDataGrid extends StatelessWidget {
                                         ),
                                       )
                                     : CachedMemoryImage(
-                                        uniqueKey: postcard!.id.toString() +
+                                        uniqueKey: postcard!.imageBase64.toString() +
                                             postcard.createdAt.toString(),
                                         errorWidget: const Text('Error'),
                                         bytes:

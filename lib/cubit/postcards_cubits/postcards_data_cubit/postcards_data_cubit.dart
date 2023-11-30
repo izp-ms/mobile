@@ -1,10 +1,11 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mobile/api/response/postcards_collection_response.dart';
 import 'package:mobile/api/response/postcards_data_list_response.dart';
-import 'package:mobile/cubit/postcards_cubits/postcards_data_cubit/postcards_data_collection_state.dart';
+import 'package:mobile/cubit/postcards_cubits/postcards_data_cubit/postcards_data_state.dart';
 import 'package:mobile/services/postcard_service.dart';
 
-class PostcardsDataCollectionCubit extends Cubit<PostcardsDataCollectionState> {
-  PostcardsDataCollectionCubit(this._repository) : super(InitState());
+class PostcardsDataCubit extends Cubit<PostcardsDataState> {
+  PostcardsDataCubit(this._repository) : super(InitState());
 
   int currentPage = 1;
   final PostcardService _repository;
@@ -14,27 +15,35 @@ class PostcardsDataCollectionCubit extends Cubit<PostcardsDataCollectionState> {
 
     final currentState = state;
     var oldPostcardsData = PostcardsDataListResponse(content: []);
+    var oldPostcardDataCollection = PostcardsCollectionListResponse(content: []);
     if (currentState is LoadedState) {
       oldPostcardsData = currentState.postcardsData;
+      oldPostcardDataCollection = currentState.postcardDataCollection;
     }
 
-    emit(LoadingState(oldPostcardsData, isFirstFetch: currentPage == 1));
+    emit(LoadingState(oldPostcardsData, oldPostcardDataCollection, isFirstFetch: currentPage == 1));
 
     try {
-      print("CURRENT PAGE");
-      print(currentPage);
       final newPostcardsData = await _repository.getPostcardData(currentPage, showAllPostcardsCollection, search, city, country, dateFrom, dateTo, orderBy);
+      var postcardDataCollectionResponse = PostcardsCollectionListResponse.createDefault();
+      if (showAllPostcardsCollection)
+        {
+          postcardDataCollectionResponse = await _repository.getPostcardDataCollection();
+        }
       var postcardsData = (state as LoadingState).oldPostcardsData;
       postcardsData.totalCount = newPostcardsData.totalCount;
       postcardsData.content?.addAll(newPostcardsData.content ?? []);
-      emit(LoadedState(postcardsData));
+
+      var postcardsDataCollection = (state as LoadingState).oldPostcardDataCollection;
+      postcardsDataCollection.content = postcardDataCollectionResponse.content;
       currentPage++;
+      emit(LoadedState(postcardsData, postcardDataCollectionResponse));
     } catch (e) {
       emit(ErrorState(e.toString()));
     }
   }
 
-  void clearUserPostcardsDataCollection() {
+  void clearUserPostcardsData() {
     emit(InitState());
   }
 }

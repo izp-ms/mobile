@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile/api/response/postcard_data_response.dart';
-import 'package:mobile/cubit/postcards_cubits/postcards_data_cubit/postcards_data_collection_cubit.dart';
-import 'package:mobile/cubit/postcards_cubits/postcards_data_cubit/postcards_data_collection_state.dart';
+import 'package:mobile/cubit/postcards_cubits/postcards_data_cubit/postcards_data_cubit.dart';
+import 'package:mobile/cubit/postcards_cubits/postcards_data_cubit/postcards_data_state.dart';
 import 'package:mobile/custom_widgets/custom_appbars/main_page_app_bar.dart';
 import 'package:mobile/custom_widgets/custom_drawer/custom_drawer.dart';
 import 'package:mobile/custom_widgets/custom_form_filed/styled.dart';
@@ -29,20 +29,20 @@ class _AdminPostcardManagementPageState
   void initState() {
     super.initState();
     context
-        .read<PostcardsDataCollectionCubit>()
-        .clearUserPostcardsDataCollection();
-    context.read<PostcardsDataCollectionCubit>().currentPage = 1;
-    context.read<PostcardsDataCollectionCubit>().getPostcardData(
+        .read<PostcardsDataCubit>()
+        .clearUserPostcardsData();
+    context.read<PostcardsDataCubit>().currentPage = 1;
+    context.read<PostcardsDataCubit>().getPostcardData(
         true, search, city, country, dateFrom, dateTo, orderBy);
   }
 
   Future _refresh() async {
     FocusScope.of(context).unfocus();
     context
-        .read<PostcardsDataCollectionCubit>()
-        .clearUserPostcardsDataCollection();
-    context.read<PostcardsDataCollectionCubit>().currentPage = 1;
-    context.read<PostcardsDataCollectionCubit>().getPostcardData(
+        .read<PostcardsDataCubit>()
+        .clearUserPostcardsData();
+    context.read<PostcardsDataCubit>().currentPage = 1;
+    context.read<PostcardsDataCubit>().getPostcardData(
         true, search, city, country, dateFrom, dateTo, orderBy);
     print("=============");
     print(search);
@@ -61,7 +61,7 @@ class _AdminPostcardManagementPageState
     listScrollController.addListener(() {
       if (listScrollController.position.atEdge) {
         if (listScrollController.position.pixels != 0) {
-          BlocProvider.of<PostcardsDataCollectionCubit>(context)
+          BlocProvider.of<PostcardsDataCubit>(context)
               .getPostcardData(showAllPostcardsCollection, search, city,
                   country, dateFrom, dateTo, orderBy);
         }
@@ -182,8 +182,8 @@ class _AdminPostcardManagementPageState
           const SizedBox(
             height: 15,
           ),
-          BlocConsumer<PostcardsDataCollectionCubit,
-              PostcardsDataCollectionState>(
+          BlocConsumer<PostcardsDataCubit,
+              PostcardsDataState>(
             listener: (context, state) {
               if (state is ErrorState) {
                 showErrorSnackBar(context, state.errorMessage);

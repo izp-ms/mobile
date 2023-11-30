@@ -89,7 +89,7 @@ class PostcardsGrid extends StatelessWidget {
                                           BlendMode.saturation,
                                         ),
                                         child: CachedMemoryImage(
-                                          uniqueKey: postcard!.title.toString(),
+                                          uniqueKey: postcard!.imageBase64.toString(),
                                           errorWidget: const Text('Error'),
                                           bytes: base64Decode(
                                               postcardImageBase64!),
@@ -97,7 +97,7 @@ class PostcardsGrid extends StatelessWidget {
                                         ),
                                       )
                                     : CachedMemoryImage(
-                                        uniqueKey: postcard!.title.toString(),
+                                        uniqueKey: postcard!.imageBase64.toString(),
                                         errorWidget: const Text('Error'),
                                         bytes:
                                             base64Decode(postcardImageBase64!),
