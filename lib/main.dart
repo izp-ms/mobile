@@ -6,11 +6,14 @@ import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:mobile/constants/ColorProvider.dart';
 import 'package:mobile/cubit/admin_cubit/admin_cubit.dart';
 import 'package:mobile/cubit/auth_cubit/auth_cubit.dart';
+import 'package:mobile/cubit/friends_cubit/all_friends_cubit/all_friends_cubit.dart';
+import 'package:mobile/cubit/friends_cubit/followed_by_cubit/followed_by_cubit.dart';
+import 'package:mobile/cubit/friends_cubit/following_cubit/following_cubit.dart';
 import 'package:mobile/cubit/postcards_cubits/collect_postcard_cubit/collect_postcard_cubit.dart';
-import 'package:mobile/cubit/postcards_cubits/postcards_collection_cubit/postcards_collection_cubit.dart';
 import 'package:mobile/cubit/postcards_cubits/postcards_data_cubit/postcards_data_cubit.dart';
 import 'package:mobile/cubit/postcards_cubits/received_postcards_cubit/received_postcards_cubit.dart';
 import 'package:mobile/cubit/postcards_cubits/unsent_postcards_cubit/unsent_postcards_cubit.dart';
+import 'package:mobile/cubit/postcards_cubits/user_postcards_data_cubit/user_postcards_data_cubit.dart';
 import 'package:mobile/cubit/user_cubit/user_cubit.dart';
 import 'package:mobile/pages/login_page/login_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -100,11 +103,20 @@ class MyApp extends StatelessWidget {
             BlocProvider<ReceivedPostcardsCubit>(
               create: (context) => ReceivedPostcardsCubit(PostcardService()),
             ),
-            BlocProvider<PostcardsCollectionCubit>(
-              create: (context) => PostcardsCollectionCubit(PostcardService()),
-            ),
             BlocProvider<AdminCubit>(
               create: (context) => AdminCubit(AdminService()),
+            ),
+            BlocProvider<AllFriendsCubit>(
+              create: (context) => AllFriendsCubit(UserService()),
+            ),
+            BlocProvider<FollowingCubit>(
+              create: (context) => FollowingCubit(UserService()),
+            ),
+            BlocProvider<FollowedByCubit>(
+              create: (context) => FollowedByCubit(UserService()),
+            ),
+            BlocProvider<UserPostcardsDataCubit>(
+              create: (context) => UserPostcardsDataCubit(PostcardService()),
             )
           ],
           child: MaterialApp(

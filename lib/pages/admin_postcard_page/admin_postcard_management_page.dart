@@ -90,6 +90,14 @@ class _AdminPostcardManagementPageState
             });
             _refresh();
           },
+          options: [
+            {'title': 'Newest', 'value': 'date'},
+            {'title': 'Oldest', 'value': '-date'},
+            {'title': 'City A-Z', 'value': 'city'},
+            {'title': 'City Z-A', 'value': '-city'},
+            {'title': 'Country A-Z', 'value': 'country'},
+            {'title': 'Country Z-A', 'value': '-country'},
+          ],
         );
       },
     );

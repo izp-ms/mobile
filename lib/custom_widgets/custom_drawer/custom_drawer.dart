@@ -3,6 +3,7 @@ import 'package:mobile/helpers/shared_preferences.dart';
 import 'package:mobile/pages/admin_postcard_page/admin_postcard_management_page.dart';
 import 'package:mobile/pages/collect_postcard_list_page/collect_postcard_list_page.dart';
 import 'package:mobile/pages/collection_page/collection_page.dart';
+import 'package:mobile/pages/friends_page/friends_page.dart';
 import 'package:mobile/pages/login_page/login_page.dart';
 import 'package:mobile/pages/postcards_page/postcards_page.dart';
 import 'package:mobile/pages/profile_page/profile_page.dart';
@@ -17,7 +18,7 @@ class CustomDrawer extends Drawer {
   const CustomDrawer(this.context, {super.key});
 
   final BuildContext context;
-  final double gapBetweenTiles = 30;
+  final double gapBetweenTiles = 15;
 
   _closeDrawer() {
     Navigator.of(context).pop();
@@ -80,6 +81,16 @@ class CustomDrawer extends Drawer {
                           tileText: "Collect",
                           onTilePress: () {
                             onCollectPostcardPress(context);
+                          },
+                        ),
+                        SizedBox(
+                          height: gapBetweenTiles,
+                        ),
+                        CustomDrawerTile(
+                          tileIcon: Icons.people_alt,
+                          tileText: "Friends",
+                          onTilePress: () {
+                            onFriendsPress(context);
                           },
                         ),
                         SizedBox(
@@ -188,6 +199,15 @@ class CustomDrawer extends Drawer {
         builder: (context) => CollectPostcardListPage(
           postcardLocationValue: postcardLocationValue,
         ),
+      ),
+    );
+  }
+
+  void onFriendsPress(context) async {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => FriendsPage(),
       ),
     );
   }

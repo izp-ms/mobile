@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile/api/response/postcard_data_response.dart';
-import 'package:mobile/cubit/postcards_cubits/postcards_data_cubit/postcards_data_cubit.dart';
-import 'package:mobile/cubit/postcards_cubits/postcards_data_cubit/postcards_data_state.dart';
+import 'package:mobile/cubit/postcards_cubits/user_postcards_data_cubit/user_postcards_data_cubit.dart';
+import 'package:mobile/cubit/postcards_cubits/user_postcards_data_cubit/user_postcards_data_state.dart';
 import 'package:mobile/custom_widgets/custom_form_filed/styled.dart';
 import 'package:mobile/helpers/show_error_snack_bar.dart';
 import 'package:mobile/pages/collection_page/user_postcards_collection_page/widgets/FilterDialog.dart';
@@ -28,16 +28,16 @@ class _UserPostcardsCollectionPageState
   @override
   void initState() {
     super.initState();
-    context.read<PostcardsDataCubit>().clearUserPostcardsData();
-    context.read<PostcardsDataCubit>().currentPage = 1;
-    context.read<PostcardsDataCubit>().getPostcardData(
+    context.read<UserPostcardsDataCubit>().clearUserPostcardsData();
+    context.read<UserPostcardsDataCubit>().currentPage = 1;
+    context.read<UserPostcardsDataCubit>().getPostcardData(
         false, search, city, country, dateFrom, dateTo, orderBy);
   }
 
   Future _refresh() async {
-    context.read<PostcardsDataCubit>().clearUserPostcardsData();
-    context.read<PostcardsDataCubit>().currentPage = 1;
-    context.read<PostcardsDataCubit>().getPostcardData(
+    context.read<UserPostcardsDataCubit>().clearUserPostcardsData();
+    context.read<UserPostcardsDataCubit>().currentPage = 1;
+    context.read<UserPostcardsDataCubit>().getPostcardData(
         false, search, city, country, dateFrom, dateTo, orderBy);
   }
 
@@ -48,7 +48,7 @@ class _UserPostcardsCollectionPageState
     listScrollController.addListener(() {
       if (listScrollController.position.atEdge) {
         if (listScrollController.position.pixels != 0) {
-          BlocProvider.of<PostcardsDataCubit>(context)
+          BlocProvider.of<UserPostcardsDataCubit>(context)
             ..getPostcardData(showAllPostcardsCollection, search, city, country,
                 dateFrom, dateTo, orderBy);
         }
@@ -76,6 +76,14 @@ class _UserPostcardsCollectionPageState
             });
             _refresh();
           },
+          options: [
+            {'title': 'Newest', 'value': 'date'},
+            {'title': 'Oldest', 'value': '-date'},
+            {'title': 'City A-Z', 'value': 'city'},
+            {'title': 'City Z-A', 'value': '-city'},
+            {'title': 'Country A-Z', 'value': 'country'},
+            {'title': 'Country Z-A', 'value': '-country'},
+          ],
         );
       },
     );
@@ -166,7 +174,7 @@ class _UserPostcardsCollectionPageState
         SizedBox(
           height: 15,
         ),
-        BlocConsumer<PostcardsDataCubit, PostcardsDataState>(
+        BlocConsumer<UserPostcardsDataCubit, UserPostcardsDataState>(
           listener: (context, state) {
             if (state is ErrorState) {
               showErrorSnackBar(context, state.errorMessage);

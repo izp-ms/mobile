@@ -75,6 +75,14 @@ class _UnsentPostcardsPageState extends State<UnsentPostcardsPage>
             });
             _refresh(); // Refresh the data with the new sorting option
           },
+          options: [
+            {'title': 'Newest', 'value': 'date'},
+            {'title': 'Oldest', 'value': '-date'},
+            {'title': 'City A-Z', 'value': 'city'},
+            {'title': 'City Z-A', 'value': '-city'},
+            {'title': 'Country A-Z', 'value': 'country'},
+            {'title': 'Country Z-A', 'value': '-country'},
+          ],
         );
       },
     );

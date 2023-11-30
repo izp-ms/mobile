@@ -1,24 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mobile/api/response/postcard_response.dart';
-import 'package:mobile/cubit/postcards_cubits/received_postcards_cubit/received_postcards_cubit.dart';
-import 'package:mobile/cubit/postcards_cubits/received_postcards_cubit/received_postcards_state.dart';
+import 'package:mobile/api/response/friend_response.dart';
+import 'package:mobile/cubit/friends_cubit/following_cubit/following_cubit.dart';
+import 'package:mobile/cubit/friends_cubit/following_cubit/following_state.dart';
 import 'package:mobile/custom_widgets/custom_form_filed/styled.dart';
 import 'package:mobile/helpers/show_error_snack_bar.dart';
-import 'package:mobile/pages/collection_page/user_postcards_collection_page/widgets/FilterDialog.dart';
 import 'package:mobile/pages/collection_page/user_postcards_collection_page/widgets/SortDialog.dart';
-import 'package:mobile/pages/collection_page/user_postcards_collection_page/widgets/postcards_list_shimmer.dart';
-import 'package:mobile/pages/postcards_page/widgets/postcard_details.dart';
-import 'package:mobile/pages/postcards_page/widgets/postcards_grid.dart';
+import 'package:mobile/pages/friends_page/widgets/friends_grid.dart';
+import 'package:mobile/pages/friends_page/widgets/friends_list_shimmer.dart';
 
-class ReceivedPostcardsPage extends StatefulWidget {
-  const ReceivedPostcardsPage({Key? key}) : super(key: key);
+class FollowingPage extends StatefulWidget {
+  const FollowingPage({Key? key}) : super(key: key);
 
   @override
-  State<ReceivedPostcardsPage> createState() => _ReceivedPostcardsPageState();
+  State<FollowingPage> createState() => _FollowingPageState();
 }
 
-class _ReceivedPostcardsPageState extends State<ReceivedPostcardsPage>
+class _FollowingPageState extends State<FollowingPage>
     with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
@@ -26,19 +24,19 @@ class _ReceivedPostcardsPageState extends State<ReceivedPostcardsPage>
   @override
   void initState() {
     super.initState();
-    context.read<ReceivedPostcardsCubit>().clearReceivedPostcards();
-    context.read<ReceivedPostcardsCubit>().currentPage = 1;
+    context.read<FollowingCubit>().clearFollowing();
+    context.read<FollowingCubit>().currentPage = 1;
     context
-        .read<ReceivedPostcardsCubit>()
-        .getPostcards(true, search, city, country, dateFrom, dateTo, orderBy);
+        .read<FollowingCubit>()
+        .getFollowing(search, orderBy);
   }
 
   Future _refresh() async {
-    context.read<ReceivedPostcardsCubit>().clearReceivedPostcards();
-    context.read<ReceivedPostcardsCubit>().currentPage = 1;
+    context.read<FollowingCubit>().clearFollowing();
+    context.read<FollowingCubit>().currentPage = 1;
     context
-        .read<ReceivedPostcardsCubit>()
-        .getPostcards(true, search, city, country, dateFrom, dateTo, orderBy);
+        .read<FollowingCubit>()
+        .getFollowing(search, orderBy);
   }
 
   bool isLoadingMore = false;
@@ -48,18 +46,14 @@ class _ReceivedPostcardsPageState extends State<ReceivedPostcardsPage>
     listScrollController.addListener(() {
       if (listScrollController.position.atEdge) {
         if (listScrollController.position.pixels != 0) {
-          BlocProvider.of<ReceivedPostcardsCubit>(context).getPostcards(
-              isSent, search, city, country, dateFrom, dateTo, orderBy);
+          BlocProvider.of<FollowingCubit>(context).getFollowing(
+              search, orderBy);
         }
       }
     });
   }
 
   String search = ""; //Palmiarnia
-  String city = ""; //Gliwice
-  String country = ""; //Poland
-  String dateFrom = ""; //2021-03-15T00:00:00
-  String dateTo = ""; //2021-03-15T00:00:00
   String orderBy = "date"; //-city
   TextEditingController searchController = TextEditingController();
 
@@ -76,36 +70,11 @@ class _ReceivedPostcardsPageState extends State<ReceivedPostcardsPage>
             _refresh(); // Refresh the data with the new sorting option
           },
           options: [
-            {'title': 'Newest', 'value': 'date'},
-            {'title': 'Oldest', 'value': '-date'},
-            {'title': 'City A-Z', 'value': 'city'},
-            {'title': 'City Z-A', 'value': '-city'},
+            {'title': 'nickname A-Z', 'value': 'nickName'},
+            {'title': 'nickname Z-A', 'value': '-nickName'},
             {'title': 'Country A-Z', 'value': 'country'},
             {'title': 'Country Z-A', 'value': '-country'},
           ],
-        );
-      },
-    );
-  }
-
-  void _showFilterDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext dialogContext) {
-        return FilterDialog(
-          city: city,
-          country: country,
-          dateFrom: dateFrom,
-          dateTo: dateTo,
-          onApply: (newCity, newCountry, newDateFrom, newDateTo) {
-            setState(() {
-              city = newCity;
-              country = newCountry;
-              dateFrom = newDateFrom;
-              dateTo = newDateTo;
-            });
-            _refresh(); // Refresh the data with the new filters
-          },
         );
       },
     );
@@ -138,19 +107,7 @@ class _ReceivedPostcardsPageState extends State<ReceivedPostcardsPage>
                   _refresh();
                 },
                 decoration: customTextFieldDecoration(
-                    context, "Search something", Icons.search),
-              ),
-            ),
-            SizedBox(
-              width: 15,
-            ),
-            GestureDetector(
-              onTap: () {
-                _showFilterDialog(context);
-              },
-              child: Icon(
-                Icons.sort,
-                color: Theme.of(context).colorScheme.secondary,
+                    context, "Search", Icons.search),
               ),
             ),
             SizedBox(
@@ -173,7 +130,7 @@ class _ReceivedPostcardsPageState extends State<ReceivedPostcardsPage>
         SizedBox(
           height: 15,
         ),
-        BlocConsumer<ReceivedPostcardsCubit, ReceivedPostcardsState>(
+        BlocConsumer<FollowingCubit, FollowingState>(
           listener: (context, state) {
             if (state is ErrorState) {
               showErrorSnackBar(context, state.errorMessage);
@@ -182,50 +139,48 @@ class _ReceivedPostcardsPageState extends State<ReceivedPostcardsPage>
           builder: (context, state) {
             if (state is ErrorState) {
               return Flexible(
-                child: PostcardsListShimmer(
-                  itemCount: 12,
-                  crossAxisCount: 3,
-                  showDescription: true,
-                  title: "Received postcards",
+                child: FriendListShimmer(
+                  itemCount: 8,
+                  crossAxisCount: 1,
+                  title: "Following users",
                 ),
               );
             }
 
             if (state is LoadingState && state.isFirstFetch) {
               return Flexible(
-                child: PostcardsListShimmer(
-                  itemCount: 12,
-                  crossAxisCount: 3,
-                  showDescription: true,
-                  title: "Received postcards",
+                child: FriendListShimmer(
+                  itemCount: 8,
+                  crossAxisCount: 1,
+                  title: "Following users",
                 ),
               );
             }
 
-            List<PostcardsResponse>? postcardsData = [];
+            List<FriendResponse>? postcardsData = [];
             isLoadingMore = false;
 
             if (state is LoadingState) {
-              postcardsData = state.oldPostcardsData.content;
+              postcardsData = state.oldFriendsData.content;
               if (postcardsData!.length <
-                  (state.oldPostcardsData.totalCount ?? 0)) {
+                  (state.oldFriendsData.totalCount ?? 0)) {
                 isLoadingMore = true;
               }
             } else if (state is LoadedState) {
-              postcardsData = state.postcardsData.content;
+              postcardsData = state.friendsData.content;
             }
 
             return Flexible(
-              child: PostcardsGrid(
+              child: FriendsGrid(
                 listScrollController: listScrollController,
-                postcardsData: postcardsData,
+                friendsData: postcardsData,
                 refreshCallback: _refresh,
                 parentContext: context,
                 isLoadingMore: isLoadingMore,
-                postcardPopup: (postcard) {
-                  showPostcardDialog(context, postcard!);
+                friendPopup: (postcard) {
+                  print("dupa");
                 },
-                title: "Received postcards",
+                title: "Following users",
               ),
             );
           },
