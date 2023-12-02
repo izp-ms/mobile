@@ -9,6 +9,7 @@ import 'package:mobile/pages/collection_page/user_postcards_collection_page/widg
 import 'package:mobile/pages/collection_page/user_postcards_collection_page/widgets/postcards_list_shimmer.dart';
 import 'package:mobile/pages/friends_page/widgets/friends_grid.dart';
 import 'package:mobile/pages/friends_page/widgets/friends_list_shimmer.dart';
+import 'package:mobile/pages/friends_page/widgets/friend_details.dart';
 
 class AllFriendsPage extends StatefulWidget {
   const AllFriendsPage({Key? key}) : super(key: key);
@@ -178,8 +179,11 @@ class _AllFriendsPageState extends State<AllFriendsPage>
                 refreshCallback: _refresh,
                 parentContext: context,
                 isLoadingMore: isLoadingMore,
-                friendPopup: (postcard) {
-                  print("dupa");
+                friendPopup: (friend) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => FriendDetails(friend: friend)),
+                  );
                 },
                 title: "All Users",
               ),

@@ -57,7 +57,7 @@ class FavouritePostcardsGrid extends StatelessWidget {
                         child: Container(
                           padding: const EdgeInsets.all(10),
                           child: CachedMemoryImage(
-                            uniqueKey: postcard!.id.toString(),
+                            uniqueKey: postcard!.imageBase64.toString(),
                             errorWidget: const Text('Error'),
                             bytes: base64Decode(postcardImageBase64!),
                             fit: BoxFit.cover,

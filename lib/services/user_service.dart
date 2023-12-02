@@ -9,6 +9,7 @@ import 'package:mobile/api/response/user_detail_response.dart';
 import 'package:mobile/constants/api_constants.dart';
 import 'package:mobile/extensions/is_ok.dart';
 import 'package:mobile/services/secure_storage_service.dart';
+import 'dart:math';
 
 class UserService {
   final String _baseUrl = ApiConstants.baseUrl;
@@ -190,6 +191,76 @@ class UserService {
       final errorJson = json.decode(response.body);
       final errorMessage = ErrorMessageResponse.fromJson(errorJson).message;
       throw errorMessage;
+    }
+  }
+
+  Future<bool> getIsFollowing(int? FriendID,) async {
+    final token = await SecureStorageService.read(key: 'token');
+    Map<String, dynamic> decodedToken = JwtDecoder.decode(token!);
+    String userId = decodedToken[
+    'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'];
+
+    // TUTAJ BEDZIE SPRAWDZANIE VZY FOLLOWUJEMY KOGOS CZY NIE PO WEJSCIU NA JEGO SZCZEGOLY
+
+    Random random = Random();
+    return random.nextBool();
+  }
+
+  Future<void> updateFollowing(bool newIsFollowing, int? friendId) async {
+    final token = await SecureStorageService.read(key: 'token');
+    Map<String, dynamic> decodedToken = JwtDecoder.decode(token!);
+    String userId = decodedToken[
+    'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'];
+
+    var url = '$_baseUrl/UserFriends';
+    final uri = Uri.parse(url);
+
+    final client = http.Client();
+
+    if (newIsFollowing) {
+      // If newIsFollowing is true, perform a POST request
+      final response = await client.post(
+        uri,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer $token',
+        },
+        body: jsonEncode({
+          'userId': userId,
+          'friendId': friendId,
+        }),
+      );
+
+      if (response.ok) {
+        return;
+      } else {
+        final errorJson = json.decode(response.body);
+        final errorMessage =
+            ErrorMessageResponse.fromJson(errorJson).message;
+        throw errorMessage;
+      }
+    } else {
+      // If newIsFollowing is false, perform a DELETE request
+      final response = await client.delete(
+        uri,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer $token',
+        },
+        body: jsonEncode({
+          'userId': userId,
+          'friendId': friendId,
+        }),
+      );
+
+      if (response.ok) {
+        return;
+      } else {
+        final errorJson = json.decode(response.body);
+        final errorMessage =
+            ErrorMessageResponse.fromJson(errorJson).message;
+        throw errorMessage;
+      }
     }
   }
 }

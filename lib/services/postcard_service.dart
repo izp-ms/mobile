@@ -239,4 +239,33 @@ class PostcardService {
       throw errorMessage;
     }
   }
+
+  Future<PostcardsListResponse> getFriendFavouritePostcards(int? FriendID) async {
+    final token = await SecureStorageService.read(key: 'token');
+    var url = '$_baseUrl/FavouritePostcard?userId=$FriendID';
+    final uri = Uri.parse(url);
+
+    final client = http.Client();
+    final response = await client.get(
+      uri,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    if (response.ok) {
+      final responseJson = json.decode(response.body) as List;
+      final List<PostcardsResponse> postcardsList =
+      responseJson.map((json) => PostcardsResponse.fromJson(json)).toList();
+
+      final postcardsListResponse =
+      PostcardsListResponse(content: postcardsList);
+      return postcardsListResponse;
+    } else {
+      final errorJson = json.decode(response.body);
+      final errorMessage = ErrorMessageResponse.fromJson(errorJson).message;
+      throw errorMessage;
+    }
+  }
 }

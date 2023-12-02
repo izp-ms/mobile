@@ -9,6 +9,7 @@ import 'package:mobile/cubit/auth_cubit/auth_cubit.dart';
 import 'package:mobile/cubit/friends_cubit/all_friends_cubit/all_friends_cubit.dart';
 import 'package:mobile/cubit/friends_cubit/followed_by_cubit/followed_by_cubit.dart';
 import 'package:mobile/cubit/friends_cubit/following_cubit/following_cubit.dart';
+import 'package:mobile/cubit/friends_cubit/friend_favourite_postcards_cubit/friends_cubit.dart';
 import 'package:mobile/cubit/postcards_cubits/collect_postcard_cubit/collect_postcard_cubit.dart';
 import 'package:mobile/cubit/postcards_cubits/postcards_data_cubit/postcards_data_cubit.dart';
 import 'package:mobile/cubit/postcards_cubits/received_postcards_cubit/received_postcards_cubit.dart';
@@ -117,6 +118,9 @@ class MyApp extends StatelessWidget {
             ),
             BlocProvider<UserPostcardsDataCubit>(
               create: (context) => UserPostcardsDataCubit(PostcardService()),
+            ),
+            BlocProvider<FriendsCubit>(
+              create: (context) => FriendsCubit(UserService(), PostcardService()),
             )
           ],
           child: MaterialApp(

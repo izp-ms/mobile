@@ -17,7 +17,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:mobile/helpers/show_error_snack_bar.dart';
 
 void showPostcardDialog(BuildContext context, PostcardsResponse? postcard,
-    {bool obfuscateData = false, UserDetailResponse? response}) {
+    {bool obfuscateData = false, bool isFriendPostcard = false, UserDetailResponse? response}) {
   double width = MediaQuery.of(context).size.width * 0.9;
   double height = MediaQuery.of(context).size.height * 0.75;
 
@@ -29,6 +29,7 @@ void showPostcardDialog(BuildContext context, PostcardsResponse? postcard,
         height: height,
         postcard: postcard,
         obfuscateData: obfuscateData,
+        isFriendPostcard: isFriendPostcard,
       );
     },
   ).then((value) {
@@ -43,6 +44,7 @@ class PostcardDetails extends StatelessWidget {
   final bool obfuscateData;
   final double height;
   final double width;
+  final bool isFriendPostcard;
 
   PostcardDetails({
     super.key,
@@ -50,6 +52,7 @@ class PostcardDetails extends StatelessWidget {
     required this.height,
     required this.postcard,
     this.obfuscateData = false,
+    this.isFriendPostcard = false,
   });
 
   late String? postcardImageBase64 = postcard?.imageBase64?.substring(23);
@@ -137,14 +140,15 @@ class PostcardDetails extends StatelessWidget {
                   height: 40,
                   onButtonPressed: () => {Navigator.of(context).pop()},
                 ),
-                SizedBox(width: 10.0),
-                if (!postcard!.isSent)
+                if(!isFriendPostcard)
+                  SizedBox(width: 10.0),
+                if (!postcard!.isSent && !isFriendPostcard)
                   SubmitButton(
                     buttonText: AppLocalizations.of(context).send,
                     height: 40,
                     onButtonPressed: () => {Navigator.of(context).pop()},
                   ),
-                if (postcard!.isSent)
+                if (postcard!.isSent && !isFriendPostcard)
                   BlocBuilder<ReceivedPostcardsCubit, ReceivedPostcardsState>(
                     builder: (context, state) {
                       if (postcard!.isSent && state is LoadedState) {
