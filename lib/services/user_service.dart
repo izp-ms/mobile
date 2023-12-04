@@ -15,12 +15,16 @@ class UserService {
   final String _baseUrl = ApiConstants.baseUrl;
   static const FETCH_LIMIT = 8;
 
-  Future<dynamic> getUserDetail() async {
+  Future<dynamic> getUserDetail(int userID) async {
     final token = await SecureStorageService.read(key: 'token');
     Map<String, dynamic> decodedToken = JwtDecoder.decode(token!);
-    String userId = decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'];
+    String currentUserId = decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'];
 
-    final url = '$_baseUrl/User/$userId';
+    var url = '$_baseUrl/User/$currentUserId';
+    if(userID != -1)
+      {
+        url = '$_baseUrl/User/$userID';
+      }
     final uri = Uri.parse(url);
 
 
@@ -121,7 +125,7 @@ class UserService {
     String userId = decodedToken[
     'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'];
 
-    var url = '$_baseUrl/User?pageNumber=$pageNumber&pageSize=$FETCH_LIMIT';
+    var url = '$_baseUrl/UserFriends/Following?pageNumber=$pageNumber&pageSize=$FETCH_LIMIT&UserId=$userId';
 
     if (search != null && search != "") {
       url = '$url&Search=$search';
@@ -162,7 +166,7 @@ class UserService {
     String userId = decodedToken[
     'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'];
 
-    var url = '$_baseUrl/User?pageNumber=$pageNumber&pageSize=$FETCH_LIMIT';
+    var url = '$_baseUrl/UserFriends/Followers?pageNumber=$pageNumber&pageSize=$FETCH_LIMIT&UserId=$userId';
 
     if (search != null && search != "") {
       url = '$url&Search=$search';
@@ -171,7 +175,6 @@ class UserService {
     if (orderBy != null && orderBy != "") {
       url = '$url&OrderBy=$orderBy';
     }
-
     final uri = Uri.parse(url);
 
     final client = http.Client();
@@ -200,10 +203,27 @@ class UserService {
     String userId = decodedToken[
     'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'];
 
-    // TUTAJ BEDZIE SPRAWDZANIE VZY FOLLOWUJEMY KOGOS CZY NIE PO WEJSCIU NA JEGO SZCZEGOLY
+    var url = '$_baseUrl/UserFriends/IsFollowing/$FriendID';
+    final uri = Uri.parse(url);
 
-    Random random = Random();
-    return random.nextBool();
+    final client = http.Client();
+    final response = await client.get(
+      uri,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    if (response.ok) {
+      print("IS FOLLOWING RESPONSE");
+      print(response.body);
+      return response.body.toLowerCase() == 'true';
+    } else {
+      final errorJson = json.decode(response.body);
+      final errorMessage = ErrorMessageResponse.fromJson(errorJson).message;
+      throw errorMessage;
+    }
   }
 
   Future<void> updateFollowing(bool newIsFollowing, int? friendId) async {

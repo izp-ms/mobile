@@ -12,10 +12,10 @@ class UserCubit extends Cubit<UserState> {
 
   UserCubit(this._repository, this._favouritePostcardsRepository) : super(InitState());
 
-  Future<void> getUserDetail() async {
+  Future<void> getUserDetail({int userID = -1}) async {
     emit(LoadingState());
     try {
-      final response = await _repository.getUserDetail();
+      final response = await _repository.getUserDetail(userID);
       final favouritePostacrdsResponse = await _favouritePostcardsRepository.getFavouritePostcards();
 
       String nickName = "";

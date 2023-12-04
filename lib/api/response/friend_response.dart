@@ -9,6 +9,7 @@ class FriendResponse {
   String? lastName;
   String? birthDate;
   String? avatarBase64;
+  String? backgroundBase64;
   String? description;
   String? city;
   String? country;
@@ -28,6 +29,7 @@ class FriendResponse {
     this.lastName,
     this.birthDate,
     this.avatarBase64,
+    this.backgroundBase64,
     this.description,
     this.city,
     this.country,
@@ -48,6 +50,7 @@ class FriendResponse {
     lastName = json['lastName'];
     birthDate = json['birthDate'];
     avatarBase64 = json['avatarBase64'];
+    backgroundBase64 = json['backgroundBase64'];
     description = json['description'];
     city = json['city'];
     country = json['country'];
@@ -69,6 +72,7 @@ class FriendResponse {
     data['lastName'] = lastName;
     data['birthDate'] = birthDate;
     data['avatarBase64'] = avatarBase64;
+    data['backgroundBase64'] = backgroundBase64;
     data['description'] = description;
     data['city'] = city;
     data['country'] = country;

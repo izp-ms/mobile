@@ -59,15 +59,14 @@ class FriendsGrid extends StatelessWidget {
           ),
           SliverGrid(
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 1,
-              childAspectRatio: 4
-            ),
+                crossAxisCount: 1, childAspectRatio: 4),
             delegate: SliverChildBuilderDelegate(
-                  (context, index) {
+              (context, index) {
                 if (index < (friendsData?.length ?? 0)) {
                   final friend = friendsData?[index];
-                  final friendImageBase64 =
-                  friend?.avatarBase64?.substring(23);
+                  final friendImageBase64 = friend?.avatarBase64?.substring(0);
+                  print(friend?.avatarBase64 ?? "");
+                  print(friendImageBase64);
                   return Container(
                     height: 100,
                     child: GestureDetector(
@@ -78,27 +77,22 @@ class FriendsGrid extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
                             children: <Widget>[
                               if (friendImageBase64 != null &&
                                   isBase64Valid(friendImageBase64))
-                                Padding(
-                                  padding: const EdgeInsets.fromLTRB(18, 18, 18, 0),
-                                  child: ConstrainedBox(
-                                    constraints: BoxConstraints(
-                                      maxHeight: 100, // Set maximum height
-                                    ),
-                                    child: AspectRatio(
-                                      aspectRatio: 3 / 4,
-                                      child: Container(
-                                        padding: const EdgeInsets.all(10),
-                                        child: ClipOval(
-                                          child: CachedMemoryImage(
-                                            uniqueKey: friend!.avatarBase64.toString(),
-                                            errorWidget: const Text('Error'),
-                                            bytes: base64Decode(friendImageBase64!),
-                                            fit: BoxFit.cover,
-                                          ),
+                                ConstrainedBox(
+                                  constraints: BoxConstraints(
+                                    maxHeight: 100, // Set maximum height
+                                  ),
+                                  child: AspectRatio(
+                                    aspectRatio: 1, // 1:1 square
+                                    child: Container(
+                                      padding: const EdgeInsets.all(10),
+                                      child: ClipOval(
+                                        child: Image.memory(
+                                          base64Decode(friendImageBase64!),
+                                          fit: BoxFit.cover,
                                         ),
                                       ),
                                     ),
@@ -114,8 +108,8 @@ class FriendsGrid extends StatelessWidget {
                                     child: Container(
                                       padding: const EdgeInsets.all(10),
                                       child: ClipOval(
-                                        child: SvgPicture.asset(
-                                          "assets/postcards/First.svg",
+                                        child: Image.asset(
+                                          'assets/profile_background_placeholder.png',
                                           fit: BoxFit.cover,
                                         ),
                                       ),
@@ -143,12 +137,14 @@ class FriendsGrid extends StatelessWidget {
                                   ),
                                 ],
                               ),
-
                             ],
                           ),
                           Padding(
                             padding: const EdgeInsets.all(15.0),
-                            child: Icon(Icons.search, size: 30,),
+                            child: Icon(
+                              Icons.search,
+                              size: 30,
+                            ),
                           )
                         ],
                       ),

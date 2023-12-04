@@ -56,7 +56,7 @@ class _AllFriendsPageState extends State<AllFriendsPage>
   }
 
   String search = ""; //Palmiarnia
-  String orderBy = "date"; //-city
+  String orderBy = "nickName"; //-city
   TextEditingController searchController = TextEditingController();
 
   void _showSortDialog(BuildContext context) {
@@ -182,7 +182,7 @@ class _AllFriendsPageState extends State<AllFriendsPage>
                 friendPopup: (friend) {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => FriendDetails(friend: friend)),
+                    MaterialPageRoute(builder: (context) => FriendDetails(friendID: friend.id!)),
                   );
                 },
                 title: "All Users",

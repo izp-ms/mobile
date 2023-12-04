@@ -6,6 +6,7 @@ import 'package:mobile/cubit/friends_cubit/followed_by_cubit/followed_by_state.d
 import 'package:mobile/custom_widgets/custom_form_filed/styled.dart';
 import 'package:mobile/helpers/show_error_snack_bar.dart';
 import 'package:mobile/pages/collection_page/user_postcards_collection_page/widgets/SortDialog.dart';
+import 'package:mobile/pages/friends_page/widgets/friend_details.dart';
 import 'package:mobile/pages/friends_page/widgets/friends_grid.dart';
 import 'package:mobile/pages/friends_page/widgets/friends_list_shimmer.dart';
 
@@ -54,7 +55,7 @@ class _FollowedByPageState extends State<FollowedByPage>
   }
 
   String search = ""; //Palmiarnia
-  String orderBy = "date"; //-city
+  String orderBy = "nickName"; //-city
   TextEditingController searchController = TextEditingController();
 
   void _showSortDialog(BuildContext context) {
@@ -107,7 +108,7 @@ class _FollowedByPageState extends State<FollowedByPage>
                   _refresh();
                 },
                 decoration: customTextFieldDecoration(
-                    context, "Search users", Icons.search),
+                    context, "Search", Icons.search),
               ),
             ),
             SizedBox(
@@ -142,7 +143,7 @@ class _FollowedByPageState extends State<FollowedByPage>
                 child: FriendListShimmer(
                   itemCount: 8,
                   crossAxisCount: 1,
-                  title: "Followed by users",
+                  title: "Followed by",
                 ),
               );
             }
@@ -152,7 +153,7 @@ class _FollowedByPageState extends State<FollowedByPage>
                 child: FriendListShimmer(
                   itemCount: 8,
                   crossAxisCount: 1,
-                  title: "Followed by users",
+                  title: "Followed by",
                 ),
               );
             }
@@ -177,10 +178,13 @@ class _FollowedByPageState extends State<FollowedByPage>
                 refreshCallback: _refresh,
                 parentContext: context,
                 isLoadingMore: isLoadingMore,
-                friendPopup: (postcard) {
-                  print("dupa");
+                friendPopup: (friend) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => FriendDetails(friendID: friend.id!)),
+                  );
                 },
-                title: "Followed by users",
+                title: "Followed by",
               ),
             );
           },

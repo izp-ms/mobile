@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:mobile/api/response/friend_response.dart';
 import 'package:mobile/cubit/friends_cubit/friend_favourite_postcards_cubit/friends_cubit.dart';
 import 'package:mobile/cubit/friends_cubit/friend_favourite_postcards_cubit/friends_state.dart';
+import 'package:mobile/custom_widgets/custom_shimmer/custom_shimmer.dart';
 import 'package:mobile/custom_widgets/submit_button.dart';
 import 'package:mobile/helpers/base64Validator.dart';
 import 'package:mobile/helpers/date_extractor.dart';
@@ -18,15 +19,17 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:mobile/pages/profile_page/profile_page_widgets/favourite_postcards_grid.dart';
 import 'package:mobile/pages/profile_page/profile_page_widgets/personal_info_section/personal_info_section_widgets/about_me_section.dart';
 import 'package:mobile/pages/profile_page/profile_page_widgets/personal_info_section/personal_info_section_widgets/row_with_icon.dart';
+import 'package:mobile/pages/profile_page/profile_page_widgets/personal_info_section/personal_info_section_widgets/user_name_section/shimmer.dart';
 import 'package:mobile/pages/profile_page/profile_page_widgets/personal_info_section/personal_info_section_widgets/user_name_section/user_name_section.dart';
 import 'package:mobile/pages/profile_page/profile_page_widgets/statistics_section/statistic_section_data.dart';
+import 'package:mobile/pages/profile_page/profile_page_widgets/statistics_section/statistics_shimmer.dart';
 
 class FriendDetails extends StatefulWidget {
-  final FriendResponse friend;
+  final int friendID;
 
   FriendDetails({
     Key? key,
-    required this.friend,
+    required this.friendID,
   }) : super(key: key);
 
   @override
@@ -42,13 +45,13 @@ class _FriendDetailsState extends State<FriendDetails> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final cubit = context.read<FriendsCubit>();
-      cubit.getFriendFavouritePostcards(widget.friend.id);
+      cubit.getFriendDetails(widget.friendID);
       dateFormatPreference = await AppSharedPreferences.getDatePreference();
     });
   }
 
   Future _refresh() async {
-    context.read<FriendsCubit>().getFriendFavouritePostcards(widget.friend.id);
+    context.read<FriendsCubit>().getFriendDetails(widget.friendID);
   }
 
   @override
@@ -116,68 +119,134 @@ class _FriendDetailsState extends State<FriendDetails> {
                     clipBehavior: Clip.none,
                     alignment: Alignment.bottomCenter,
                     children: [
-                    AspectRatio(
-                    aspectRatio: 2,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: Container(
+
+                      if(state is LoadedState)...[
+                        AspectRatio(
+                          aspectRatio: 2,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child:
+
+                            isBase64Valid(state.friendResponse.backgroundBase64)
+                              ? Image.memory(
+                            base64Decode(state.friendResponse.backgroundBase64!),
+                            fit: BoxFit.cover,
+                          )
+                              : Container(
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                                colors: [
+                                  Theme.of(context).colorScheme.surface,
+                                  Theme.of(context).colorScheme.secondaryContainer,
+                                ],
+                              ),
+                            ),
+                          ),
+                          ),
+                        ),
+                      ]
+                      else...[
+              AspectRatio(
+              aspectRatio: 2,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: CustomShimmer(
+                  context: context,
+                  width: double.infinity,
+                  height: double.infinity,
+                ),
+              ),
+            )
+                      ],
+
+
+
+
+
+              if(state is LoadedState)...[
+                Positioned(
+                  top: (deviceSize.width - 40) * 0.3,
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Container(
+                        height: imageSize,
+                        width: imageSize,
                         decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                            colors: [
-                              Theme.of(context).colorScheme.surface,
-                              Theme.of(context).colorScheme.secondaryContainer,
-                            ],
+                          color: Theme.of(context).colorScheme.background,
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                      ClipRRect(
+                        borderRadius: borderRadius,
+                        child:
+                        SizedBox(
+                          height: imageSize - 10,
+                          width: imageSize - 10,
+                          child: (isBase64Valid(state.friendResponse.avatarBase64))
+                              ? Image.memory(
+                            base64Decode(state.friendResponse.avatarBase64!),
+                            fit: BoxFit.cover,
+                          )
+                              : Image.asset(
+                            'assets/profile_background_placeholder.png',
+                            fit: BoxFit.cover,
                           ),
                         ),
                       ),
-                    ),
+                    ],
                   ),
+                ),
+              ]
+          else...[
+                Positioned(
+                  top: (deviceSize.width - 40) * 0.3,
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Container(
+                        height: imageSize,
+                        width: imageSize,
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.background,
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+          ClipRRect(
+          borderRadius: borderRadius,
+          child: SizedBox(
+          width: imageSize - 10,
+          height: imageSize - 10,
+          child: CustomShimmer(
+          context: context,
+          ),
+          ),
+          ),
+                    ],
+                  ),
+                ),
+              ],
 
-                  Positioned(
-                    top: (deviceSize.width - 40) * 0.3,
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        Container(
-                          height: imageSize,
-                          width: imageSize,
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).colorScheme.background,
-                            shape: BoxShape.circle,
-                          ),
-                        ),
-                        ClipRRect(
-                          borderRadius: borderRadius,
-                          child: SizedBox(
-                            height: imageSize - 10,
-                            width: imageSize - 10,
-                            child: (isBase64Valid(widget.friend.avatarBase64))
-                                ? Image.memory(
-                              base64Decode(widget.friend.avatarBase64!),
-                              fit: BoxFit.cover,
-                            )
-                                : Image.asset(
-                              'assets/profile_background_placeholder.png',
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+
+
+
+
+
+
+
                       if (state is LoadedState)...[
                         SizedBox(width: 15,),
                         Positioned(
                           top: 20,
                           child: SubmitButton(
-                            buttonText: state.isFollowing ? "follow": "unfollow",
+                            buttonText: state.isFollowing ? "unfollow": "follow",
                             height: 40,
                             onButtonPressed: () => {
                               context
                                   .read<FriendsCubit>()
-                                  .updateFollowing(!state.isFollowing, widget.friend.id, state.favouritePostcards)
+                                  .updateFollowing(!state.isFollowing, state.friendResponse.id, state.favouritePostcards, state.friendResponse)
                             },
                           ),
                         ),
@@ -200,44 +269,57 @@ class _FriendDetailsState extends State<FriendDetails> {
 
 
               SizedBox(height: 70,),
+
+
+
               Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                UserNamesSection(
-                nickName: widget.friend.nickName ?? "",
-                firstName: widget.friend.firstName ?? null,
-                lastName: widget.friend.lastName ?? null,
-              ),
+                  if (state is LoadedState) ...[
+                    UserNamesSection(
+                      nickName: state.friendResponse.nickName ?? "",
+                      firstName: state.friendResponse.firstName ?? null,
+                      lastName: state.friendResponse.lastName ?? null,
+                    ),
+                  ]
+                  else ...[
+                    UserNamesSectionShimmer(context: context)
+                  ],
+
+
+
+
                   const SizedBox(
                     height: 12,
                   ),
-
-                    if (widget.friend.birthDate != null && dateFormatPreference != null)
+              if (state is LoadedState) ...[
+                    if (state.friendResponse.birthDate != null && dateFormatPreference != null)
                       Padding(
                         padding: const EdgeInsets.only(top: 15),
                         child: RowWithIcon(
                           icon: Icons.cake_outlined,
                           text: formatDateString(
-                              dateExtractor(widget.friend.birthDate.toString())!,
+                              dateExtractor(state.friendResponse.birthDate.toString())!,
                               dateFormatPreference!),
                         ),
                       ),
-                    if (widget.friend.country != null)
+                    if (state.friendResponse.country != null)
                       Padding(
                         padding: const EdgeInsets.only(top: 15),
                         child: RowWithIcon(
                           icon: Icons.flag,
-                          text: widget.friend.country!,
+                          text: state.friendResponse.country!,
                         ),
                       ),
-                    if (widget.friend.description != null && widget.friend.description!.isNotEmpty)
-                      AboutMeSection(description: widget.friend.description!)
+                    if (state.friendResponse.description != null && state.friendResponse.description!.isNotEmpty)
+                      AboutMeSection(description: state.friendResponse.description!)
                 ],
+          ],
               ),
 
 
 
-
+              if (state is LoadedState) ...[
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 28,0,12),
               child: Flex(
@@ -250,21 +332,21 @@ class _FriendDetailsState extends State<FriendDetails> {
                         children: [
                           StatisticsSectionData(
                             dataTitle: AppLocalizations.of(context).postcards,
-                            dataValue: widget.friend.postcardsCount ?? 0,
+                            dataValue: state.friendResponse.postcardsCount ?? 0,
                           ),
                           const SizedBox(
                             width: 20,
                           ),
                           StatisticsSectionData(
                             dataTitle: AppLocalizations.of(context).followers,
-                            dataValue: widget.friend.followersCount ?? 0,
+                            dataValue: state.friendResponse.followersCount ?? 0,
                           ),
                           const SizedBox(
                             width: 20,
                           ),
                           StatisticsSectionData(
                             dataTitle: AppLocalizations.of(context).following,
-                            dataValue: widget.friend.followingCount ?? 0,
+                            dataValue: state.friendResponse.followingCount ?? 0,
                           ),
                         ],
                       ),
@@ -273,14 +355,17 @@ class _FriendDetailsState extends State<FriendDetails> {
                 ],
               ),
             ),
-
+]
+                  else...[
+          UserStatisticsShimmer(context: context)
+                    ],
 
 
                     ],
                   ),
                 ),
 
-                if (state is LoadingState)
+                if (state is! LoadedState)
                   Column(
                     children: [
                       Padding(
@@ -316,6 +401,8 @@ class _FriendDetailsState extends State<FriendDetails> {
                       ),
                     ],
                   ),
+
+
                 if (state is LoadedState &&
                     state.favouritePostcards.content!.length > 0)...[
                   Container(
@@ -346,10 +433,6 @@ class _FriendDetailsState extends State<FriendDetails> {
                     },
                   ),
                 ],
-
-
-
-
               ],
             ),
           );

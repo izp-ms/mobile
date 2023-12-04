@@ -6,6 +6,7 @@ import 'package:mobile/cubit/friends_cubit/following_cubit/following_state.dart'
 import 'package:mobile/custom_widgets/custom_form_filed/styled.dart';
 import 'package:mobile/helpers/show_error_snack_bar.dart';
 import 'package:mobile/pages/collection_page/user_postcards_collection_page/widgets/SortDialog.dart';
+import 'package:mobile/pages/friends_page/widgets/friend_details.dart';
 import 'package:mobile/pages/friends_page/widgets/friends_grid.dart';
 import 'package:mobile/pages/friends_page/widgets/friends_list_shimmer.dart';
 
@@ -142,7 +143,7 @@ class _FollowingPageState extends State<FollowingPage>
                 child: FriendListShimmer(
                   itemCount: 8,
                   crossAxisCount: 1,
-                  title: "Following users",
+                  title: "Following Users",
                 ),
               );
             }
@@ -152,7 +153,7 @@ class _FollowingPageState extends State<FollowingPage>
                 child: FriendListShimmer(
                   itemCount: 8,
                   crossAxisCount: 1,
-                  title: "Following users",
+                  title: "Following Users",
                 ),
               );
             }
@@ -177,10 +178,13 @@ class _FollowingPageState extends State<FollowingPage>
                 refreshCallback: _refresh,
                 parentContext: context,
                 isLoadingMore: isLoadingMore,
-                friendPopup: (postcard) {
-                  print("dupa");
+                friendPopup: (friend) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => FriendDetails(friendID: friend.id!)),
+                  );
                 },
-                title: "Following users",
+                title: "Following Users",
               ),
             );
           },
