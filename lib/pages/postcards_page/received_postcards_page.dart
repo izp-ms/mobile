@@ -22,6 +22,7 @@ class _ReceivedPostcardsPageState extends State<ReceivedPostcardsPage>
     with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => false;
+  List<int> favouritePostcards = [];
 
   @override
   void initState() {
@@ -170,7 +171,7 @@ class _ReceivedPostcardsPageState extends State<ReceivedPostcardsPage>
             ),
           ],
         ),
-        SizedBox(
+        const SizedBox(
           height: 15,
         ),
         BlocConsumer<ReceivedPostcardsCubit, ReceivedPostcardsState>(
@@ -213,6 +214,10 @@ class _ReceivedPostcardsPageState extends State<ReceivedPostcardsPage>
               }
             } else if (state is LoadedState) {
               postcardsData = state.postcardsData.content;
+              favouritePostcards = state.favouritePostcards.content
+                      ?.map((postcard) => postcard.postcardId ?? 0)
+                      .toList() ??
+                  [];
             }
 
             return Flexible(
@@ -226,6 +231,7 @@ class _ReceivedPostcardsPageState extends State<ReceivedPostcardsPage>
                   showPostcardDialog(context, postcard!);
                 },
                 title: "Received postcards",
+                favouritePostcardsIds: favouritePostcards,
               ),
             );
           },

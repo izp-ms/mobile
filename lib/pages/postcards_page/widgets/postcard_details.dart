@@ -125,7 +125,7 @@ class PostcardDetails extends StatelessWidget {
                 children: [
                   Flexible(
                     child: Text(
-                      "${postcard?.content ?? ''}",
+                      postcard?.content ?? '',
                       textAlign: TextAlign.center,
                       style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
@@ -223,9 +223,6 @@ class PostcardDetails extends StatelessWidget {
         ?.map((postcard) => postcard.postcardId)
         .toList();
     List<PostcardIdsWithOrders> resultList = [];
-
-    print(postcard?.postcardId);
-    print(postcard?.id);
 
     if (isPostcardInFavourite(state.favouritePostcards.content ?? [])) {
       ids?.remove(postcard?.postcardId ?? postcard?.id);

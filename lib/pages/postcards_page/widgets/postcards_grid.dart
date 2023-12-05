@@ -15,6 +15,7 @@ class PostcardsGrid extends StatelessWidget {
   final void Function(PostcardsResponse postcard)? postcardPopup;
   final bool obfuscateData;
   final String title;
+  final List<int> favouritePostcardsIds;
 
   PostcardsGrid({
     Key? key,
@@ -26,6 +27,7 @@ class PostcardsGrid extends StatelessWidget {
     required this.postcardPopup,
     this.obfuscateData = false,
     this.title = "",
+    this.favouritePostcardsIds = const [],
   });
 
   @override
@@ -81,7 +83,20 @@ class PostcardsGrid extends StatelessWidget {
                             child: AspectRatio(
                               aspectRatio: 3 / 4,
                               child: Container(
-                                padding: const EdgeInsets.all(10),
+                                padding: const EdgeInsets.all(5),
+                                decoration: BoxDecoration(
+                                  color: isPostcardInFavourite(postcard)
+                                      ? Colors.amberAccent
+                                      : Colors.white,
+                                  boxShadow: const [
+                                    BoxShadow(
+                                      color: Colors.black12,
+                                      spreadRadius: 5,
+                                      blurRadius: 7,
+                                      offset: Offset(0, 3),
+                                    ),
+                                  ],
+                                ),
                                 child: obfuscateData
                                     ? ColorFiltered(
                                         colorFilter: const ColorFilter.mode(
@@ -131,6 +146,9 @@ class PostcardsGrid extends StatelessWidget {
                                     ),
                                   ),
                           ),
+                        const SizedBox(
+                          height: 8,
+                        ),
                         Flexible(
                           child: Text(
                             postcard?.postcardDataTitle ?? '',
@@ -159,5 +177,10 @@ class PostcardsGrid extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  bool isPostcardInFavourite(PostcardsResponse? postcard) {
+    if (postcard == null) return false;
+    return favouritePostcardsIds.contains(postcard.id);
   }
 }
