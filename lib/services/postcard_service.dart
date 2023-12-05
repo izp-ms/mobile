@@ -85,31 +85,36 @@ class PostcardService {
   }
 
   Future<PostcardsCollectionListResponse> getPostcardDataCollection() async {
-    final token = await SecureStorageService.read(key: 'token');
-    Map<String, dynamic> decodedToken = JwtDecoder.decode(token!);
-    String userId = decodedToken[
-    'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'];
+    try {
+      final token = await SecureStorageService.read(key: 'token');
+      Map<String, dynamic> decodedToken = JwtDecoder.decode(token!);
+      String userId = decodedToken[
+      'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'];
 
-    var url = '$_baseUrl/PostcardCollection?userId=$userId';
-    final uri = Uri.parse(url);
+      var url = '$_baseUrl/PostcardCollection?userId=$userId';
+      final uri = Uri.parse(url);
 
-    final client = http.Client();
-    final response = await client.get(
-      uri,
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer $token',
-      },
-    );
+      final client = http.Client();
+      final response = await client.get(
+        uri,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer $token',
+        },
+      );
 
-    if (response.ok) {
-      final responseJson = json.decode(response.body);
-      final postcardsList = PostcardsCollectionListResponse.fromJson(responseJson);
-      return postcardsList;
-    }  else {
-      final errorJson = json.decode(response.body);
-      final errorMessage = ErrorMessageResponse.fromJson(errorJson).message;
-      throw errorMessage;
+      if (response.ok) {
+        final responseJson = json.decode(response.body);
+        final postcardsList = PostcardsCollectionListResponse.fromJson(responseJson);
+        return postcardsList;
+      } else {
+        // Handle the error case here
+        return PostcardsCollectionListResponse.empty();
+      }
+    } catch (e) {
+      // Handle any exceptions that occur during the execution
+      print('Error: $e');
+      return PostcardsCollectionListResponse.empty();
     }
   }
 

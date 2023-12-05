@@ -82,7 +82,7 @@ class PostcardsDataGrid extends StatelessWidget {
                               aspectRatio: 3 / 4,
                               child: Container(
                                 padding: const EdgeInsets.all(10),
-                                child: obfuscateData && IdsWithoutObfuscateData!.isNotEmpty && !(IdsWithoutObfuscateData!.contains(postcard?.id))
+                                child: obfuscateData && !(IdsWithoutObfuscateData!.contains(postcard?.id))
                                     ? ColorFiltered(
                                         colorFilter: const ColorFilter.mode(
                                             Colors.grey, BlendMode.saturation),

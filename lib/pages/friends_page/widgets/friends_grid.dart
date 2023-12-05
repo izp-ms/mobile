@@ -16,6 +16,7 @@ class FriendsGrid extends StatelessWidget {
   final bool isLoadingMore;
   final void Function(FriendResponse friend)? friendPopup;
   final String title;
+  final int? selectedFriendIndex;
 
   FriendsGrid({
     Key? key,
@@ -26,6 +27,7 @@ class FriendsGrid extends StatelessWidget {
     required this.isLoadingMore,
     required this.friendPopup,
     this.title = "",
+    this.selectedFriendIndex = -1
   });
 
   @override
@@ -142,7 +144,7 @@ class FriendsGrid extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.all(15.0),
                             child: Icon(
-                              Icons.search,
+                              selectedFriendIndex == -1 ? Icons.search : selectedFriendIndex==index ? Icons.check_box : Icons.check_box_outline_blank ,
                               size: 30,
                             ),
                           )

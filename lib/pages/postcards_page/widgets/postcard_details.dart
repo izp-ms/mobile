@@ -15,6 +15,7 @@ import 'package:mobile/custom_widgets/submit_button.dart';
 import 'package:mobile/helpers/base64Validator.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:mobile/helpers/show_error_snack_bar.dart';
+import 'package:mobile/pages/transfer_postcard_page/transfer_postcard_page.dart';
 
 void showPostcardDialog(BuildContext context, PostcardsResponse? postcard,
     {bool obfuscateData = false, bool isFriendPostcard = false, UserDetailResponse? response}) {
@@ -146,7 +147,9 @@ class PostcardDetails extends StatelessWidget {
                   SubmitButton(
                     buttonText: AppLocalizations.of(context).send,
                     height: 40,
-                    onButtonPressed: () => {Navigator.of(context).pop()},
+                    onButtonPressed: () => {
+                      openPostcardEditPage(context, postcard!)
+                    },
                   ),
                 if (postcard!.isSent && !isFriendPostcard)
                   BlocBuilder<ReceivedPostcardsCubit, ReceivedPostcardsState>(
@@ -193,6 +196,14 @@ class PostcardDetails extends StatelessWidget {
             postcardIdsWithOrders: resultList,
           ),
         );
+  }
+
+  void openPostcardEditPage(BuildContext context, PostcardsResponse postcard) {
+    Navigator.of(context).pop();
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => TransferPostcard(postcard: postcard)),
+    );
   }
 
   bool isPostcardInFavourite(List<PostcardsResponse> postcardsList) {

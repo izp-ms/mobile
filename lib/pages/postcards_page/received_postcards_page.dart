@@ -21,7 +21,7 @@ class ReceivedPostcardsPage extends StatefulWidget {
 class _ReceivedPostcardsPageState extends State<ReceivedPostcardsPage>
     with AutomaticKeepAliveClientMixin {
   @override
-  bool get wantKeepAlive => true;
+  bool get wantKeepAlive => false;
 
   @override
   void initState() {

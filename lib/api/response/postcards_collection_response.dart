@@ -27,4 +27,11 @@ class PostcardsCollectionListResponse {
       content: <dynamic>[],
     );
   }
+
+  static PostcardsCollectionListResponse empty() {
+    return PostcardsCollectionListResponse(
+      userId: 0,
+      content: [],
+    );
+  }
 }

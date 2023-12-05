@@ -1,6 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mobile/api/request/postcard_transfer_request.dart';
 import 'package:mobile/api/response/friends_list_response.dart';
 import 'package:mobile/cubit/friends_cubit/all_friends_cubit/all_friends_state.dart';
+import 'package:mobile/helpers/show_error_snack_bar.dart';
+import 'package:mobile/helpers/show_success_snack_bar.dart';
 import 'package:mobile/services/user_service.dart';
 
 class AllFriendsCubit extends Cubit<AllFriendsState> {
@@ -32,6 +36,15 @@ class AllFriendsCubit extends Cubit<AllFriendsState> {
       emit(LoadedState(allFriendsData));
     } catch (e) {
       emit(ErrorState(e.toString()));
+    }
+  }
+
+  Future<void> transferPostcard(PostcardTransferRequest postcardTransferRequest, BuildContext context) async {
+    try {
+      final response = await _repository.putPostcardTransfer(postcardTransferRequest);
+      showSuccessSnackBar(context, "Successfully sent postcard.");
+    } catch (e) {
+      showErrorSnackBar(context, "An error occurred: $e");
     }
   }
 

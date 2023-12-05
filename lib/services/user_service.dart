@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:mobile/api/request/postcard_transfer_request.dart';
 import 'package:mobile/api/request/user_detail_request.dart';
 import 'package:mobile/api/response/error_message_response.dart';
 import 'package:mobile/api/response/friend_response.dart';
@@ -283,4 +284,49 @@ class UserService {
       }
     }
   }
+
+
+
+  Future<dynamic> putPostcardTransfer(PostcardTransferRequest postcardTransferRequest) async {
+    final url = '$_baseUrl/Postcard/Transfer';
+    final uri = Uri.parse(url);
+    final token = await SecureStorageService.read(key: 'token');
+
+    Map<String, dynamic> decodedToken = JwtDecoder.decode(token!);
+    String userIdString = decodedToken[
+    'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'];
+
+    int userId;
+    try {
+      userId = int.parse(userIdString);
+    } catch (e) {
+      // Handle the case where userIdString is not a valid integer
+      print('Error parsing userId: $e');
+      userId = 0; // Default value or any other suitable handling
+    }
+
+    final client = http.Client();
+    final response = await client.put(
+      uri,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $token',
+      },
+      body: json.encode(postcardTransferRequest.toJson()),
+    );
+
+    if (response.ok) {
+      final transferJson = json.decode(response.body);
+      final postcardTransferResponse = PostcardTransferRequest.fromJson(transferJson);
+      return postcardTransferResponse;
+    } else {
+      final errorJson = json.decode(response.body);
+      final errorMessage = ErrorMessageResponse.fromJson(errorJson).message;
+      throw errorMessage;
+    }
+  }
+
 }
+
+
+

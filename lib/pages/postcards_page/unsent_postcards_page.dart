@@ -21,7 +21,7 @@ class UnsentPostcardsPage extends StatefulWidget {
 class _UnsentPostcardsPageState extends State<UnsentPostcardsPage>
     with AutomaticKeepAliveClientMixin {
   @override
-  bool get wantKeepAlive => true;
+  bool get wantKeepAlive => false;
 
   @override
   void initState() {
