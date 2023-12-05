@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mobile/api/response/friend_response.dart';
+import 'package:mobile/cubit/friends_cubit/all_friends_cubit/all_friends_cubit.dart';
+import 'package:mobile/cubit/friends_cubit/followed_by_cubit/followed_by_cubit.dart';
+import 'package:mobile/cubit/friends_cubit/following_cubit/following_cubit.dart';
 import 'package:mobile/cubit/friends_cubit/friend_favourite_postcards_cubit/friends_cubit.dart';
 import 'package:mobile/cubit/friends_cubit/friend_favourite_postcards_cubit/friends_state.dart';
 import 'package:mobile/custom_widgets/custom_shimmer/custom_shimmer.dart';
@@ -244,9 +247,7 @@ class _FriendDetailsState extends State<FriendDetails> {
                             buttonText: state.isFollowing ? "unfollow": "follow",
                             height: 40,
                             onButtonPressed: () => {
-                              context
-                                  .read<FriendsCubit>()
-                                  .updateFollowing(!state.isFollowing, state.friendResponse.id, state.favouritePostcards, state.friendResponse)
+                              refreshFriends(state, context)
                             },
                           ),
                         ),
@@ -439,5 +440,23 @@ class _FriendDetailsState extends State<FriendDetails> {
         },
       ),
     );
+  }
+
+  Future<void> refreshFriends(state, BuildContext context) async {
+    await context
+        .read<FriendsCubit>()
+        .updateFollowing(!state.isFollowing, state.friendResponse.id, state.favouritePostcards, state.friendResponse);
+
+    context.read<FollowedByCubit>().clearFollowedBy();
+    context.read<FollowedByCubit>().currentPage = 1;
+    context
+        .read<FollowedByCubit>()
+        .getFollowedBy("", "nickName");
+
+    context.read<FollowingCubit>().clearFollowing();
+    context.read<FollowingCubit>().currentPage = 1;
+    context
+        .read<FollowingCubit>()
+        .getFollowing("", "nickName");
   }
 }

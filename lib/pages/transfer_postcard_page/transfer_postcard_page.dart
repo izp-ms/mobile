@@ -9,6 +9,7 @@ import 'package:mobile/api/response/friend_response.dart';
 import 'package:mobile/api/response/postcard_response.dart';
 import 'package:mobile/cubit/friends_cubit/all_friends_cubit/all_friends_cubit.dart';
 import 'package:mobile/cubit/friends_cubit/all_friends_cubit/all_friends_state.dart';
+import 'package:mobile/cubit/postcards_cubits/unsent_postcards_cubit/unsent_postcards_cubit.dart';
 import 'package:mobile/custom_widgets/custom_form_filed/styled.dart';
 import 'package:mobile/custom_widgets/submit_button.dart';
 import 'package:mobile/helpers/date_extractor.dart';
@@ -34,7 +35,7 @@ class TransferPostcard extends StatefulWidget {
 
 class _TransferPostcardState extends State<TransferPostcard> with AutomaticKeepAliveClientMixin {
   @override
-  bool get wantKeepAlive => true;
+  bool get wantKeepAlive => false;
 
 
 
@@ -355,7 +356,12 @@ class _TransferPostcardState extends State<TransferPostcard> with AutomaticKeepA
       newUserId: selectedFriendId?? 0,
     );
 
-    context.read<AllFriendsCubit>().transferPostcard(request, context);
+    await context.read<AllFriendsCubit>().transferPostcard(request, context);
+    context.read<UnsentPostcardsCubit>().clearUnsentPostcards();
+    context.read<UnsentPostcardsCubit>().currentPage = 1;
+    context
+        .read<UnsentPostcardsCubit>()
+        .getPostcards(false, "", "", "", "", "", "date");
     Navigator.pop(context);
 
 

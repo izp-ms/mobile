@@ -55,7 +55,7 @@ class _FollowingPageState extends State<FollowingPage>
   }
 
   String search = ""; //Palmiarnia
-  String orderBy = "date"; //-city
+  String orderBy = "nickName"; //-city
   TextEditingController searchController = TextEditingController();
 
   void _showSortDialog(BuildContext context) {

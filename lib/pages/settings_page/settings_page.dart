@@ -64,19 +64,6 @@ class SettingsPage extends StatelessWidget {
                 children: [
                   Center(
                       child: TextIconButton(
-                        text: "Test noti",
-                        shouldHaveIcon: true,
-                        iconData: Icons.delete_forever,
-                        iconSide: IconSide.left,
-                        onTap: () {
-                          NotificationService().showNotification(title: "Siema", body: "it Works");
-                        },
-                        fontSize: 15.0,
-                        iconSize: 20.0,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                      ),),
-                  Center(
-                      child: TextIconButton(
                     text: AppLocalizations.of(context).deleteAccount,
                     shouldHaveIcon: true,
                     iconData: Icons.delete_forever,
