@@ -121,28 +121,28 @@ class _ContentAndDisplayState extends State<ContentAndDisplay> {
                   )
                 ],
               ),
-              const SizedBox(height: 3),
-              GestureDetector(
-                onTap: () => {print("app language")},
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      AppLocalizations.of(context).appLanguage,
-                      style: GoogleFonts.rubik(
-                        fontSize: 18,
-                      ),
-                    ),
-                    Text(
-                      "${widget.languageValue} >",
-                      style: GoogleFonts.rubik(
-                        fontSize: 18,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 15),
+              const SizedBox(height: 5),
+              // GestureDetector(
+              //   onTap: () => {print("app language")},
+              //   child: Row(
+              //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //     children: [
+              //       Text(
+              //         AppLocalizations.of(context).appLanguage,
+              //         style: GoogleFonts.rubik(
+              //           fontSize: 18,
+              //         ),
+              //       ),
+              //       Text(
+              //         "${widget.languageValue} >",
+              //         style: GoogleFonts.rubik(
+              //           fontSize: 18,
+              //         ),
+              //       ),
+              //     ],
+              //   ),
+              // ),
+              // const SizedBox(height: 15),
               GestureDetector(
                 onTap: openNotificationSettings,
                 child: Row(

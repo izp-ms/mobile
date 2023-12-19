@@ -187,7 +187,7 @@ class _UserPostcardsCollectionPageState
                 itemCount: 12,
                 crossAxisCount: 3,
                 showDescription: true,
-                title: "Your postcards",
+                title: "Visited places",
               ));
             }
 
@@ -197,7 +197,7 @@ class _UserPostcardsCollectionPageState
                 itemCount: 12,
                 crossAxisCount: 3,
                 showDescription: true,
-                title: "Your postcards",
+                title: "Visited places",
               ));
             }
 
@@ -224,7 +224,7 @@ class _UserPostcardsCollectionPageState
                 postcardPopup: (postcard) {
                   showImageDialog(context, postcard!);
                 },
-                title: "Your postcards",
+                title: "Visited places",
               ),
             );
           },

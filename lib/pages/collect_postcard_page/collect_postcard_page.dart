@@ -67,7 +67,7 @@ class _CollectPostcardPageState extends State<CollectPostcardPage> {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 15),
               child: Text(
-                widget.postcard.title ?? "Postcard id: ${widget.postcard.id}",
+                widget.postcard.title ?? "Something went wrong",
                 style: GoogleFonts.rubik(
                   fontSize: 30,
                 ),
@@ -82,7 +82,7 @@ class _CollectPostcardPageState extends State<CollectPostcardPage> {
                   Text(
                     "Longitude: ${widget.postcard.longitude}",
                     style: GoogleFonts.rubik(
-                      fontSize: 25,
+                      fontSize: 20,
                     ),
                   ),
                   const SizedBox(
@@ -91,7 +91,7 @@ class _CollectPostcardPageState extends State<CollectPostcardPage> {
                   Text(
                     "Latitude: ${widget.postcard.latitude}",
                     style: GoogleFonts.rubik(
-                      fontSize: 25,
+                      fontSize: 20,
                     ),
                   ),
                   if (widget.postcard.country != null) ...[
@@ -101,7 +101,7 @@ class _CollectPostcardPageState extends State<CollectPostcardPage> {
                     Text(
                       "Country: ${widget.postcard.country}",
                       style: GoogleFonts.rubik(
-                        fontSize: 25,
+                        fontSize: 20,
                       ),
                     ),
                   ],
@@ -112,7 +112,7 @@ class _CollectPostcardPageState extends State<CollectPostcardPage> {
                     Text(
                       "City: ${widget.postcard.city}",
                       style: GoogleFonts.rubik(
-                        fontSize: 25,
+                        fontSize: 20,
                       ),
                     ),
                   ],

@@ -186,7 +186,7 @@ class _CollectPostcardListPageState extends State<CollectPostcardListPage> {
                 children: [
                   if (lastReceivedPostcards?.postcardsCollected != null)
                     PostcardListWithTitle(
-                      title: "Postcards collected",
+                      title: "Postcards to collect",
                       postcards: lastReceivedPostcards!.postcardsCollected!,
                       isReadyToCollect: true,
                     ),

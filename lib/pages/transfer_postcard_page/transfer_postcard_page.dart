@@ -50,6 +50,7 @@ class _TransferPostcardState extends State<TransferPostcard> with AutomaticKeepA
   }
 
   Future _refresh() async {
+    FocusScope.of(context).unfocus();
     setState(() {
       selectedFriendIndex = null;
       selectedFriendId = null;

@@ -8,6 +8,7 @@ class PostcardsDataResponse {
   String? title;
   String? longitude;
   String? latitude;
+  String? type;
   int? collectRangeInMeters;
   String? createdAt;
 
@@ -19,6 +20,7 @@ class PostcardsDataResponse {
         this.title,
         this.longitude,
         this.latitude,
+        this.type,
         this.collectRangeInMeters,
         this.createdAt
       });
@@ -31,6 +33,7 @@ class PostcardsDataResponse {
     title = json['title'];
     longitude = json['longitude'];
     latitude = json['latitude'];
+    type = json['type'];
     collectRangeInMeters = json['collectRangeInMeters'];
     createdAt = dateExtractor(json['createdAt']);
   }
@@ -44,6 +47,7 @@ class PostcardsDataResponse {
     data['title'] = title;
     data['longitude'] = longitude;
     data['latitude'] = latitude;
+    data['type'] = type;
     data['collectRangeInMeters'] = collectRangeInMeters;
     data['createdAt'] = dateExtractor(createdAt);
     return data;

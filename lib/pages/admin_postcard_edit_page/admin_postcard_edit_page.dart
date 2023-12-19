@@ -256,6 +256,7 @@ class _AdminPostcardEditPageState extends State<AdminPostcardEditPage> {
             title: _title,
             longitude: _longitude,
             latitude: _latitude,
+            type: "place",
             collectRangeInMeters: int.parse(_collectRangeInMeters!),
             createdAt: DateFormat('yyyy-MM-ddTHH:mm:ss')
                 .format(DateTime.now())

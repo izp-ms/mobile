@@ -193,7 +193,7 @@ class _AllPostcardsCollectionPageState extends State<AllPostcardsCollectionPage>
                   itemCount: 12,
                   crossAxisCount: 3,
                   showDescription: true,
-                  title: "All postcards",
+                  title: "All places",
                 ),
               );
             }
@@ -204,7 +204,7 @@ class _AllPostcardsCollectionPageState extends State<AllPostcardsCollectionPage>
                   itemCount: 12,
                   crossAxisCount: 3,
                   showDescription: true,
-                  title: "All postcards",
+                  title: "All places",
                 ),
               );
             }
@@ -238,7 +238,7 @@ class _AllPostcardsCollectionPageState extends State<AllPostcardsCollectionPage>
                   },
                   obfuscateData: true,
                   IdsWithoutObfuscateData: IdsWithoutObfuscateData,
-                  title: "All postcards",
+                  title: "All places",
                 ),
               );
           },

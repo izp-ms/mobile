@@ -33,6 +33,7 @@ class _FollowingPageState extends State<FollowingPage>
   }
 
   Future _refresh() async {
+    FocusScope.of(context).unfocus();
     context.read<FollowingCubit>().clearFollowing();
     context.read<FollowingCubit>().currentPage = 1;
     context

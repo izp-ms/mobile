@@ -34,6 +34,7 @@ class _AllFriendsPageState extends State<AllFriendsPage>
   }
 
   Future _refresh() async {
+    FocusScope.of(context).unfocus();
     context.read<AllFriendsCubit>().clearAllFriends();
     context.read<AllFriendsCubit>().currentPage = 1;
     context
