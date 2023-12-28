@@ -18,6 +18,10 @@ class MainPageAppBar extends StatelessWidget implements PreferredSizeWidget {
               size: 30,
             ),
             onPressed: () {
+              final FocusScopeNode currentScope = FocusScope.of(context);
+              if (!currentScope.hasPrimaryFocus && currentScope.hasFocus) {
+                FocusManager.instance.primaryFocus?.unfocus();
+              };
               Scaffold.of(context).openDrawer();
             },
             tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,

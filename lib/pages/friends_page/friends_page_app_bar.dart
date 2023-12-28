@@ -17,6 +17,10 @@ class FriendsPageAppBar extends StatelessWidget implements PreferredSizeWidget {
               size: 30,
             ),
             onPressed: () {
+              final FocusScopeNode currentScope = FocusScope.of(context);
+              if (!currentScope.hasPrimaryFocus && currentScope.hasFocus) {
+                FocusManager.instance.primaryFocus?.unfocus();
+              };
               Scaffold.of(context).openDrawer();
             },
             tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
@@ -24,6 +28,12 @@ class FriendsPageAppBar extends StatelessWidget implements PreferredSizeWidget {
         },
       ),
       bottom: TabBar(
+        onTap: (index){
+          final FocusScopeNode currentScope = FocusScope.of(context);
+          if (!currentScope.hasPrimaryFocus && currentScope.hasFocus) {
+            FocusManager.instance.primaryFocus?.unfocus();
+          };
+        },
         tabs: [
           Tab(icon: Icon(Icons.person, color: Theme.of(context).colorScheme.secondary)),
           Tab(icon: Icon(Icons.person_pin_sharp, color: Theme.of(context).colorScheme.secondary,)),

@@ -34,7 +34,10 @@ class _AllFriendsPageState extends State<AllFriendsPage>
   }
 
   Future _refresh() async {
-    FocusScope.of(context).unfocus();
+    final FocusScopeNode currentScope = FocusScope.of(context);
+    if (!currentScope.hasPrimaryFocus && currentScope.hasFocus) {
+      FocusManager.instance.primaryFocus?.unfocus();
+    };
     context.read<AllFriendsCubit>().clearAllFriends();
     context.read<AllFriendsCubit>().currentPage = 1;
     context

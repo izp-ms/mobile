@@ -65,6 +65,10 @@ class _UserPostcardsCollectionPageState
   TextEditingController searchController = TextEditingController();
 
   void _showSortDialog(BuildContext context) {
+    final FocusScopeNode currentScope = FocusScope.of(context);
+    if (!currentScope.hasPrimaryFocus && currentScope.hasFocus) {
+      FocusManager.instance.primaryFocus?.unfocus();
+    }
     showDialog(
       context: context,
       builder: (BuildContext dialogContext) {
@@ -90,6 +94,10 @@ class _UserPostcardsCollectionPageState
   }
 
   void _showFilterDialog(BuildContext context) {
+    final FocusScopeNode currentScope = FocusScope.of(context);
+    if (!currentScope.hasPrimaryFocus && currentScope.hasFocus) {
+      FocusManager.instance.primaryFocus?.unfocus();
+    }
     showDialog(
       context: context,
       builder: (BuildContext dialogContext) {

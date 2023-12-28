@@ -9,16 +9,24 @@ class PostcardsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 2,
-      child: Scaffold(
-        appBar: const PostcardsPageAppBar(),
-        drawer: CustomDrawer(context),
-        body: const TabBarView(
-          children: [
-            UnsentPostcardsPage(),
-            ReceivedPostcardsPage(),
-          ],
+    return GestureDetector(
+      onTap: (){
+        final FocusScopeNode currentScope = FocusScope.of(context);
+        if (!currentScope.hasPrimaryFocus && currentScope.hasFocus) {
+          FocusManager.instance.primaryFocus?.unfocus();
+        };
+      },
+      child: DefaultTabController(
+        length: 2,
+        child: Scaffold(
+          appBar: const PostcardsPageAppBar(),
+          drawer: CustomDrawer(context),
+          body: const TabBarView(
+            children: [
+              UnsentPostcardsPage(),
+              ReceivedPostcardsPage(),
+            ],
+          ),
         ),
       ),
     );

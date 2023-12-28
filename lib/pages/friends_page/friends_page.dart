@@ -11,17 +11,25 @@ class FriendsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 3,
-      child: Scaffold(
-        appBar: const FriendsPageAppBar(),
-        drawer: CustomDrawer(context),
-        body: const TabBarView(
-          children: [
-            FollowingPage(),
-            FollowedByPage(),
-            AllFriendsPage(),
-          ],
+    return GestureDetector(
+      onTap: (){
+        final FocusScopeNode currentScope = FocusScope.of(context);
+        if (!currentScope.hasPrimaryFocus && currentScope.hasFocus) {
+          FocusManager.instance.primaryFocus?.unfocus();
+        };
+      },
+      child: DefaultTabController(
+        length: 3,
+        child: Scaffold(
+          appBar: const FriendsPageAppBar(),
+          drawer: CustomDrawer(context),
+          body: const TabBarView(
+            children: [
+              FollowingPage(),
+              FollowedByPage(),
+              AllFriendsPage(),
+            ],
+          ),
         ),
       ),
     );

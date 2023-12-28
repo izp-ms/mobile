@@ -17,6 +17,10 @@ class CollectionPageAppBar extends StatelessWidget implements PreferredSizeWidge
               size: 30,
             ),
             onPressed: () {
+              final FocusScopeNode currentScope = FocusScope.of(context);
+              if (!currentScope.hasPrimaryFocus && currentScope.hasFocus) {
+                FocusManager.instance.primaryFocus?.unfocus();
+              }
               Scaffold.of(context).openDrawer();
             },
             tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
@@ -24,6 +28,12 @@ class CollectionPageAppBar extends StatelessWidget implements PreferredSizeWidge
         },
       ),
       bottom: TabBar(
+        onTap: (index){
+          final FocusScopeNode currentScope = FocusScope.of(context);
+          if (!currentScope.hasPrimaryFocus && currentScope.hasFocus) {
+            FocusManager.instance.primaryFocus?.unfocus();
+          }
+        },
         indicatorSize: TabBarIndicatorSize.label, // Set indicatorSize to label
         indicatorWeight: 2.0, // Adjust the indicatorWeight as needed
         tabs: [

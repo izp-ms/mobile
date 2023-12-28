@@ -9,16 +9,22 @@ class CollectionPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 2,
-      child: Scaffold(
-        appBar: const CollectionPageAppBar(),
-        drawer: CustomDrawer(context),
-        body: const TabBarView(
-          children: [
-            UserPostcardsCollectionPage(),
-            AllPostcardsCollectionPage(),
-          ],
+    return GestureDetector(
+      onTap: (){final FocusScopeNode currentScope = FocusScope.of(context);
+      if (!currentScope.hasPrimaryFocus && currentScope.hasFocus) {
+        FocusManager.instance.primaryFocus?.unfocus();
+      }},
+      child: DefaultTabController(
+        length: 2,
+        child: Scaffold(
+          appBar: const CollectionPageAppBar(),
+          drawer: CustomDrawer(context),
+          body: const TabBarView(
+            children: [
+              UserPostcardsCollectionPage(),
+              AllPostcardsCollectionPage(),
+            ],
+          ),
         ),
       ),
     );

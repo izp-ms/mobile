@@ -10,6 +10,7 @@ import 'package:mobile/custom_widgets/submit_button.dart';
 import 'package:mobile/custom_widgets/switch_page_link.dart';
 import 'package:mobile/helpers/show_error_snack_bar.dart';
 import 'package:mobile/pages/postcards_page/postcards_page.dart';
+import 'package:mobile/pages/profile_page/profile_page.dart';
 import 'package:mobile/pages/register_page/register_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:mobile/providers/admin_provider.dart';
@@ -154,7 +155,7 @@ class _LoginFormState extends State<LoginForm> {
   Future<void> _navigateToPostcardsPage(BuildContext context) async {
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => PostcardsPage()),
+      MaterialPageRoute(builder: (context) => ProfilePage()),
     );
   }
 

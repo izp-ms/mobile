@@ -19,6 +19,7 @@ import 'package:mobile/cubit/user_cubit/user_cubit.dart';
 import 'package:mobile/pages/login_page/login_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:mobile/pages/postcards_page/postcards_page.dart';
+import 'package:mobile/pages/profile_page/profile_page.dart';
 import 'package:mobile/providers/admin_provider.dart';
 import 'package:mobile/providers/theme_provider.dart';
 import 'package:mobile/services/admin_service.dart';
@@ -185,7 +186,7 @@ class MyApp extends StatelessWidget {
               ),
             ),
             themeMode: themeNotifier.isDark ? ThemeMode.dark : ThemeMode.light,
-            home: isAuthenticated ? const PostcardsPage() : const LoginPage(),
+            home: isAuthenticated ? const ProfilePage() : const LoginPage(),
           ),
         );
       }),
