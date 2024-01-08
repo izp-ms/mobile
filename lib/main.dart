@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
@@ -44,6 +45,10 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final token = await SecureStorageService.read(key: 'token');
   await ColorProvider.loadColors();
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown
+  ]);
   runApp(MyApp(token: token));
 }
 

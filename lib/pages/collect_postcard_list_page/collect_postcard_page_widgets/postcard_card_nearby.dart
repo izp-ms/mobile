@@ -52,7 +52,7 @@ class PostcardCardNearby extends StatelessWidget {
             ),
           ),
           subtitle: Text(
-            "Long: ${postcard.longitude} Lat: ${postcard.latitude}",
+            "Long: ${postcard.longitude}\nLat: ${postcard.latitude}",
             style: GoogleFonts.rubik(
               fontSize: 15,
             ),
